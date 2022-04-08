@@ -1,0 +1,140 @@
+{
+  "records": [
+    {
+      "ServiceCode": "3101",
+      "DisplayNameEN": "Cash On Delivery",
+      "DisplayNameFI": "Postiennakko",
+      "DescriptionEN": "The shipment is handed over to the recipient against the payment specified by the Customer. Posti remits the payment to the Customer’s account at a bank operating in SEPA countries within two to four (2–4) weekdays of payment. COD additional service is only available for parcels and pallets from/to Baltics. The maximum sum of a COD is EUR 2,000.",
+      "DescriptionFI": "Postiennakolla lähettämisellä vastaanottaja saa paketin vasta maksettuaan lähettäjän valitseman summan. Lähettäjä valitsee summan, joka vastaanottajan täytyy maksaa lunastaakseen paketin. Postiennakon maksimisumma on 2000 €. Vastaanottaja saa paketin vasta, kun on maksanut postiennakkosumman. Pakettia ei ole mahdollista avata ennen maksamista.",
+      "LabelMarking": "1",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [
+        {
+          "Addon": "3115"
+        },
+        {
+          "Addon": "3106"
+        }
+      ],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3102",
+      "DisplayNameEN": "Multi-Parcel Shipment",
+      "DisplayNameFI": "Monipakettilähetys",
+      "DescriptionEN": "MPS, or consignment pricing, is a feature that allows parcels or transport units sent from the same sender to the same recipient on the same day to be billed as a single shipment. The maximum number of items in a multi-parcel shipment is 10 parcels. Larger items will be invoiced in several shipments. The additional service appears on the contact card.",
+      "DescriptionFI": "MPS eli lähetyserähinnoittelu on ominaisuus jolla samalta lähettäjältä samalle vastaanottajalle samana päivänä lähetetyt paketit tai kuljetusyksiköt voidaan laskuttaa yhtenä lähetyksenä. Monipakettierän maksimikollimäärä on 10 pakettia. Isommat erät laskutetaan useampana lähetyseränä. Lisäpalvelu ilmenee osoitekortilta.",
+      "LabelMarking": null,
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [
+        {
+          "Addon": "3101"
+        },
+        {
+          "Addon": "3105"
+        }
+      ],
+      "AvailableCountries": [
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3103",
+      "DisplayNameEN": "Paid by other than sender",
+      "DisplayNameFI": "Maksaja muu kuin lähettäjä",
+      "DescriptionEN": "Transportation and additional services can be paid by other than the sender.",
+      "DescriptionFI": null,
+      "LabelMarking": "3",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": []
+    },
+    {
+      "ServiceCode": "3104",
+      "DisplayNameEN": "Fragile",
+      "DisplayNameFI": "Särkyvä",
+      "DescriptionEN": "With the service, you can ensure the careful handling of your products vulnerable to damage. Using the additional service requires a marking on the shipment and the EDI message.",
+      "DescriptionFI": null,
+      "LabelMarking": "4",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        },
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3105",
+      "DisplayNameEN": "Registration",
+      "DisplayNameFI": "",
+      "DescriptionEN": "A registered shipment is only handed over to the recipient or a person authorized by the recipient. The recipient’s identity and any power of attorney are verified upon handing over.",
+      "DescriptionFI": null,
+      "LabelMarking": "5",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3106",
+      "DisplayNameEN": "Saturday Delivery",
+      "DisplayNameFI": "Lauantaijakelu",
+      "DescriptionEN": "A shipment sent on Friday is delivered to the recipient on an ordinary Saturday by 4:00 p.m. in the areas and between the locations specified in the Delivery Time Inquiry.",
+      "DescriptionFI": null,
+      "LabelMarking": "6",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [
+        {
+          "Addon": "3103"
+        },
+        {
+          "Addon": "3104"
+        },
+        {
+          "Addon": "3102"
+        }
+      ],
+      "AvailableCountries": []
+    },
+    {
+      "ServiceCode": "3115",
+      "DisplayNameEN": "Delivery to Specific Location",
+      "DisplayNameFI": "Täsmäpaikkajakelu",
+      "DescriptionEN": "We deliver the shipment to an agreed place near the recipient, for instance, inside a store or to an office. The exact delivery location will be agreed with the recipient via phone.",
+      "DescriptionFI": null,
+      "LabelMarking": "15",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": []
+    }
+  ]
+}

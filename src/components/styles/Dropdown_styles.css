@@ -1,0 +1,124 @@
+:root {
+  --border-radius: 16px;
+  --dd-bg: #394b58;
+  --dd-border: 2px solid #394b58;
+  --dd-hover-color: rgb(255, 194, 38);
+  --speed: 0.3s ease-in-out;
+}
+
+.chevron {
+  fill: white;
+  height: 16px;
+  position: absolute;
+  right: 8px;
+  transform: rotate(-90deg);
+  transition: all var(--speed);
+}
+
+.dd-wrapper {
+  position: relative;
+  border: var(--dd-border);
+  border-radius: var(--border-radius);
+  min-height: 35px;
+  height: 0;
+  background-color: var(--dd-bg);
+  color: white;
+  transition: all var(--speed);
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.dd-wrapper:hover {
+  color: var(--dd-hover-color);
+}
+
+.dd-wrapper:hover .chevron {
+  fill: var(--dd-hover-color) !important;
+}
+
+.dd-header {
+  display: flexbox;
+  width: 100% !important;
+  height: 35px !important;
+}
+
+.dd-header_title--bold {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 9px 0 0 10px;
+  float: left;
+}
+
+.dd-header_action {
+  margin: -3px 0 0 0;
+  float: right;
+}
+
+.menu {
+  margin: 0;
+  max-height: 250px;
+  overflow: auto;
+}
+
+.dd-list {
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+.dd-list-item {
+  list-style-type: none;
+  transition: var(--speed);
+}
+
+.dd-list-item:hover {
+  background-color: rgb(240, 240, 240);
+  filter: brightness(0.9);
+}
+
+.dd-list-item > button {
+  background-color: transparent;
+  border: none;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.dd-list-item_group {
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dd-list-item_value {
+  font-size: 14px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.dd-list-item_additionalInfo {
+  margin-top: 3px;
+  font-size: 11px;
+  align-self: flex-start;
+}
+
+.dd-list-item_selection {
+  align-self: flex-end;
+}
+
+.menu-primary-enter {
+  opacity: 0;
+}
+.menu-primary-enter-done {
+  opacity: 1;
+  transition: all var(--speed);
+}
+.menu-primary-exit {
+  opacity: 1;
+}
+.menu-primary-exit-active {
+  opacity: 0;
+  transition: all var(--speed);
+}

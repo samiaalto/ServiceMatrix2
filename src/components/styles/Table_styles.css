@@ -1,0 +1,49 @@
+th.headerTitle {
+  height: 270px; /* header height */
+  white-space: nowrap;
+  font-weight: 700;
+  width: 35px !important;
+  cursor: pointer;
+}
+
+th.headerTitle > div {
+  transform: translate(17px, 130px) rotate(270deg);
+  /* rotate(315deg); for diagnol */
+  width: 0px !important;
+}
+
+.service {
+  white-space: nowrap;
+  min-width: 200px;
+  text-align: right;
+  padding-right: 5px;
+}
+
+td {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  border: 1px solid grey;
+}
+
+.tooltip span {
+  white-space: normal;
+  font-size: 10px;
+  font-weight: 100;
+  visibility: hidden;
+  max-height: 200px;
+  min-width: 100px;
+  max-width: 200px;
+  background-color: black;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.tooltip:hover span {
+  visibility: visible;
+}
