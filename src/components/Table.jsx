@@ -1,12 +1,16 @@
-import { useTable } from 'react-table';
+import { useTable, initialState } from 'react-table';
 import './styles/Table_styles.css';
 import Button from './Button';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 
 function Table({ columns, data }) {
   function TableUI({ columns, data }) {
+    const initialState = { hiddenColumns: ['serviceGroup'] };
+
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
       columns,
       data,
+      initialState,
     });
     // Render the UI for your table
     return (
@@ -31,12 +35,19 @@ function Table({ columns, data }) {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
-                  console.log(cell);
-                  if (cell.value !== 'X' && cell.value !== undefined) {
+                  if (cell.column.id === 'service') {
                     return (
                       <td className="service" {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                        <Button title="test" type="select" />
+                        <Grid fluid className="serviceContainer">
+                          <Row>
+                            <Col xs={10} className="serviceNameDiv">
+                              <span className="serviceName">{cell.render('Cell')}</span>
+                            </Col>
+                            <Col xs={2}>
+                              <Button title="" type="select" />
+                            </Col>
+                          </Row>
+                        </Grid>
                       </td>
                     );
                   } else {

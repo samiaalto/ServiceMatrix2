@@ -28,7 +28,10 @@ export default function App() {
   ];
 
   function mapColumns(additionalServices) {
-    let columns = [{ Header: ' ', accessor: 'service', tipText: '' }];
+    let columns = [
+      { Header: ' ', accessor: 'service', tipText: '' },
+      { Header: 'Service Group', accessor: 'serviceGroup', tipText: '' },
+    ];
     additionalServices.records.map((record) =>
       columns.push({
         Header: t(record.ServiceCode),
@@ -44,6 +47,7 @@ export default function App() {
     for (let record of services.records) {
       let service = {};
       service['service'] = t(record.ServiceCode);
+      service['serviceGroup'] = t(record.ServiceGroup);
       for (let addon of record.AdditionalServices) {
         service[addon.Addon] = 'X';
       }
@@ -56,8 +60,19 @@ export default function App() {
   const data = mapRows(services);
   //const data = useMemo(() => mapRows(services), []);
 
+  const filterCriteria = (obj) => {
+    if (selectedItem[0]) {
+      return obj.serviceGroup.includes(selectedItem[0].value);
+    } else {
+      return obj.serviceGroup.includes('');
+    }
+    //&& obj.lastName.includes(lastName)
+    //&& obj.city.includes(city);
+  };
+
   useEffect(() => {
-    console.log(selectedItem);
+    if (selectedItem[0]) {
+    }
   }, [selectedItem]);
 
   function handleButtonClick(e) {
@@ -100,7 +115,7 @@ export default function App() {
             />
           </Col>
         </Row>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={data.filter(filterCriteria)} />
       </Grid>
     </div>
   );

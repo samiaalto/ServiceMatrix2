@@ -19,7 +19,7 @@ function ResetButton({ title, type, onClick }: buttonProps) {
     switch (param) {
       case 'clipboard':
         return <Clipboard />;
-      case 'service':
+      case 'select':
         return <Select />;
       default:
         return <Redo />;

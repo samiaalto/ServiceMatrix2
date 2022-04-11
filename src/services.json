@@ -92,7 +92,7 @@
       "DisplayNameFI": "Express-paketti",
       "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 14 parcels will be delivered between 8 am and 4 pm on the next working day and this service covers more than 95% of Finnish companies.",
       "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 14-paketti toimitetaan klo 8–16 välillä seuraavana arkipäivänä ja tämän palvelun piirissä on yli 95% Suomen yrityksistä.",
-      "ServiceGroup": "Parcel Services",
+      "ServiceGroup": "Transport Unit Services",
       "LabelName": "Express-paketti",
       "ProcessNumber": "14",
       "Dimensions": [
