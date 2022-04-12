@@ -2,6 +2,7 @@ import './styles.css';
 import { useState, useEffect, useMemo } from 'react';
 import Dropdown from './components/Dropdown';
 import Button from './components/Button';
+import Checkbox from './components/Checkbox';
 import Table from './components/Table';
 import additionalServices from './additionalServices.json';
 import services from './services.json';
@@ -27,6 +28,10 @@ export default function App() {
     { id: 1, value: t('Finnish'), additionalInfo: 'fi' },
   ];
 
+  function handleButtonClick(e) {
+    console.log(e);
+  }
+
   function mapColumns(additionalServices) {
     let columns = [
       { Header: ' ', accessor: 'service', tipText: '' },
@@ -46,10 +51,34 @@ export default function App() {
     let rows = [];
     for (let record of services.records) {
       let service = {};
-      service['service'] = t(record.ServiceCode);
+      service['service'] = (
+        //<Grid fluid className="serviceContainer">
+        <Row>
+          <Col xs={10} className="serviceNameDiv">
+            <span className="serviceName">{t(record.ServiceCode)}</span>
+          </Col>
+          <Col xs={2} className="serviceButton">
+            <Button
+              title=""
+              type="select"
+              onClick={(e) => {
+                handleButtonClick(e);
+              }}
+            />
+          </Col>
+        </Row>
+        //</Grid>
+      );
       service['serviceGroup'] = t(record.ServiceGroup);
       for (let addon of record.AdditionalServices) {
-        service[addon.Addon] = 'X';
+        service[addon.Addon] = (
+          <Checkbox
+            title={'X'}
+            onClick={(e) => {
+              handleButtonClick(e);
+            }}
+          />
+        );
       }
       rows.push(service);
     }
@@ -74,10 +103,6 @@ export default function App() {
     if (selectedItem[0]) {
     }
   }, [selectedItem]);
-
-  function handleButtonClick(e) {
-    console.log(e.target.className);
-  }
 
   return (
     <div className="App">
@@ -115,7 +140,9 @@ export default function App() {
             />
           </Col>
         </Row>
-        <Table columns={columns} data={data.filter(filterCriteria)} />
+        <div className="content">
+          <Table columns={columns} data={data.filter(filterCriteria)} />
+        </div>
       </Grid>
     </div>
   );

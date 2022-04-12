@@ -1,0 +1,48 @@
+:root {
+  --checkbox-border-radius: 0;
+  --reset-button-bg: #394b58;
+  --reset-button-border: 2px solid #394b58;
+  --reset-button-hover-color: rgb(255, 194, 38);
+  --clipboard-button-bg: #6c757d;
+  --clipboard-button-border: 2px solid #6c757d;
+  --select-button-bg: #fff;
+  --select-button-border: 0;
+  --select-button-hover-bg: #394b58;
+  --speed: 0.3s ease-in-out;
+}
+
+input[type='checkbox'] {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.checkbox {
+  height: 100% !important;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.checkboxLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.checkboxLabel svg {
+  height: 39px;
+  width: 39px;
+  background-color: rgba(255, 255, 255, 0);
+}

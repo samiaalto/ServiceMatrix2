@@ -89,7 +89,7 @@
     {
       "ServiceCode": "3105",
       "DisplayNameEN": "Registration",
-      "DisplayNameFI": "",
+      "DisplayNameFI": null,
       "DescriptionEN": "A registered shipment is only handed over to the recipient or a person authorized by the recipient. The recipient’s identity and any power of attorney are verified upon handing over.",
       "DescriptionFI": null,
       "LabelMarking": "5",
@@ -135,6 +135,97 @@
       "Pudo": true,
       "ExcludedAdditionalServices": [],
       "AvailableCountries": []
+    },
+    {
+      "ServiceCode": "3116",
+      "DisplayNameEN": "Installation, Ready for Use",
+      "DisplayNameFI": "Installation, Ready for Use",
+      "DescriptionEN": "Installation, Ready for Use",
+      "DescriptionFI": "Installation, Ready for Use",
+      "LabelMarking": "16",
+      "Home": true,
+      "Pudo": false,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        },
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3119",
+      "DisplayNameEN": "Shelving Service",
+      "DisplayNameFI": "Hyllytyspalvelu",
+      "DescriptionEN": "Shelving Service",
+      "DescriptionFI": "Shelving Service",
+      "LabelMarking": "19",
+      "Home": true,
+      "Pudo": false,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3137",
+      "DisplayNameEN": "Transport to Recycling",
+      "DisplayNameFI": "Transport to Recycling",
+      "DescriptionEN": "Transport to Recycling",
+      "DescriptionFI": "Transport to Recycling",
+      "LabelMarking": "37",
+      "Home": true,
+      "Pudo": false,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        },
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3139",
+      "DisplayNameEN": "Electronic notice of arrival",
+      "DisplayNameFI": "Electronic notice of arrival",
+      "DescriptionEN": "We will send an SMS to the parcel addressee after the driver has loaded the parcel at the terminal.",
+      "DescriptionFI": "We will send an SMS to the parcel addressee after the driver has loaded the parcel at the terminal.",
+      "LabelMarking": null,
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        },
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
+        }
+      ]
     }
   ]
 }

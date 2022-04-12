@@ -3,3 +3,12 @@
   font-size: 13px;
   text-align: center;
 }
+
+html,
+body {
+  overflow: hidden;
+}
+
+.content {
+  margin-right: 0;
+}
