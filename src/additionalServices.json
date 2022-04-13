@@ -54,7 +54,7 @@
       "DisplayNameEN": "Paid by other than sender",
       "DisplayNameFI": "Maksaja muu kuin lähettäjä",
       "DescriptionEN": "Transportation and additional services can be paid by other than the sender.",
-      "DescriptionFI": null,
+      "DescriptionFI": "Transportation and additional services can be paid by other than the sender.",
       "LabelMarking": "3",
       "Home": true,
       "Pudo": true,
@@ -66,7 +66,7 @@
       "DisplayNameEN": "Fragile",
       "DisplayNameFI": "Särkyvä",
       "DescriptionEN": "With the service, you can ensure the careful handling of your products vulnerable to damage. Using the additional service requires a marking on the shipment and the EDI message.",
-      "DescriptionFI": null,
+      "DescriptionFI": "With the service, you can ensure the careful handling of your products vulnerable to damage. Using the additional service requires a marking on the shipment and the EDI message.",
       "LabelMarking": "4",
       "Home": true,
       "Pudo": true,
@@ -91,7 +91,7 @@
       "DisplayNameEN": "Registration",
       "DisplayNameFI": null,
       "DescriptionEN": "A registered shipment is only handed over to the recipient or a person authorized by the recipient. The recipient’s identity and any power of attorney are verified upon handing over.",
-      "DescriptionFI": null,
+      "DescriptionFI": "A registered shipment is only handed over to the recipient or a person authorized by the recipient. The recipient’s identity and any power of attorney are verified upon handing over.",
       "LabelMarking": "5",
       "Home": true,
       "Pudo": true,
@@ -107,7 +107,7 @@
       "DisplayNameEN": "Saturday Delivery",
       "DisplayNameFI": "Lauantaijakelu",
       "DescriptionEN": "A shipment sent on Friday is delivered to the recipient on an ordinary Saturday by 4:00 p.m. in the areas and between the locations specified in the Delivery Time Inquiry.",
-      "DescriptionFI": null,
+      "DescriptionFI": "A shipment sent on Friday is delivered to the recipient on an ordinary Saturday by 4:00 p.m. in the areas and between the locations specified in the Delivery Time Inquiry.",
       "LabelMarking": "6",
       "Home": true,
       "Pudo": true,
@@ -122,14 +122,18 @@
           "Addon": "3102"
         }
       ],
-      "AvailableCountries": []
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
     },
     {
       "ServiceCode": "3115",
       "DisplayNameEN": "Delivery to Specific Location",
       "DisplayNameFI": "Täsmäpaikkajakelu",
       "DescriptionEN": "We deliver the shipment to an agreed place near the recipient, for instance, inside a store or to an office. The exact delivery location will be agreed with the recipient via phone.",
-      "DescriptionFI": null,
+      "DescriptionFI": "We deliver the shipment to an agreed place near the recipient, for instance, inside a store or to an office. The exact delivery location will be agreed with the recipient via phone.",
       "LabelMarking": "15",
       "Home": true,
       "Pudo": true,
@@ -209,6 +213,158 @@
       "DescriptionEN": "We will send an SMS to the parcel addressee after the driver has loaded the parcel at the terminal.",
       "DescriptionFI": "We will send an SMS to the parcel addressee after the driver has loaded the parcel at the terminal.",
       "LabelMarking": null,
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        },
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3143",
+      "DisplayNameEN": "LQ Process permit",
+      "DisplayNameFI": "LQ Prosessilupa",
+      "DescriptionEN": "The additional service enables the lawful transport of dangerous goods packed in limited quantity, provided for in the Finnish Act on the Transport of Dangerous Goods. The LQ Process Permit additional service can be used for sending products, ADR classifications and quantities of dangerous goods separately defined by Posti packed in a parcel. Unlike other dangerous goods transport services, shipments sent through the LQ Process Permit service can be taken to a Pickup Point and Posti’s VAK (dangerous goods) tape is not attached to the shipment",
+      "DescriptionFI": "The additional service enables the lawful transport of dangerous goods packed in limited quantity, provided for in the Finnish Act on the Transport of Dangerous Goods. The LQ Process Permit additional service can be used for sending products, ADR classifications and quantities of dangerous goods separately defined by Posti packed in a parcel. Unlike other dangerous goods transport services, shipments sent through the LQ Process Permit service can be taken to a Pickup Point and Posti’s VAK (dangerous goods) tape is not attached to the shipment",
+      "LabelMarking": "43",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3146",
+      "DisplayNameEN": "Pickup reminder by mail",
+      "DisplayNameFI": "Pickup reminder by mail",
+      "DescriptionEN": "A reminder letter is sent to the recipient of the item either as a printed copy or through OmaPosti, if the recipient has not picked up the item within eight (8) days from its arrival.",
+      "DescriptionFI": "A reminder letter is sent to the recipient of the item either as a printed copy or through OmaPosti, if the recipient has not picked up the item within eight (8) days from its arrival.",
+      "LabelMarking": "46",
+      "Home": true,
+      "Pudo": false,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3147",
+      "DisplayNameEN": "Fast track",
+      "DisplayNameFI": "Fast track",
+      "DescriptionEN": "The Fast track supplementary service delivers same-day postal parcels six days a week (Mon-Sat) in the capital region if the parcel arrives at the Posti terminal by 1 p.m. The process is always agreed on separately with the customer. Parcels are delivered to Posti's parcel lockers in grocery stores and shopping centers by 7 p.m for consumer pickup.",
+      "DescriptionFI": "The Fast track supplementary service delivers same-day postal parcels six days a week (Mon-Sat) in the capital region if the parcel arrives at the Posti terminal by 1 p.m. The process is always agreed on separately with the customer. Parcels are delivered to Posti's parcel lockers in grocery stores and shopping centers by 7 p.m for consumer pickup.",
+      "LabelMarking": "47",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3151",
+      "DisplayNameEN": "Recipient identification",
+      "DisplayNameFI": "Recipient identification",
+      "DescriptionEN": "Recipient is identified by Posti personnel prior to shipment delivery",
+      "DescriptionFI": "Recipient is identified by Posti personnel prior to shipment delivery",
+      "LabelMarking": "51",
+      "Home": false,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3155",
+      "DisplayNameEN": "Blocker for Parcel Steering",
+      "DisplayNameFI": "Blocker for Parcel Steering",
+      "DescriptionEN": "Blocks parcel steering according My Pickup Point service",
+      "DescriptionFI": "Blocks parcel steering according My Pickup Point service",
+      "LabelMarking": "55",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3162",
+      "DisplayNameEN": "Transport of Dangerous Goods",
+      "DisplayNameFI": "Vaarallisten aineiden kuljetus",
+      "DescriptionEN": "We handle the transport of any parcels classified as dangerous goods safely, reliably and in accordance with the applicable legislation. <br><br> NOTE! At least two copies of the Transport of Dangerous Goods Appendix should be attached to the shipment when Dangerous Goods (ADR) additional service is used.",
+      "DescriptionFI": "We handle the transport of any parcels classified as dangerous goods safely, reliably and in accordance with the applicable legislation. <br><br> NOTE! At least two copies of the Transport of Dangerous Goods Appendix should be attached to the shipment when Dangerous Goods (ADR) additional service is used.",
+      "LabelMarking": "62",
+      "Home": true,
+      "Pudo": false,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3163",
+      "DisplayNameEN": "Deliverable in Person",
+      "DisplayNameFI": "Henkilökohtaisesti luovutettava",
+      "DescriptionEN": "The delivery is only handed to the person specified in the shipment. The identity of the person picking up the shipment is verified, and identity can be verified using a driver's license, passport or photo identity document. The recipient will be contacted before starting the route or at least an hour before delivery to the recipient.",
+      "DescriptionFI": "The delivery is only handed to the person specified in the shipment. The identity of the person picking up the shipment is verified, and identity can be verified using a driver's license, passport or photo identity document. The recipient will be contacted before starting the route or at least an hour before delivery to the recipient.",
+      "LabelMarking": "63",
+      "Home": true,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        },
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
+        }
+      ]
+    },
+    {
+      "ServiceCode": "3164",
+      "DisplayNameEN": "Delivery without receivers signature",
+      "DisplayNameFI": "Luovutus ilman vastaanottajan allekirjoitusta",
+      "DescriptionEN": "We will deliver your item to the recipient’s address even if the recipient is not at home. We will leave the item in a protected place.",
+      "DescriptionFI": "We will deliver your item to the recipient’s address even if the recipient is not at home. We will leave the item in a protected place.",
+      "LabelMarking": "64",
       "Home": true,
       "Pudo": true,
       "ExcludedAdditionalServices": [],

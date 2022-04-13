@@ -153,3 +153,9 @@ th:hover::after {
   width: 100%;
   z-index: -1;
 }
+
+tbody {
+  width: calc(200px);
+  overflow: auto;
+  table-layout: fixed;
+}

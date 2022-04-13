@@ -7,8 +7,10 @@
 html,
 body {
   overflow: hidden;
+  width: 100vw;
 }
 
 .content {
   margin-right: 0;
+  overflow: auto;
 }
