@@ -1,13 +1,24 @@
 import './styles/Checkbox_styles.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { animated, useSpring, useChain, useSpringRef } from 'react-spring';
 
 interface checkboxProps {
   title: string;
+  classname: string;
+  idx: string;
+  checked: boolean;
   onClick: (el) => void;
 }
 
-function Checkbox({ title, onClick }: checkboxProps) {
+const Checkbox = ({
+  title,
+  idx,
+  classname,
+  onClick,
+  checked,
+  row: { index },
+  column: { id },
+}: checkboxProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const [checkMarkLength, setCheckMarkLenght] = useState(null);
 
@@ -31,13 +42,25 @@ function Checkbox({ title, onClick }: checkboxProps) {
   );
 
   function handleOnClick(el) {
-    onClick(el);
-    //console.log('CLICKED');
+    setIsChecked(!isChecked);
+    onClick({
+      row: index,
+      column: id,
+      isChecked: !isChecked,
+    });
   }
 
   return (
     <label className="checkboxLabel">
-      <input type="checkbox" onChange={() => setIsChecked(!isChecked)} />
+      <input
+        type="checkbox"
+        id={idx}
+        checked={checked}
+        className={classname}
+        onChange={(el) => {
+          handleOnClick(el);
+        }}
+      />
       <animated.svg
         className={`checkbox ${isChecked ? 'checkbox--active' : ''}`}
         aria-hidden="true"
@@ -68,6 +91,6 @@ function Checkbox({ title, onClick }: checkboxProps) {
       </animated.svg>
     </label>
   );
-}
+};
 
 export default Checkbox;

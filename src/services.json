@@ -38,6 +38,30 @@
       "AdditionalServices": [
         {
           "Addon": "3102"
+        },
+        {
+          "Addon": "3103"
+        },
+        {
+          "Addon": "3104"
+        },
+        {
+          "Addon": "3139"
+        },
+        {
+          "Addon": "3143"
+        },
+        {
+          "Addon": "3155"
+        },
+        {
+          "Addon": "3162"
+        },
+        {
+          "Addon": "3163"
+        },
+        {
+          "Addon": "3164"
         }
       ],
       "Routes": [
@@ -92,7 +116,7 @@
       "DisplayNameFI": "Express-paketti",
       "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 14 parcels will be delivered between 8 am and 4 pm on the next working day and this service covers more than 95% of Finnish companies.",
       "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 14-paketti toimitetaan klo 8–16 välillä seuraavana arkipäivänä ja tämän palvelun piirissä on yli 95% Suomen yrityksistä.",
-      "ServiceGroup": "Transport Unit Services",
+      "ServiceGroup": "Parcel Services",
       "LabelName": "Express-paketti",
       "ProcessNumber": "14",
       "Dimensions": [
@@ -127,6 +151,45 @@
         },
         {
           "Addon": "3102"
+        },
+        {
+          "Addon": "3103"
+        },
+        {
+          "Addon": "3104"
+        },
+        {
+          "Addon": "3106"
+        },
+        {
+          "Addon": "3115"
+        },
+        {
+          "Addon": "3139"
+        },
+        {
+          "Addon": "3137"
+        },
+        {
+          "Addon": "3119"
+        },
+        {
+          "Addon": "3116"
+        },
+        {
+          "Addon": "3143"
+        },
+        {
+          "Addon": "3155"
+        },
+        {
+          "Addon": "3162"
+        },
+        {
+          "Addon": "3163"
+        },
+        {
+          "Addon": "3164"
         }
       ],
       "Routes": [
@@ -151,6 +214,93 @@
           "Fid_deliveryservices": 2
         }
       ]
+    },
+    {
+      "ServiceCode": "2103",
+      "DisplayNameEN": "Postal Parcel",
+      "DisplayNameFI": "Postipaketti",
+      "DescriptionEN": "Postal Parcel",
+      "DescriptionFI": "Postipaketti",
+      "ServiceGroup": "Parcel Services",
+      "LabelName": "Postipaketti",
+      "ProcessNumber": "16",
+      "Dimensions": [],
+      "AdditionalServices": [
+        {
+          "Addon": "3101"
+        },
+        {
+          "Addon": "3103"
+        },
+        {
+          "Addon": "3104"
+        },
+        {
+          "Addon": "3105"
+        },
+        {
+          "Addon": "3139"
+        },
+        {
+          "Addon": "3143"
+        },
+        {
+          "Addon": "3146"
+        },
+        {
+          "Addon": "3151"
+        },
+        {
+          "Addon": "3155"
+        },
+        {
+          "Addon": "3163"
+        }
+      ],
+      "Routes": [],
+      "Fields": []
+    },
+    {
+      "ServiceCode": "2104",
+      "DisplayNameEN": "Home Parcel",
+      "DisplayNameFI": "Kotipaketti",
+      "DescriptionEN": "Home Parcel",
+      "DescriptionFI": "Kotipaketti",
+      "ServiceGroup": "Parcel Services",
+      "LabelName": "Kotipaketti",
+      "ProcessNumber": "21",
+      "Dimensions": [],
+      "AdditionalServices": [
+        {
+          "Addon": "3101"
+        },
+        {
+          "Addon": "3102"
+        },
+        {
+          "Addon": "3103"
+        },
+        {
+          "Addon": "3104"
+        },
+        {
+          "Addon": "3143"
+        },
+        {
+          "Addon": "3147"
+        },
+        {
+          "Addon": "3162"
+        },
+        {
+          "Addon": "3163"
+        },
+        {
+          "Addon": "3164"
+        }
+      ],
+      "Routes": [],
+      "Fields": []
     }
   ]
 }

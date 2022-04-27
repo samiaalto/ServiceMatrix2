@@ -11,7 +11,10 @@
       "Pudo": true,
       "ExcludedAdditionalServices": [
         {
-          "Addon": "3115"
+          "Addon": "3164"
+        },
+        {
+          "Addon": "3119"
         },
         {
           "Addon": "3106"
@@ -20,6 +23,15 @@
       "AvailableCountries": [
         {
           "Country": "FI"
+        },
+        {
+          "Country": "EE"
+        },
+        {
+          "Country": "LV"
+        },
+        {
+          "Country": "LT"
         }
       ]
     },
@@ -33,9 +45,6 @@
       "Home": true,
       "Pudo": true,
       "ExcludedAdditionalServices": [
-        {
-          "Addon": "3101"
-        },
         {
           "Addon": "3105"
         }
@@ -89,7 +98,7 @@
     {
       "ServiceCode": "3105",
       "DisplayNameEN": "Registration",
-      "DisplayNameFI": null,
+      "DisplayNameFI": "Registration",
       "DescriptionEN": "A registered shipment is only handed over to the recipient or a person authorized by the recipient. The recipient’s identity and any power of attorney are verified upon handing over.",
       "DescriptionFI": "A registered shipment is only handed over to the recipient or a person authorized by the recipient. The recipient’s identity and any power of attorney are verified upon handing over.",
       "LabelMarking": "5",
@@ -143,7 +152,7 @@
     {
       "ServiceCode": "3116",
       "DisplayNameEN": "Installation, Ready for Use",
-      "DisplayNameFI": "Installation, Ready for Use",
+      "DisplayNameFI": "Asennuspalvelu",
       "DescriptionEN": "Installation, Ready for Use",
       "DescriptionFI": "Installation, Ready for Use",
       "LabelMarking": "16",
@@ -184,7 +193,7 @@
     {
       "ServiceCode": "3137",
       "DisplayNameEN": "Transport to Recycling",
-      "DisplayNameFI": "Transport to Recycling",
+      "DisplayNameFI": "Kierrätykseen vienti",
       "DescriptionEN": "Transport to Recycling",
       "DescriptionFI": "Transport to Recycling",
       "LabelMarking": "37",
@@ -209,7 +218,7 @@
     {
       "ServiceCode": "3139",
       "DisplayNameEN": "Electronic notice of arrival",
-      "DisplayNameFI": "Electronic notice of arrival",
+      "DisplayNameFI": "Sähköinen noutomuistutus",
       "DescriptionEN": "We will send an SMS to the parcel addressee after the driver has loaded the parcel at the terminal.",
       "DescriptionFI": "We will send an SMS to the parcel addressee after the driver has loaded the parcel at the terminal.",
       "LabelMarking": null,
@@ -250,7 +259,7 @@
     {
       "ServiceCode": "3146",
       "DisplayNameEN": "Pickup reminder by mail",
-      "DisplayNameFI": "Pickup reminder by mail",
+      "DisplayNameFI": "Noutomuistutus kirjeenä",
       "DescriptionEN": "A reminder letter is sent to the recipient of the item either as a printed copy or through OmaPosti, if the recipient has not picked up the item within eight (8) days from its arrival.",
       "DescriptionFI": "A reminder letter is sent to the recipient of the item either as a printed copy or through OmaPosti, if the recipient has not picked up the item within eight (8) days from its arrival.",
       "LabelMarking": "46",
@@ -266,7 +275,7 @@
     {
       "ServiceCode": "3147",
       "DisplayNameEN": "Fast track",
-      "DisplayNameFI": "Fast track",
+      "DisplayNameFI": "Fasttrack",
       "DescriptionEN": "The Fast track supplementary service delivers same-day postal parcels six days a week (Mon-Sat) in the capital region if the parcel arrives at the Posti terminal by 1 p.m. The process is always agreed on separately with the customer. Parcels are delivered to Posti's parcel lockers in grocery stores and shopping centers by 7 p.m for consumer pickup.",
       "DescriptionFI": "The Fast track supplementary service delivers same-day postal parcels six days a week (Mon-Sat) in the capital region if the parcel arrives at the Posti terminal by 1 p.m. The process is always agreed on separately with the customer. Parcels are delivered to Posti's parcel lockers in grocery stores and shopping centers by 7 p.m for consumer pickup.",
       "LabelMarking": "47",
@@ -282,7 +291,7 @@
     {
       "ServiceCode": "3151",
       "DisplayNameEN": "Recipient identification",
-      "DisplayNameFI": "Recipient identification",
+      "DisplayNameFI": "Vastaanottajan tunnistaminen",
       "DescriptionEN": "Recipient is identified by Posti personnel prior to shipment delivery",
       "DescriptionFI": "Recipient is identified by Posti personnel prior to shipment delivery",
       "LabelMarking": "51",
@@ -298,7 +307,7 @@
     {
       "ServiceCode": "3155",
       "DisplayNameEN": "Blocker for Parcel Steering",
-      "DisplayNameFI": "Blocker for Parcel Steering",
+      "DisplayNameFI": "Dynaamisen ohjauksen esto",
       "DescriptionEN": "Blocks parcel steering according My Pickup Point service",
       "DescriptionFI": "Blocks parcel steering according My Pickup Point service",
       "LabelMarking": "55",

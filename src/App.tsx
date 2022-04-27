@@ -1,5 +1,5 @@
 import './styles.css';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, createRef } from 'react';
 import Dropdown from './components/Dropdown';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
@@ -11,6 +11,8 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 
 export default function App() {
   const [selectedItem, setSelectedItem] = useState([]);
+  const [rowData, setRowData] = useState([]);
+  const [checkedState, setCheckedState] = useState([]);
 
   const { t, i18n } = useTranslation();
 
@@ -35,22 +37,66 @@ export default function App() {
   function mapColumns(additionalServices) {
     let columns = [
       { Header: ' ', accessor: 'service', tipText: '' },
+      { Header: ' ', accessor: 'serviceCode', tipText: '' },
       { Header: 'Service Group', accessor: 'serviceGroup', tipText: '' },
     ];
     additionalServices.records.map((record) =>
       columns.push({
         Header: t(record.ServiceCode),
         accessor: record.ServiceCode,
+        Cell: Checkbox,
         tipText: t(record.ServiceCode + '_tooltip'),
       })
     );
     return columns;
   }
 
-  function mapRows(services) {
+  const onClick = (e) => {
+    console.log(e);
+
+    setCheckedState((prevState) => ({
+      ...prevState,
+      [e.row]: { ...prevState[e.row], [e.column]: e.isChecked },
+    }));
+
+    let excluded = [];
+    for (let record of additionalServices.records) {
+      if (record.ServiceCode === e.column) {
+        for (let excludedAddon of record.ExcludedAdditionalServices) {
+          excluded.push(excludedAddon.Addon);
+        }
+      }
+    }
+
+    for (const [key, value] of Object.entries(rowData[e.row])) {
+      if ((excluded.includes(key) && value === 'Y') || (excluded.includes(key) && value === 'X')) {
+        let value = 'Y';
+        if (!e.isChecked) {
+          value = 'X';
+        }
+        //setSkipPageReset(true);
+        setRowData((old) =>
+          old.map((row, index) => {
+            if (index === e.row) {
+              return {
+                ...old[e.row],
+                [key]: value,
+              };
+            }
+            return row;
+          })
+        );
+      }
+    }
+  };
+
+  function mapRows(services, additionalServices) {
+    setCheckedState([]);
     let rows = [];
+    let checksRows = [];
     for (let record of services.records) {
       let service = {};
+      let checks = {};
       service['service'] = (
         //<Grid fluid className="serviceContainer">
         <Row>
@@ -69,24 +115,34 @@ export default function App() {
         </Row>
         //</Grid>
       );
+      service['serviceCode'] = record.ServiceCode;
       service['serviceGroup'] = t(record.ServiceGroup);
-      for (let addon of record.AdditionalServices) {
-        service[addon.Addon] = (
-          <Checkbox
-            title={'X'}
-            onClick={(e) => {
-              handleButtonClick(e);
-            }}
-          />
-        );
+      for (let addon of additionalServices.records) {
+        if (record.AdditionalServices.some((e) => e.Addon === addon.ServiceCode)) {
+          checks[addon.ServiceCode] = false;
+          service[addon.ServiceCode] = 'X';
+        } else {
+          service[addon.ServiceCode] = undefined;
+        }
       }
+      checksRows.push(checks);
       rows.push(service);
     }
-    return rows;
+    setCheckedState(checksRows);
+    return setRowData(rows);
   }
 
   const columns = mapColumns(additionalServices);
-  const data = mapRows(services);
+  //const data = mapRows(services);
+
+  useEffect(() => {
+    mapRows(services, additionalServices);
+  }, []);
+
+  useEffect(() => {
+    //console.log(rowData);
+  }, [rowData]);
+
   //const data = useMemo(() => mapRows(services), []);
 
   const filterCriteria = (obj) => {
@@ -97,6 +153,22 @@ export default function App() {
     }
     //&& obj.lastName.includes(lastName)
     //&& obj.city.includes(city);
+  };
+
+  const updateMyData = (rowIndex, columnId, value) => {
+    // We also turn on the flag to not reset the page
+    //setSkipPageReset(true);
+    setRowData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+          };
+        }
+        return row;
+      })
+    );
   };
 
   useEffect(() => {
@@ -141,7 +213,7 @@ export default function App() {
           </Col>
         </Row>
         <div className="content">
-          <Table columns={columns} data={data.filter(filterCriteria)} />
+          <Table columns={columns} data={rowData} onClick={onClick} updateMyData={updateMyData} />
         </div>
       </Grid>
     </div>
