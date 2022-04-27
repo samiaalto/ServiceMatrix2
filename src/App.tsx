@@ -12,6 +12,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 export default function App() {
   const [selectedItem, setSelectedItem] = useState([]);
   const [rowData, setRowData] = useState([]);
+  const [columnData, setColumnData] = useState([]);
   const [checkedState, setCheckedState] = useState([]);
 
   const { t, i18n } = useTranslation();
@@ -30,15 +31,15 @@ export default function App() {
     { id: 1, value: t('Finnish'), additionalInfo: 'fi' },
   ];
 
-  function handleButtonClick(e) {
+  const handleButtonClick = (e) => {
     console.log(e);
-  }
+  };
 
-  function mapColumns(additionalServices) {
+  const mapColumns = (additionalServices) => {
     let columns = [
-      { Header: ' ', accessor: 'service', tipText: '' },
-      { Header: ' ', accessor: 'serviceCode', tipText: '' },
-      { Header: 'Service Group', accessor: 'serviceGroup', tipText: '' },
+      { Header: ' ', accessor: 'service', tipText: '', show: true },
+      { Header: ' ', accessor: 'serviceCode', tipText: '', show: true },
+      { Header: 'Service Group', accessor: 'serviceGroup', tipText: '', show: false },
     ];
     additionalServices.records.map((record) =>
       columns.push({
@@ -46,10 +47,42 @@ export default function App() {
         accessor: record.ServiceCode,
         Cell: Checkbox,
         tipText: t(record.ServiceCode + '_tooltip'),
+        show: true,
       })
     );
-    return columns;
-  }
+
+    return setColumnData(columns);
+  };
+
+  const hideColumn = (addon, currentRow, visibleRows) => {
+    let emptyCount = 1;
+    for (const [i, row] of rowData.entries()) {
+      if (i !== currentRow) {
+        for (const [key, value] of Object.entries(row)) {
+          if (key === addon && value !== 'X') {
+            emptyCount++;
+          }
+        }
+      }
+    }
+    if (emptyCount === rowData.length) {
+      //hide column
+      console.log('Hide column ' + addon);
+
+      setColumnData((prevState) =>
+        prevState.map((item, index) =>
+          item.accessor === addon ? { ...item, show: !item.show } : item
+        )
+      );
+    } else {
+      //show hidden column
+      setColumnData((prevState) =>
+        prevState.map((item, index) =>
+          item.accessor === addon && !item.show ? { ...item, show: !item.show } : item
+        )
+      );
+    }
+  };
 
   const onClick = (e) => {
     console.log(e);
@@ -71,9 +104,13 @@ export default function App() {
     for (const [key, value] of Object.entries(rowData[e.row])) {
       if ((excluded.includes(key) && value === 'Y') || (excluded.includes(key) && value === 'X')) {
         let value = 'Y';
+
         if (!e.isChecked) {
           value = 'X';
         }
+
+        hideColumn(key, e.row, '');
+
         //setSkipPageReset(true);
         setRowData((old) =>
           old.map((row, index) => {
@@ -90,7 +127,7 @@ export default function App() {
     }
   };
 
-  function mapRows(services, additionalServices) {
+  const mapRows = (services, additionalServices) => {
     setCheckedState([]);
     let rows = [];
     let checksRows = [];
@@ -130,18 +167,19 @@ export default function App() {
     }
     setCheckedState(checksRows);
     return setRowData(rows);
-  }
+  };
 
-  const columns = mapColumns(additionalServices);
+  //const columns = mapColumns(additionalServices);
   //const data = mapRows(services);
 
   useEffect(() => {
+    mapColumns(additionalServices);
     mapRows(services, additionalServices);
   }, []);
 
   useEffect(() => {
-    //console.log(rowData);
-  }, [rowData]);
+    console.log(columnData);
+  }, [columnData]);
 
   //const data = useMemo(() => mapRows(services), []);
 
@@ -213,7 +251,12 @@ export default function App() {
           </Col>
         </Row>
         <div className="content">
-          <Table columns={columns} data={rowData} onClick={onClick} updateMyData={updateMyData} />
+          <Table
+            columns={columnData}
+            data={rowData}
+            onClick={onClick}
+            updateMyData={updateMyData}
+          />
         </div>
       </Grid>
     </div>

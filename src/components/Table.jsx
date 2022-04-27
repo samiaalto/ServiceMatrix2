@@ -4,7 +4,11 @@ import './styles/Table_styles.css';
 
 function Table({ columns, data, updateMyData, skipPageReset, onClick, checked }) {
   // function TableUI({ columns, data, isChecked }) {
-  const initialState = { hiddenColumns: ['serviceGroup'] };
+  const initialState = {
+    hiddenColumns: columns.map((column) => {
+      if (column.show === false) return column.accessor || column.id;
+    }),
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state } = useTable({
     columns,
