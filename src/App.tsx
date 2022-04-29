@@ -106,6 +106,45 @@ export default function App() {
     //console.log(out);
   };
 
+  const filterCountries = (e, route) => {
+    console.log(e);
+    const value = e[0].value;
+
+    if (route === 'destinationCountries') {
+      if (value === '') {
+        setFilteredData(rowData);
+      } else {
+        if (filteredData.length > 0) {
+          const result = rowData.filter((item) =>
+            item.destinationCountries.some((e) => e === value)
+          );
+
+          setFilteredData(result);
+        } else {
+          const result = rowData.filter((item) =>
+            item.destinationCountries.some((e) => e === value)
+          );
+
+          setFilteredData(result);
+        }
+      }
+    } else {
+      if (value === '') {
+        setFilteredData(rowData);
+      } else {
+        if (filteredData.length > 0) {
+          const result = rowData.filter((item) => item.departureCountry === value);
+
+          setFilteredData(result);
+        } else {
+          const result = rowData.filter((item) => item.departureCountry === value);
+
+          setFilteredData(result);
+        }
+      }
+    }
+  };
+
   const onFilterChange = (e) => {
     const value = e.target.value;
 
@@ -342,7 +381,7 @@ export default function App() {
               items={departureCountries}
               multiSelect={false}
               onChange={(e) => {
-                console.log(e);
+                filterCountries(e, 'departureCountries');
               }}
             />
           </Col>
@@ -352,7 +391,7 @@ export default function App() {
               items={destinationCountries}
               multiSelect={false}
               onChange={(e) => {
-                console.log(e);
+                filterCountries(e, 'destinationCountries');
               }}
             />
           </Col>
