@@ -4,16 +4,24 @@ import Dropdown from './components/Dropdown';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Table from './components/Table';
+import Filter from './components/Filter';
 import additionalServices from './additionalServices.json';
 import services from './services.json';
 import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { useGlobalFilter } from 'react-table';
 
 export default function App() {
   const [selectedItem, setSelectedItem] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [columnData, setColumnData] = useState([]);
   const [checkedState, setCheckedState] = useState([]);
+  const [skipPageReset, setSkipPageReset] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [departureCountries, setDepartureCountries] = useState([]);
+  const [destinationCountries, setDestinationCountries] = useState([
+    { id: 0, value: 'FI', additionalInfo: 'FI' },
+  ]);
 
   const { t, i18n } = useTranslation();
 
@@ -37,9 +45,30 @@ export default function App() {
 
   const mapColumns = (additionalServices) => {
     let columns = [
-      { Header: ' ', accessor: 'service', tipText: '', show: true },
-      { Header: ' ', accessor: 'serviceCode', tipText: '', show: true },
-      { Header: 'Service Group', accessor: 'serviceGroup', tipText: '', show: false },
+      { Header: ' ', accessor: 'serviceName', tipText: '', show: true, sticky: 'left' },
+      { Header: ' ', accessor: 'serviceButton', tipText: '', show: true, sticky: 'left' },
+      { Header: ' ', accessor: 'serviceCode', tipText: '', show: true, sticky: 'left' },
+      {
+        Header: 'Departure Countries',
+        accessor: 'departureCountries',
+        tipText: '',
+        show: true,
+        sticky: 'left',
+      },
+      {
+        Header: 'Destination Countries',
+        accessor: 'destinationCountries',
+        tipText: '',
+        show: true,
+        sticky: 'left',
+      },
+      {
+        Header: 'Service Group',
+        accessor: 'serviceGroup',
+        tipText: '',
+        show: false,
+        sticky: 'left',
+      },
     ];
     additionalServices.records.map((record) =>
       columns.push({
@@ -52,6 +81,47 @@ export default function App() {
     );
 
     return setColumnData(columns);
+  };
+
+  const populateCountries = (route) => {
+    let out = [];
+    let countries = [];
+    for (let row of rowData) {
+      for (let country of row[route]) {
+        if (!countries || !countries.includes(country)) {
+          countries.push(country);
+        }
+      }
+    }
+    let index = 0;
+    for (let country of countries) {
+      out.push({ id: index, value: country, additionalInfo: country });
+      index++;
+    }
+    if (route === 'departureCountries') {
+      setDepartureCountries(out);
+    } else {
+      setDestinationCountries(out);
+    }
+    //console.log(out);
+  };
+
+  const onFilterChange = (e) => {
+    const value = e.target.value;
+
+    if (value === '') {
+      setFilteredData(rowData);
+    } else {
+      if (filteredData.length > 0) {
+        const result = rowData.filter((item) => item.destinationCountries.some((e) => e === value));
+
+        setFilteredData(result);
+      } else {
+        const result = rowData.filter((item) => item.destinationCountries.some((e) => e === value));
+
+        setFilteredData(result);
+      }
+    }
   };
 
   const hideColumn = (addon, currentRow, visibleRows) => {
@@ -67,8 +137,6 @@ export default function App() {
     }
     if (emptyCount === rowData.length) {
       //hide column
-      console.log('Hide column ' + addon);
-
       setColumnData((prevState) =>
         prevState.map((item, index) =>
           item.accessor === addon ? { ...item, show: !item.show } : item
@@ -109,9 +177,8 @@ export default function App() {
           value = 'X';
         }
 
+        setSkipPageReset(true);
         hideColumn(key, e.row, '');
-
-        //setSkipPageReset(true);
         setRowData((old) =>
           old.map((row, index) => {
             if (index === e.row) {
@@ -134,26 +201,49 @@ export default function App() {
     for (let record of services.records) {
       let service = {};
       let checks = {};
-      service['service'] = (
-        //<Grid fluid className="serviceContainer">
-        <Row>
-          <Col xs={10} className="serviceNameDiv">
-            <span className="serviceName">{t(record.ServiceCode)}</span>
-          </Col>
-          <Col xs={2} className="serviceButton">
-            <Button
-              title=""
-              type="select"
-              onClick={(e) => {
-                handleButtonClick(e);
-              }}
-            />
-          </Col>
-        </Row>
-        //</Grid>
+      service['serviceName'] = t(record.ServiceCode);
+      service['serviceButton'] = (
+        <Button
+          title=""
+          type="select"
+          onClick={(e) => {
+            handleButtonClick(e);
+          }}
+        />
       );
+      //service['service'] = (
+      //<Grid fluid className="serviceContainer">
+      //  <Row>
+      //    <Col xs={10} className="serviceNameDiv">
+      //      <span className="serviceName">{t(record.ServiceCode)}</span>
+      //    </Col>
+      //    <Col xs={2} className="serviceButton">
+      //      <Button
+      //        title=""
+      //        type="select"
+      //        onClick={(e) => {
+      //          handleButtonClick(e);
+      //        }}
+      //      />
+      //    </Col>
+      //  </Row>
+      //</Grid>
+      //);
       service['serviceCode'] = record.ServiceCode;
       service['serviceGroup'] = t(record.ServiceGroup);
+
+      let depCountries = [];
+      let destCountries = [];
+
+      for (let route of record.Routes) {
+        depCountries.push(route.DepartureCountry);
+        for (let destination of route.DestinationCountries) {
+          destCountries.push(destination.Country);
+        }
+      }
+      service['departureCountries'] = depCountries;
+      service['destinationCountries'] = destCountries;
+
       for (let addon of additionalServices.records) {
         if (record.AdditionalServices.some((e) => e.Addon === addon.ServiceCode)) {
           checks[addon.ServiceCode] = false;
@@ -178,8 +268,11 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    console.log(columnData);
-  }, [columnData]);
+    setSkipPageReset(false);
+    populateCountries('departureCountries');
+    populateCountries('destinationCountries');
+    //console.log(rowData);
+  }, [rowData, columnData]);
 
   //const data = useMemo(() => mapRows(services), []);
 
@@ -228,7 +321,10 @@ export default function App() {
               }}
             />
           </Col>
-          <Col xs={6} sm={4} smOffset={3} md={3} mdOffset={5}>
+          <Col xs={6} sm={4}>
+            <Filter placeHolder="Filter data" onChange={onFilterChange} />
+          </Col>
+          <Col xs={6} sm={4}>
             <Dropdown
               title={t("'Select Language'")}
               items={langs}
@@ -238,6 +334,29 @@ export default function App() {
               }}
             />
           </Col>
+        </Row>
+        <Row>
+          <Col xs={6} sm={4}>
+            <Dropdown
+              title={t("'Select Departure Country'")}
+              items={departureCountries}
+              multiSelect={false}
+              onChange={(e) => {
+                console.log(e);
+              }}
+            />
+          </Col>
+          <Col xs={6} sm={4}>
+            <Dropdown
+              title={t("'Select Destination Country'")}
+              items={destinationCountries}
+              multiSelect={false}
+              onChange={(e) => {
+                console.log(e);
+              }}
+            />
+          </Col>
+          <Col xs={6} sm={4}></Col>
         </Row>
         <Row>
           <Col xs={6} sm={5}>
@@ -253,7 +372,7 @@ export default function App() {
         <div className="content">
           <Table
             columns={columnData}
-            data={rowData}
+            data={filteredData.length > 0 ? filteredData : rowData}
             onClick={onClick}
             updateMyData={updateMyData}
           />

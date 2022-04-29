@@ -12,14 +12,14 @@ th.headerTitle > div {
   width: 0px !important;
 }
 
-.serviceContainer {
-  padding: 0;
-}
-
-.serviceName {
+.service {
   white-space: nowrap;
   font-weight: 700;
-  align-self: flex-end;
+  text-align: right;
+  padding-right: 7px;
+  height: 39px;
+  min-width: 300px;
+  max-width: 300px;
 }
 
 td.service {
@@ -27,23 +27,6 @@ td.service {
   border-bottom: 0;
   border-top: 0;
   background-color: #fff;
-}
-
-.serviceNameDiv {
-  align-self: center;
-  text-align: right;
-  padding: 0;
-}
-
-.serviceButton {
-  padding: 0 0 0 5px;
-}
-
-.service {
-  padding: 0;
-  height: 39px;
-  min-width: 300px;
-  max-width: 300px;
 }
 
 tr {
@@ -85,7 +68,6 @@ td {
 table {
   border-spacing: 0;
   border-collapse: collapse;
-  overflow: hidden;
   z-index: 1;
 }
 
@@ -152,10 +134,4 @@ th:hover::after {
   bottom: 0px;
   width: 100%;
   z-index: -1;
-}
-
-tbody {
-  width: calc(200px);
-  overflow: auto;
-  table-layout: fixed;
 }

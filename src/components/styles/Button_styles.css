@@ -5,7 +5,7 @@
   --reset-button-hover-color: rgb(255, 194, 38);
   --clipboard-button-bg: #6c757d;
   --clipboard-button-border: 2px solid #6c757d;
-  --select-button-bg: transparent;
+  --select-button-bg: transparent !important;
   --select-button-border: 0;
   --select-button-hover-bg: #394b58;
   --speed: 0.3s ease-in-out;

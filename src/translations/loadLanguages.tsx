@@ -2,6 +2,8 @@ import additionalServices from '../additionalServices.json';
 import services from '../services.json';
 
 let en = {
+  "'Select Departure Country'": 'Select Departure Country',
+  "'Select Destination Country'": 'Select Destination Country',
   "'Select Language'": 'Select Language',
   "'Select Service Group'": 'Select Service Group',
   "'Parcel Services'": 'Parcel Services',
@@ -14,6 +16,8 @@ let en = {
 };
 
 let fi = {
+  "'Select Departure Country'": 'Valitse lähtömaa',
+  "'Select Destination Country'": 'Valitse kohdemaa',
   "'Select Language'": 'Valitse kieli',
   "'Select Service Group'": 'Valitse tuoteryhmä',
   "'Parcel Services'": 'Pakettipalvelut',

@@ -257,7 +257,16 @@
           "Addon": "3163"
         }
       ],
-      "Routes": [],
+      "Routes": [
+        {
+          "DepartureCountry": "FI",
+          "DestinationCountries": [
+            {
+              "Country": "FI"
+            }
+          ]
+        }
+      ],
       "Fields": []
     },
     {
@@ -299,7 +308,22 @@
           "Addon": "3164"
         }
       ],
-      "Routes": [],
+      "Routes": [
+        {
+          "DepartureCountry": "FI",
+          "DestinationCountries": [
+            {
+              "Country": "FI"
+            },
+            {
+              "Country": "AX"
+            },
+            {
+              "Country": "SE"
+            }
+          ]
+        }
+      ],
       "Fields": []
     }
   ]
