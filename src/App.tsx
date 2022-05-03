@@ -10,6 +10,7 @@ import additionalServices from './additionalServices.json';
 import services from './services.json';
 import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 export default function App() {
   const depCountryFilter = (rows, id, filterValue) =>
@@ -18,6 +19,7 @@ export default function App() {
   const destCountryFilter = (rows, id, filterValue) =>
     rows.filter((row) => row.original.destinationCountries.some((e) => e === filterValue));
 
+  const [params, setParams] = useSearchParams();
   const [selectedItem, setSelectedItem] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [columnData, setColumnData] = useState([
@@ -57,6 +59,17 @@ export default function App() {
   const [destinationCountries, setDestinationCountries] = useState([
     { id: 0, value: 'FI', additionalInfo: 'FI' },
   ]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const service = queryParams.get('service');
+    const addons = queryParams.get('addons');
+    const departure = queryParams.get('departure');
+    setSelectedDepartureCountry(departure);
+    console.log('service: ' + service + ' addons: ' + addons + ' departure: ' + departure);
+  }, []);
 
   const { t, i18n } = useTranslation();
 
@@ -163,15 +176,28 @@ export default function App() {
     }
   };
 
+  const updateSearchParams = (param, value) => {
+    let updatedSearchParams = new URLSearchParams(params.toString());
+    if (value === '') {
+      updatedSearchParams.delete(param);
+    } else {
+      updatedSearchParams.set(param, value);
+    }
+    setParams(updatedSearchParams.toString());
+  };
+
   const filterCountries = (e, route) => {
     let value = '';
     if (e[0]) {
       value = e[0].value;
     }
+
     if (route === 'departureCountries') {
       setSelectedDepartureCountry(value);
+      updateSearchParams('departure', value);
     } else {
       setSelectedDestinationCountry(value);
+      updateSearchParams('destination', value);
     }
   };
 
@@ -362,10 +388,14 @@ export default function App() {
             <Col xs={6} sm={4} md={4}>
               <Filter
                 placeHolder="Filter data"
-                onChange={(e) => setGlobalFilterValue(e.target.value)}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  updateSearchParams('filter', value);
+                  setGlobalFilterValue(value);
+                }}
               />
             </Col>
-            <Col xs={6} sm={4} md={4}>
+            <Col xs={6} sm={4} mdOffset={2} md={2}>
               <Dropdown
                 title={t("'Select Language'")}
                 items={langs}
@@ -382,6 +412,7 @@ export default function App() {
                 title={t("'Select Departure Country'")}
                 items={departureCountries}
                 multiSelect={false}
+                value={selectedDepartureCountry}
                 onChange={(e) => {
                   filterCountries(e, 'departureCountries');
                 }}

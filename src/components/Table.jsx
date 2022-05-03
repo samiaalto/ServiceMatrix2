@@ -134,7 +134,7 @@ function Table({
                       </td>
                     );
                   } else if (cell.value === undefined || cell.value === 'Y') {
-                    return <td></td>;
+                    return <td {...cell.getCellProps()}></td>;
                   } else {
                     return (
                       <td

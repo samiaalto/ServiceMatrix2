@@ -7,12 +7,13 @@ type item = { id: number; value: string; additionalInfo: string };
 
 interface dropdownProps {
   title: string;
+  value: string;
   items: item[];
   multiSelect: boolean;
   onChange: (item) => void;
 }
 
-function Dropdown({ title, items, multiSelect, onChange }: dropdownProps) {
+function Dropdown({ title, items, multiSelect, onChange, value }: dropdownProps) {
   const [open, setOpen] = useState(false);
   const [handle, setHandle] = useState(-90);
   const [selection, setSelection] = useState([]);
@@ -38,6 +39,10 @@ function Dropdown({ title, items, multiSelect, onChange }: dropdownProps) {
       onChange([]);
     }
   }
+
+  //useEffect(() => {
+  //  handleOnClick(value);
+  //}, [value]);
 
   function isItemInSelection(item) {
     if (selection.some((current) => current.id === item.id)) {
