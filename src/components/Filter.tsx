@@ -1,3 +1,5 @@
+import './styles/Filter_styles.css';
+
 interface filterProps {
   value: string;
   placeHolder: string;

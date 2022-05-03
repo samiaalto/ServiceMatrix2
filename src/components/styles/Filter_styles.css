@@ -1,0 +1,19 @@
+:root {
+  --border-radius: 16px;
+}
+
+.filter-wrapper {
+  width: 100%;
+}
+
+input {
+  position: relative;
+  border-radius: var(--border-radius);
+  width: 95%;
+  min-height: 35px;
+  height: 0;
+  padding-left: 10px;
+  color: #000;
+  transition: all var(--speed);
+  border: 2px solid #394b58;
+}

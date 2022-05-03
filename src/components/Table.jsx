@@ -1,10 +1,26 @@
-import { useTable, useBlockLayout, useAsyncDebounce, useGlobalFilter } from 'react-table';
-import { useState } from 'react';
-import { useSticky } from 'react-table-sticky';
-import GlobalFilter from './GlobalFilter';
+import {
+  useTable,
+  //  useBlockLayout,
+  // useAsyncDebounce,
+  useGlobalFilter,
+  useFilters,
+} from 'react-table';
+import { useEffect } from 'react';
+//import { useSticky } from 'react-table-sticky';
 import './styles/Table_styles.css';
 
-function Table({ columns, data, updateMyData, skipPageReset, onClick, checked }) {
+function Table({
+  columns,
+  data,
+  updateMyData,
+  skipPageReset,
+  onClick,
+  updateDropdowns,
+  depCountry,
+  destCountry,
+  glblFilter,
+  serviceGroup,
+}) {
   // function TableUI({ columns, data, isChecked }) {
   const initialState = {
     hiddenColumns: columns.map((column) => {
@@ -18,8 +34,10 @@ function Table({ columns, data, updateMyData, skipPageReset, onClick, checked })
     headerGroups,
     rows,
     prepareRow,
-    state,
+    //state,
     setGlobalFilter,
+    setFilter,
+    filteredRows,
   } = useTable(
     {
       columns,
@@ -27,23 +45,48 @@ function Table({ columns, data, updateMyData, skipPageReset, onClick, checked })
       initialState,
       updateMyData,
       onClick,
-      checked,
+      updateDropdowns,
       autoResetPage: !skipPageReset,
     },
-    useGlobalFilter
+    useGlobalFilter,
+    useFilters
   );
 
-  const { globalFilter } = state;
+  //const { globalFilter } = state;
+
+  useEffect(() => {
+    updateDropdowns(filteredRows);
+  }, [filteredRows]);
+
+  useEffect(() => {
+    setFilter('departureCountries', depCountry || undefined);
+  }, [depCountry]);
+
+  useEffect(() => {
+    setFilter('destinationCountries', destCountry || undefined);
+  }, [destCountry]);
+
+  useEffect(() => {
+    setFilter('serviceGroup', serviceGroup || undefined);
+  }, [serviceGroup]);
+
+  useEffect(() => {
+    setGlobalFilter(glblFilter || undefined);
+  }, [glblFilter]);
+
   // Render the UI for your table
   return (
     <>
-      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, index) => {
-                if (column.id === 'service') {
+                if (
+                  column.id === 'serviceName' ||
+                  column.id === 'serviceButton' ||
+                  column.id === 'serviceCode'
+                ) {
                   return (
                     <th className="headerTitle tooltip left fixColumn" {...column.getHeaderProps()}>
                       <div> {column.render('Header')} </div>
@@ -75,6 +118,18 @@ function Table({ columns, data, updateMyData, skipPageReset, onClick, checked })
                   if (cell.column.id === 'serviceName') {
                     return (
                       <td className="service" {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  } else if (cell.column.id === 'serviceButton') {
+                    return (
+                      <td className="serviceButton" {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  } else if (cell.column.id === 'serviceCode') {
+                    return (
+                      <td className="serviceCode" {...cell.getCellProps()}>
                         {cell.render('Cell')}
                       </td>
                     );

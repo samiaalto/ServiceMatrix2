@@ -26,7 +26,7 @@ const Checkbox = ({
   const checkMarkAnimationRef = useSpringRef();
 
   const checkboxAnimationStyle = useSpring({
-    backgroundColor: isChecked ? '#394b58' : '#fff',
+    backgroundColor: isChecked ? '#394b58' : 'transparent',
     ref: checkboxAnimationRef,
   });
   const checkMarkAnimationStyle = useSpring({

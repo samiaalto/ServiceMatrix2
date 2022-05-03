@@ -18,15 +18,22 @@ th.headerTitle > div {
   text-align: right;
   padding-right: 7px;
   height: 39px;
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 200px;
+  max-width: 200px;
 }
 
 td.service {
+  border: 0;
+}
+
+td.serviceButton {
+  border: 0;
+}
+
+td.serviceCode {
   border-left: 0;
   border-bottom: 0;
   border-top: 0;
-  background-color: #fff;
 }
 
 tr {
@@ -40,7 +47,6 @@ td {
   max-height: 39px !important;
   padding: 0;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .tooltip span {
@@ -92,7 +98,8 @@ td:hover:first-child {
 td:hover:nth-child(3n) {
   background-color: #394b58;
 }
-tr:last-child td:hover {
+
+th:first-child td:hover {
   background-color: #394b58;
 }
 

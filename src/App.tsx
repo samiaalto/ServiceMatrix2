@@ -1,23 +1,58 @@
 import './styles.css';
-import { useState, useEffect, useMemo, createRef } from 'react';
+import { useState, useEffect } from 'react';
 import Dropdown from './components/Dropdown';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Table from './components/Table';
 import Filter from './components/Filter';
+//import customFilterFunction from './components/customFilter';
 import additionalServices from './additionalServices.json';
 import services from './services.json';
 import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { useGlobalFilter } from 'react-table';
 
 export default function App() {
+  const depCountryFilter = (rows, id, filterValue) =>
+    rows.filter((row) => row.original.departureCountries.some((e) => e === filterValue));
+
+  const destCountryFilter = (rows, id, filterValue) =>
+    rows.filter((row) => row.original.destinationCountries.some((e) => e === filterValue));
+
   const [selectedItem, setSelectedItem] = useState([]);
   const [rowData, setRowData] = useState([]);
-  const [columnData, setColumnData] = useState([]);
+  const [columnData, setColumnData] = useState([
+    { Header: ' ', accessor: 'serviceName', tipText: '', show: true, sticky: 'left' },
+    { Header: ' ', accessor: 'serviceButton', tipText: '', show: true, sticky: 'left' },
+    { Header: ' ', accessor: 'serviceCode', tipText: '', show: true, sticky: 'left' },
+    {
+      Header: 'Departure Countries',
+      accessor: 'departureCountries',
+      tipText: '',
+      show: true,
+      sticky: 'left',
+    },
+    {
+      Header: 'Destination Countries',
+      accessor: 'destinationCountries',
+      tipText: '',
+      show: true,
+      sticky: 'left',
+    },
+    {
+      Header: 'Service Group',
+      accessor: 'serviceGroup',
+      tipText: '',
+      show: false,
+      sticky: 'left',
+    },
+  ]);
   const [checkedState, setCheckedState] = useState([]);
   const [skipPageReset, setSkipPageReset] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const [selectedDepartureCountry, setSelectedDepartureCountry] = useState('');
+  const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const [selectedServiceGroup, setSelectedServiceGroup] = useState('');
   const [departureCountries, setDepartureCountries] = useState([]);
   const [destinationCountries, setDestinationCountries] = useState([
     { id: 0, value: 'FI', additionalInfo: 'FI' },
@@ -52,15 +87,17 @@ export default function App() {
         Header: 'Departure Countries',
         accessor: 'departureCountries',
         tipText: '',
-        show: true,
+        show: false,
         sticky: 'left',
+        filter: depCountryFilter,
       },
       {
         Header: 'Destination Countries',
         accessor: 'destinationCountries',
         tipText: '',
-        show: true,
+        show: false,
         sticky: 'left',
+        filter: destCountryFilter,
       },
       {
         Header: 'Service Group',
@@ -79,17 +116,27 @@ export default function App() {
         show: true,
       })
     );
-
+    //setColumnData(columns);
     return setColumnData(columns);
   };
 
-  const populateCountries = (route) => {
+  const populateCountries = (route, rowdata, filteredRows) => {
     let out = [];
     let countries = [];
-    for (let row of rowData) {
-      for (let country of row[route]) {
-        if (!countries || !countries.includes(country)) {
-          countries.push(country);
+    if (filteredRows) {
+      for (let row of filteredRows) {
+        for (let country of row.original[route]) {
+          if (!countries || !countries.includes(country)) {
+            countries.push(country);
+          }
+        }
+      }
+    } else {
+      for (let row of rowdata) {
+        for (let country of row[route]) {
+          if (!countries || !countries.includes(country)) {
+            countries.push(country);
+          }
         }
       }
     }
@@ -103,63 +150,28 @@ export default function App() {
     } else {
       setDestinationCountries(out);
     }
-    //console.log(out);
   };
 
-  const filterCountries = (e, route) => {
-    console.log(e);
-    const value = e[0].value;
-
-    if (route === 'destinationCountries') {
-      if (value === '') {
-        setFilteredData(rowData);
-      } else {
-        if (filteredData.length > 0) {
-          const result = rowData.filter((item) =>
-            item.destinationCountries.some((e) => e === value)
-          );
-
-          setFilteredData(result);
-        } else {
-          const result = rowData.filter((item) =>
-            item.destinationCountries.some((e) => e === value)
-          );
-
-          setFilteredData(result);
-        }
-      }
+  const updateDropdowns = (filteredRows) => {
+    if (selectedDepartureCountry && !selectedDestinationCountry) {
+      populateCountries('destinationCountries', '', filteredRows);
+    } else if (!selectedDepartureCountry && selectedDestinationCountry) {
+      populateCountries('departureCountries', '', filteredRows);
     } else {
-      if (value === '') {
-        setFilteredData(rowData);
-      } else {
-        if (filteredData.length > 0) {
-          const result = rowData.filter((item) => item.departureCountry === value);
-
-          setFilteredData(result);
-        } else {
-          const result = rowData.filter((item) => item.departureCountry === value);
-
-          setFilteredData(result);
-        }
-      }
+      populateCountries('departureCountries', '', filteredRows);
+      populateCountries('destinationCountries', '', filteredRows);
     }
   };
 
-  const onFilterChange = (e) => {
-    const value = e.target.value;
-
-    if (value === '') {
-      setFilteredData(rowData);
+  const filterCountries = (e, route) => {
+    let value = '';
+    if (e[0]) {
+      value = e[0].value;
+    }
+    if (route === 'departureCountries') {
+      setSelectedDepartureCountry(value);
     } else {
-      if (filteredData.length > 0) {
-        const result = rowData.filter((item) => item.destinationCountries.some((e) => e === value));
-
-        setFilteredData(result);
-      } else {
-        const result = rowData.filter((item) => item.destinationCountries.some((e) => e === value));
-
-        setFilteredData(result);
-      }
+      setSelectedDestinationCountry(value);
     }
   };
 
@@ -300,6 +312,7 @@ export default function App() {
 
   //const columns = mapColumns(additionalServices);
   //const data = mapRows(services);
+  //const columns = mapColumns(additionalServices);
 
   useEffect(() => {
     mapColumns(additionalServices);
@@ -308,26 +321,16 @@ export default function App() {
 
   useEffect(() => {
     setSkipPageReset(false);
-    populateCountries('departureCountries');
-    populateCountries('destinationCountries');
+    populateCountries('departureCountries', rowData, '');
+    populateCountries('destinationCountries', rowData, '');
     //console.log(rowData);
   }, [rowData, columnData]);
 
   //const data = useMemo(() => mapRows(services), []);
 
-  const filterCriteria = (obj) => {
-    if (selectedItem[0]) {
-      return obj.serviceGroup.includes(selectedItem[0].value);
-    } else {
-      return obj.serviceGroup.includes('');
-    }
-    //&& obj.lastName.includes(lastName)
-    //&& obj.city.includes(city);
-  };
-
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
-    //setSkipPageReset(true);
+    setSkipPageReset(true);
     setRowData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
@@ -341,79 +344,84 @@ export default function App() {
     );
   };
 
-  useEffect(() => {
-    if (selectedItem[0]) {
-    }
-  }, [selectedItem]);
-
   return (
     <div className="App">
       <Grid fluid>
-        <Row>
-          <Col xs={6} sm={5} md={4}>
-            <Dropdown
-              title={t("'Select Service Group'")}
-              items={items}
-              multiSelect={false}
-              onChange={(e) => {
-                setSelectedItem(e);
-              }}
-            />
-          </Col>
-          <Col xs={6} sm={4}>
-            <Filter placeHolder="Filter data" onChange={onFilterChange} />
-          </Col>
-          <Col xs={6} sm={4}>
-            <Dropdown
-              title={t("'Select Language'")}
-              items={langs}
-              multiSelect={false}
-              onChange={(e) => {
-                i18n.changeLanguage(e[0].additionalInfo);
-              }}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={6} sm={4}>
-            <Dropdown
-              title={t("'Select Departure Country'")}
-              items={departureCountries}
-              multiSelect={false}
-              onChange={(e) => {
-                filterCountries(e, 'departureCountries');
-              }}
-            />
-          </Col>
-          <Col xs={6} sm={4}>
-            <Dropdown
-              title={t("'Select Destination Country'")}
-              items={destinationCountries}
-              multiSelect={false}
-              onChange={(e) => {
-                filterCountries(e, 'destinationCountries');
-              }}
-            />
-          </Col>
-          <Col xs={6} sm={4}></Col>
-        </Row>
-        <Row>
-          <Col xs={6} sm={5}>
-            <Button
-              title={t('Reset')}
-              type="reset"
-              onClick={(e) => {
-                handleButtonClick(e);
-              }}
-            />
-          </Col>
-        </Row>
+        <div className="controls">
+          <Row>
+            <Col xs={6} sm={4} md={4}>
+              <Dropdown
+                title={t("'Select Service Group'")}
+                items={items}
+                multiSelect={false}
+                onChange={(e) => {
+                  setSelectedServiceGroup(e[0].value);
+                }}
+              />
+            </Col>
+            <Col xs={6} sm={4} md={4}>
+              <Filter
+                placeHolder="Filter data"
+                onChange={(e) => setGlobalFilterValue(e.target.value)}
+              />
+            </Col>
+            <Col xs={6} sm={4} md={4}>
+              <Dropdown
+                title={t("'Select Language'")}
+                items={langs}
+                multiSelect={false}
+                onChange={(e) => {
+                  i18n.changeLanguage(e[0].additionalInfo);
+                }}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={6} sm={4}>
+              <Dropdown
+                title={t("'Select Departure Country'")}
+                items={departureCountries}
+                multiSelect={false}
+                onChange={(e) => {
+                  filterCountries(e, 'departureCountries');
+                }}
+              />
+            </Col>
+            <Col xs={6} sm={4}>
+              <Dropdown
+                title={t("'Select Destination Country'")}
+                items={destinationCountries}
+                multiSelect={false}
+                onChange={(e) => {
+                  filterCountries(e, 'destinationCountries');
+                }}
+              />
+            </Col>
+            <Col xs={6} sm={4}></Col>
+          </Row>
+          <Row>
+            <Col xs={6} sm={2}>
+              <Button
+                title={t('Reset')}
+                type="reset"
+                onClick={(e) => {
+                  handleButtonClick(e);
+                }}
+              />
+            </Col>
+          </Row>
+        </div>
         <div className="content">
           <Table
             columns={columnData}
             data={filteredData.length > 0 ? filteredData : rowData}
             onClick={onClick}
             updateMyData={updateMyData}
+            depCountry={selectedDepartureCountry}
+            destCountry={selectedDestinationCountry}
+            glblFilter={globalFilterValue}
+            serviceGroup={selectedServiceGroup}
+            updateDropdowns={updateDropdowns}
           />
         </div>
       </Grid>

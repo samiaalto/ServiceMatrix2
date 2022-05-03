@@ -194,7 +194,7 @@
       ],
       "Routes": [
         {
-          "DepartureCountry": "FI",
+          "DepartureCountry": "SE",
           "DestinationCountries": [
             {
               "Country": "FI"
@@ -259,7 +259,7 @@
       ],
       "Routes": [
         {
-          "DepartureCountry": "FI",
+          "DepartureCountry": "EE",
           "DestinationCountries": [
             {
               "Country": "FI"

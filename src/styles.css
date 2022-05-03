@@ -9,7 +9,30 @@ body {
   overflow: hidden;
 }
 
+body {
+  height: 100vh;
+  width: 100vw;
+  padding: 5px;
+}
+
+.container-fluid {
+  height: 100%;
+  max-width: 1440px !important;
+  color: #3b4a57;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.15);
+  overflow: auto;
+  border-radius: 16px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.controls {
+  padding: 10px;
+}
+
 .content {
+  height: 100%;
+  width: 100%;
   margin-right: 0;
-  overflow-y: hidden !important;
+  overflow: hidden;
 }
