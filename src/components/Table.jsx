@@ -12,7 +12,6 @@ import './styles/Table_styles.css';
 function Table({
   columns,
   data,
-  updateMyData,
   skipPageReset,
   onClick,
   updateDropdowns,
@@ -43,7 +42,6 @@ function Table({
       columns,
       data,
       initialState,
-      updateMyData,
       onClick,
       updateDropdowns,
       autoResetPage: !skipPageReset,

@@ -10,7 +10,7 @@ import additionalServices from './additionalServices.json';
 import services from './services.json';
 import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 export default function App() {
   const depCountryFilter = (rows, id, filterValue) =>
@@ -20,7 +20,7 @@ export default function App() {
     rows.filter((row) => row.original.destinationCountries.some((e) => e === filterValue));
 
   const [params, setParams] = useSearchParams();
-  const [selectedItem, setSelectedItem] = useState([]);
+  const [loaded, setLoaded] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [columnData, setColumnData] = useState([
     { Header: ' ', accessor: 'serviceName', tipText: '', show: true, sticky: 'left' },
@@ -48,28 +48,18 @@ export default function App() {
       sticky: 'left',
     },
   ]);
-  const [checkedState, setCheckedState] = useState([]);
   const [skipPageReset, setSkipPageReset] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);
-  const [selectedDepartureCountry, setSelectedDepartureCountry] = useState('');
-  const [selectedDestinationCountry, setSelectedDestinationCountry] = useState('');
-  const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const [selectedServiceGroup, setSelectedServiceGroup] = useState('');
   const [departureCountries, setDepartureCountries] = useState([]);
-  const [destinationCountries, setDestinationCountries] = useState([
-    { id: 0, value: 'FI', additionalInfo: 'FI' },
-  ]);
-
-  const location = useLocation();
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const service = queryParams.get('service');
-    const addons = queryParams.get('addons');
-    const departure = queryParams.get('departure');
-    setSelectedDepartureCountry(departure);
-    console.log('service: ' + service + ' addons: ' + addons + ' departure: ' + departure);
-  }, []);
+  const [destinationCountries, setDestinationCountries] = useState([]);
+  const [selected, setSelected] = useState({
+    serviceGroup: '',
+    service: '',
+    addons: [],
+    departure: '',
+    destination: '',
+    filter: '',
+    lang: '',
+  });
 
   const { t, i18n } = useTranslation();
 
@@ -129,7 +119,6 @@ export default function App() {
         show: true,
       })
     );
-    //setColumnData(columns);
     return setColumnData(columns);
   };
 
@@ -166,9 +155,9 @@ export default function App() {
   };
 
   const updateDropdowns = (filteredRows) => {
-    if (selectedDepartureCountry && !selectedDestinationCountry) {
+    if (selected.departure && !selected.destination) {
       populateCountries('destinationCountries', '', filteredRows);
-    } else if (!selectedDepartureCountry && selectedDestinationCountry) {
+    } else if (!selected.departure && selected.destination) {
       populateCountries('departureCountries', '', filteredRows);
     } else {
       populateCountries('departureCountries', '', filteredRows);
@@ -177,7 +166,9 @@ export default function App() {
   };
 
   const updateSearchParams = (param, value) => {
+    //console.log(param + ' ' + value);
     let updatedSearchParams = new URLSearchParams(params.toString());
+    //console.log(updatedSearchParams.toString());
     if (value === '') {
       updatedSearchParams.delete(param);
     } else {
@@ -193,10 +184,16 @@ export default function App() {
     }
 
     if (route === 'departureCountries') {
-      setSelectedDepartureCountry(value);
+      setSelected((prevState) => ({
+        ...prevState,
+        departure: value,
+      }));
       updateSearchParams('departure', value);
     } else {
-      setSelectedDestinationCountry(value);
+      setSelected((prevState) => ({
+        ...prevState,
+        destination: value,
+      }));
       updateSearchParams('destination', value);
     }
   };
@@ -229,38 +226,34 @@ export default function App() {
     }
   };
 
-  const onClick = (e) => {
-    console.log(e);
-
-    setCheckedState((prevState) => ({
-      ...prevState,
-      [e.row]: { ...prevState[e.row], [e.column]: e.isChecked },
-    }));
-
+  const disableExcluded = (addon, rowIndex, isChecked) => {
     let excluded = [];
     for (let record of additionalServices.records) {
-      if (record.ServiceCode === e.column) {
+      if (record.ServiceCode === addon) {
         for (let excludedAddon of record.ExcludedAdditionalServices) {
           excluded.push(excludedAddon.Addon);
         }
       }
     }
 
-    for (const [key, value] of Object.entries(rowData[e.row])) {
-      if ((excluded.includes(key) && value === 'Y') || (excluded.includes(key) && value === 'X')) {
+    for (const [key, value] of Object.entries(rowData[rowIndex])) {
+      if (
+        (excluded.includes(key) && value === 'Y') ||
+        (excluded.includes(key) && value === false)
+      ) {
         let value = 'Y';
 
-        if (!e.isChecked) {
-          value = 'X';
+        if (!isChecked) {
+          value = false;
         }
 
         setSkipPageReset(true);
-        hideColumn(key, e.row, '');
+        hideColumn(key, rowIndex, '');
         setRowData((old) =>
           old.map((row, index) => {
-            if (index === e.row) {
+            if (index === rowIndex) {
               return {
-                ...old[e.row],
+                ...old[rowIndex],
                 [key]: value,
               };
             }
@@ -271,13 +264,48 @@ export default function App() {
     }
   };
 
+  const onClick = (e) => {
+    console.log(e);
+    let service = '';
+    let addons = '';
+    if (e.isChecked) {
+      service = rowData[e.row].serviceCode;
+      setSelected((prevState) => ({
+        ...prevState,
+        service: service,
+        addons: [...prevState.addons, e.column],
+      }));
+
+      if (selected.addons.length > 0) {
+        addons = selected.addons.join(' ') + ' ' + e.column;
+      } else {
+        addons = e.column;
+      }
+      updateSearchParams('service', service);
+      updateSearchParams('addons', addons);
+    } else {
+      if (selected.addons.length === 1) {
+        updateSearchParams('service', service);
+        updateSearchParams('addons', addons);
+      } else {
+        addons = selected.addons.filter((x) => x !== e.column).join(' ');
+        updateSearchParams('addons', addons);
+      }
+
+      setSelected((prevState) => ({
+        ...prevState,
+        service: service,
+        addons: prevState.addons.filter((x) => x !== e.column),
+      }));
+    }
+
+    disableExcluded(e.column, e.row, e.isChecked);
+  };
+
   const mapRows = (services, additionalServices) => {
-    setCheckedState([]);
     let rows = [];
-    let checksRows = [];
     for (let record of services.records) {
       let service = {};
-      let checks = {};
       service['serviceName'] = t(record.ServiceCode);
       service['serviceButton'] = (
         <Button
@@ -288,24 +316,6 @@ export default function App() {
           }}
         />
       );
-      //service['service'] = (
-      //<Grid fluid className="serviceContainer">
-      //  <Row>
-      //    <Col xs={10} className="serviceNameDiv">
-      //      <span className="serviceName">{t(record.ServiceCode)}</span>
-      //    </Col>
-      //    <Col xs={2} className="serviceButton">
-      //      <Button
-      //        title=""
-      //        type="select"
-      //        onClick={(e) => {
-      //          handleButtonClick(e);
-      //        }}
-      //      />
-      //    </Col>
-      //  </Row>
-      //</Grid>
-      //);
       service['serviceCode'] = record.ServiceCode;
       service['serviceGroup'] = t(record.ServiceGroup);
 
@@ -323,16 +333,15 @@ export default function App() {
 
       for (let addon of additionalServices.records) {
         if (record.AdditionalServices.some((e) => e.Addon === addon.ServiceCode)) {
-          checks[addon.ServiceCode] = false;
-          service[addon.ServiceCode] = 'X';
+          // checks[addon.ServiceCode] = false;
+          service[addon.ServiceCode] = false;
         } else {
           service[addon.ServiceCode] = undefined;
         }
       }
-      checksRows.push(checks);
       rows.push(service);
     }
-    setCheckedState(checksRows);
+
     return setRowData(rows);
   };
 
@@ -349,26 +358,64 @@ export default function App() {
     setSkipPageReset(false);
     populateCountries('departureCountries', rowData, '');
     populateCountries('destinationCountries', rowData, '');
-    //console.log(rowData);
-  }, [rowData, columnData]);
+    if (!loaded) {
+      setLoaded(true);
+    }
+  }, [rowData]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(params.toString());
+    const serviceGroup = searchParams.get('serviceGroup');
+    const service = searchParams.get('service');
+    const addons = searchParams.get('addons');
+    const departure = searchParams.get('departure');
+    const destination = searchParams.get('destination');
+    const lang = searchParams.get('lang');
+    const filter = searchParams.get('filter');
+    let addonArray = [];
+    let serviceIndex;
+
+    if (addons) {
+      addonArray = addons.split(' ');
+    }
+
+    for (let [i, row] of rowData.entries()) {
+      if (row.serviceCode === service) {
+        serviceIndex = i;
+      }
+    }
+    if (serviceIndex) {
+      for (let addon of addonArray) {
+        setRowData((old) =>
+          old.map((row, index) => {
+            if (index === serviceIndex) {
+              return {
+                ...old[serviceIndex],
+                [addon]: true,
+              };
+            }
+            return row;
+          })
+        );
+        disableExcluded(addon, serviceIndex, true);
+      }
+      //setSelectedDepartureCountry(departure);
+      //setSelectedDestinationCountry(destination);
+
+      setSelected((prevState) => ({
+        ...prevState,
+        serviceGroup: serviceGroup,
+        service: service,
+        addons: addonArray,
+        departure: departure,
+        destination: destination,
+        filter: filter,
+        lang: lang,
+      }));
+    }
+  }, [loaded]);
 
   //const data = useMemo(() => mapRows(services), []);
-
-  const updateMyData = (rowIndex, columnId, value) => {
-    // We also turn on the flag to not reset the page
-    setSkipPageReset(true);
-    setRowData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...old[rowIndex],
-            [columnId]: value,
-          };
-        }
-        return row;
-      })
-    );
-  };
 
   return (
     <div className="App">
@@ -380,18 +427,28 @@ export default function App() {
                 title={t("'Select Service Group'")}
                 items={items}
                 multiSelect={false}
+                value={selected.serviceGroup}
                 onChange={(e) => {
-                  setSelectedServiceGroup(e[0].value);
+                  let value = e[0].value;
+                  updateSearchParams('serviceGroup', value);
+                  setSelected((prevState) => ({
+                    ...prevState,
+                    serviceGroup: value,
+                  }));
                 }}
               />
             </Col>
             <Col xs={6} sm={4} md={4}>
               <Filter
                 placeHolder="Filter data"
+                value={selected.filter ? selected.filter : ''}
                 onChange={(e) => {
                   let value = e.target.value;
                   updateSearchParams('filter', value);
-                  setGlobalFilterValue(value);
+                  setSelected((prevState) => ({
+                    ...prevState,
+                    filter: value,
+                  }));
                 }}
               />
             </Col>
@@ -399,9 +456,16 @@ export default function App() {
               <Dropdown
                 title={t("'Select Language'")}
                 items={langs}
+                value={selected.lang}
                 multiSelect={false}
                 onChange={(e) => {
-                  i18n.changeLanguage(e[0].additionalInfo);
+                  let value = e[0].additionalInfo;
+                  updateSearchParams('lang', value);
+                  setSelected((prevState) => ({
+                    ...prevState,
+                    lang: value,
+                  }));
+                  i18n.changeLanguage(value);
                 }}
               />
             </Col>
@@ -412,7 +476,7 @@ export default function App() {
                 title={t("'Select Departure Country'")}
                 items={departureCountries}
                 multiSelect={false}
-                value={selectedDepartureCountry}
+                value={selected.departure}
                 onChange={(e) => {
                   filterCountries(e, 'departureCountries');
                 }}
@@ -422,6 +486,7 @@ export default function App() {
               <Dropdown
                 title={t("'Select Destination Country'")}
                 items={destinationCountries}
+                value={selected.destination}
                 multiSelect={false}
                 onChange={(e) => {
                   filterCountries(e, 'destinationCountries');
@@ -445,13 +510,12 @@ export default function App() {
         <div className="content">
           <Table
             columns={columnData}
-            data={filteredData.length > 0 ? filteredData : rowData}
+            data={rowData}
             onClick={onClick}
-            updateMyData={updateMyData}
-            depCountry={selectedDepartureCountry}
-            destCountry={selectedDestinationCountry}
-            glblFilter={globalFilterValue}
-            serviceGroup={selectedServiceGroup}
+            depCountry={selected.departure}
+            destCountry={selected.destination}
+            glblFilter={selected.filter}
+            serviceGroup={selected.serviceGroup}
             updateDropdowns={updateDropdowns}
           />
         </div>

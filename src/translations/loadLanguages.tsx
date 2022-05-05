@@ -56,7 +56,7 @@ function loadLanguages(language) {
         record.DisplayNameFI + ' (' + record.ServiceCode + ') ' + record.DescriptionFI;
     }
   }
-  console.log(result);
+  //console.log(result);
   return result;
 }
 

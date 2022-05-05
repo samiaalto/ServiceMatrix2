@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { ReactComponent as ChevronIcon } from './icons/ChevronIcon.svg';
 import './styles/Dropdown_styles.css';
@@ -40,16 +40,23 @@ function Dropdown({ title, items, multiSelect, onChange, value }: dropdownProps)
     }
   }
 
-  //useEffect(() => {
-  //  handleOnClick(value);
-  //}, [value]);
-
   function isItemInSelection(item) {
     if (selection.some((current) => current.id === item.id)) {
       return true;
     }
     return false;
   }
+
+  useEffect(() => {
+    if (items.length > 0) {
+      for (let item of items) {
+        if (item.value === value) {
+          setSelection([item]);
+          setSelectedTitle(value);
+        }
+      }
+    }
+  }, [value]);
 
   function calcHeight(el: any) {
     if (open) {
@@ -72,7 +79,6 @@ function Dropdown({ title, items, multiSelect, onChange, value }: dropdownProps)
       <div
         tabIndex={0}
         className="dd-header"
-        role="button"
         onKeyPress={() => toggle(!open)}
         onClick={() => toggle(!open)}>
         <div className="dd-header_title">

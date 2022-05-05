@@ -5,19 +5,17 @@ import { animated, useSpring, useChain, useSpringRef } from 'react-spring';
 interface checkboxProps {
   title: string;
   classname: string;
-  idx: string;
-  checked: boolean;
+  value: boolean;
   onClick: (el) => void;
 }
 
 const Checkbox = ({
   title,
-  idx,
   classname,
   onClick,
-  checked,
   row: { index },
   column: { id },
+  value,
 }: checkboxProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const [checkMarkLength, setCheckMarkLenght] = useState(null);
@@ -50,12 +48,15 @@ const Checkbox = ({
     });
   }
 
+  useEffect(() => {
+    setIsChecked(value);
+  }, [value]);
+
   return (
     <label className="checkboxLabel">
       <input
         type="checkbox"
-        id={idx}
-        checked={checked}
+        value={value}
         className={classname}
         onChange={(el) => {
           handleOnClick(el);
