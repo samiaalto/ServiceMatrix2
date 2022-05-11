@@ -45,12 +45,12 @@
 .dd-header_title--bold {
   font-size: 14px;
   font-weight: 600;
-  margin: 9px 0 0 10px;
+  margin: 5px 0 0 10px;
   float: left;
 }
 
 .dd-header_action {
-  margin: -3px 0 0 0;
+  margin: 8px 0 0 0;
   float: right;
 }
 

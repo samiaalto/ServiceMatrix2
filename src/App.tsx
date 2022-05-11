@@ -1,18 +1,26 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import { useState, useEffect } from 'react';
 import Dropdown from './components/Dropdown';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
 import Table from './components/Table';
+import FFTable from './components/FileFormatTable';
 import Filter from './components/Filter';
+import Modal from './components/Modal';
+import hideColumn from './components/HideColumn';
 //import customFilterFunction from './components/customFilter';
 import additionalServices from './additionalServices.json';
 import services from './services.json';
+import fileFormats from './fileFormats.json';
 import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Route, Routes, Navigate } from 'react-router-dom';
+import NavBar from './components/NavBar';
 
 export default function App() {
+  const { t, i18n } = useTranslation();
+
   const depCountryFilter = (rows, id, filterValue) =>
     rows.filter((row) => row.original.departureCountries.some((e) => e === filterValue));
 
@@ -23,29 +31,26 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [columnData, setColumnData] = useState([
-    { Header: ' ', accessor: 'serviceName', tipText: '', show: true, sticky: 'left' },
-    { Header: ' ', accessor: 'serviceButton', tipText: '', show: true, sticky: 'left' },
-    { Header: ' ', accessor: 'serviceCode', tipText: '', show: true, sticky: 'left' },
+    { Header: ' ', accessor: 'serviceName', tipText: '', show: true },
+    { Header: ' ', accessor: 'serviceButton', tipText: '', show: true },
+    { Header: ' ', accessor: 'serviceCode', tipText: '', show: true },
     {
       Header: 'Departure Countries',
       accessor: 'departureCountries',
       tipText: '',
       show: true,
-      sticky: 'left',
     },
     {
       Header: 'Destination Countries',
       accessor: 'destinationCountries',
       tipText: '',
       show: true,
-      sticky: 'left',
     },
     {
       Header: 'Service Group',
       accessor: 'serviceGroup',
       tipText: '',
       show: false,
-      sticky: 'left',
     },
   ]);
   const [skipPageReset, setSkipPageReset] = useState(false);
@@ -59,9 +64,46 @@ export default function App() {
     destination: '',
     filter: '',
     lang: '',
+    format: '',
+    formatFilter: '',
+    modalOpen: false,
+    modalData: {},
   });
 
-  const { t, i18n } = useTranslation();
+  const [formats, setFormats] = useState([]);
+  const [ffRowData, setFfRowData] = useState([]);
+  const [ffColumnData, setFfColumnData] = useState([
+    {
+      Header: 'Format',
+      accessor: 'format',
+      show: false,
+    },
+    {
+      Header: "'Attribute Name'",
+      accessor: 'attribute',
+      show: true,
+    },
+    {
+      Header: "'M/O/C'",
+      accessor: 'moc',
+      show: true,
+    },
+    {
+      Header: 'Repeat',
+      accessor: 'repeat',
+      show: true,
+    },
+    {
+      Header: 'Type',
+      accessor: 'type',
+      show: true,
+    },
+    {
+      Header: 'Description',
+      accessor: 'description',
+      show: true,
+    },
+  ]);
 
   const items = [
     { id: 0, value: t("'Parcel Services'"), additionalInfo: t("'Domestic shipments under 35 kg'") },
@@ -72,26 +114,16 @@ export default function App() {
     },
   ];
 
-  const langs = [
-    { id: 0, value: t('English'), additionalInfo: 'en' },
-    { id: 1, value: t('Finnish'), additionalInfo: 'fi' },
-  ];
-
-  const handleButtonClick = (e) => {
-    console.log(e);
-  };
-
   const mapColumns = (additionalServices) => {
     let columns = [
-      { Header: ' ', accessor: 'serviceName', tipText: '', show: true, sticky: 'left' },
-      { Header: ' ', accessor: 'serviceButton', tipText: '', show: true, sticky: 'left' },
-      { Header: ' ', accessor: 'serviceCode', tipText: '', show: true, sticky: 'left' },
+      { Header: ' ', accessor: 'serviceName', tipText: '', show: true },
+      { Header: ' ', accessor: 'serviceButton', tipText: '', show: true },
+      { Header: ' ', accessor: 'serviceCode', tipText: '', show: true },
       {
         Header: 'Departure Countries',
         accessor: 'departureCountries',
         tipText: '',
         show: false,
-        sticky: 'left',
         filter: depCountryFilter,
       },
       {
@@ -99,7 +131,6 @@ export default function App() {
         accessor: 'destinationCountries',
         tipText: '',
         show: false,
-        sticky: 'left',
         filter: destCountryFilter,
       },
       {
@@ -107,15 +138,13 @@ export default function App() {
         accessor: 'serviceGroup',
         tipText: '',
         show: false,
-        sticky: 'left',
       },
     ];
     additionalServices.records.map((record) =>
       columns.push({
-        Header: t(record.ServiceCode),
+        Header: record.ServiceCode,
         accessor: record.ServiceCode,
         Cell: Checkbox,
-        tipText: t(record.ServiceCode + '_tooltip'),
         show: true,
       })
     );
@@ -152,6 +181,23 @@ export default function App() {
     } else {
       setDestinationCountries(out);
     }
+  };
+
+  const populateDropdown = (filteredRows) => {
+    let out = [];
+    let formats = [];
+    for (let row of filteredRows) {
+      if (!formats || !formats.includes(row.format)) {
+        formats.push(row.format);
+      }
+    }
+
+    let index = 0;
+    for (let format of formats) {
+      out.push({ id: index, value: format, additionalInfo: format });
+      index++;
+    }
+    setFormats(out);
   };
 
   const updateDropdowns = (filteredRows) => {
@@ -198,35 +244,21 @@ export default function App() {
     }
   };
 
-  const hideColumn = (addon, currentRow, visibleRows) => {
-    let emptyCount = 1;
-    for (const [i, row] of rowData.entries()) {
-      if (i !== currentRow) {
-        for (const [key, value] of Object.entries(row)) {
-          if (key === addon && value !== 'X') {
-            emptyCount++;
-          }
+  const updateRowData = (rowIndex, key, value) => {
+    setRowData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [key]: value,
+          };
         }
-      }
-    }
-    if (emptyCount === rowData.length) {
-      //hide column
-      setColumnData((prevState) =>
-        prevState.map((item, index) =>
-          item.accessor === addon ? { ...item, show: !item.show } : item
-        )
-      );
-    } else {
-      //show hidden column
-      setColumnData((prevState) =>
-        prevState.map((item, index) =>
-          item.accessor === addon && !item.show ? { ...item, show: !item.show } : item
-        )
-      );
-    }
+        return row;
+      })
+    );
   };
 
-  const disableExcluded = (addon, rowIndex, isChecked) => {
+  const disableExcluded = (rowIndex, addon, isChecked) => {
     let excluded = [];
     for (let record of additionalServices.records) {
       if (record.ServiceCode === addon) {
@@ -248,24 +280,43 @@ export default function App() {
         }
 
         setSkipPageReset(true);
-        hideColumn(key, rowIndex, '');
-        setRowData((old) =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...old[rowIndex],
-                [key]: value,
-              };
-            }
-            return row;
-          })
-        );
+        updateRowData(rowIndex, key, value);
+        hideColumn(key, rowIndex, rowData, setColumnData);
       }
     }
   };
 
+  const handleReset = () => {
+    for (let [i, row] of rowData.entries()) {
+      for (const [key, value] of Object.entries(row)) {
+        if (value === true || value === 'Y') {
+          updateRowData(i, key, false);
+          disableExcluded(i, key, false);
+        }
+      }
+    }
+    updateSearchParams('addons', '');
+    updateSearchParams('service', '');
+  };
+
+  const handleServiceSelection = (service) => {
+    //console.log(rowData);
+    for (let [i, row] of rowData.entries()) {
+      if (row.serviceCode !== service) {
+        for (const [key, value] of Object.entries(row)) {
+          if (value === true || value === false) {
+            updateRowData(i, key, 'Y');
+            hideColumn(key, i, rowData, setColumnData);
+          }
+        }
+      }
+    }
+
+    updateSearchParams('service', service);
+  };
+
   const onClick = (e) => {
-    console.log(e);
+    //console.log(e);
     let service = '';
     let addons = '';
     if (e.isChecked) {
@@ -299,25 +350,35 @@ export default function App() {
       }));
     }
 
-    disableExcluded(e.column, e.row, e.isChecked);
+    updateRowData(e.row, e.column, e.isChecked);
+    disableExcluded(e.row, e.column, e.isChecked);
   };
 
   const mapRows = (services, additionalServices) => {
     let rows = [];
+    let allAddons = {
+      serviceName: 'Service',
+      serviceButton: ' ',
+      serviceCode: 'Code',
+      serviceGroup: ' ',
+      departureCountries: ' ',
+      destinationCountries: ' ',
+    };
+
     for (let record of services.records) {
       let service = {};
-      service['serviceName'] = t(record.ServiceCode);
+      service['serviceName'] = record.ServiceCode;
       service['serviceButton'] = (
         <Button
           title=""
           type="select"
           onClick={(e) => {
-            handleButtonClick(e);
+            handleServiceSelection(record.ServiceCode);
           }}
         />
       );
       service['serviceCode'] = record.ServiceCode;
-      service['serviceGroup'] = t(record.ServiceGroup);
+      service['serviceGroup'] = record.ServiceGroup;
 
       let depCountries = [];
       let destCountries = [];
@@ -332,6 +393,7 @@ export default function App() {
       service['destinationCountries'] = destCountries;
 
       for (let addon of additionalServices.records) {
+        allAddons[addon.ServiceCode] = addon.ServiceCode;
         if (record.AdditionalServices.some((e) => e.Addon === addon.ServiceCode)) {
           // checks[addon.ServiceCode] = false;
           service[addon.ServiceCode] = false;
@@ -341,8 +403,65 @@ export default function App() {
       }
       rows.push(service);
     }
-
+    //let out = (...allAddons ...rows)
+    rows = [allAddons, ...rows];
+    //console.log(rows);
     return setRowData(rows);
+  };
+
+  const mapFfRows = (fileFormats) => {
+    let rows = [];
+    for (let record of fileFormats.records) {
+      for (let attribute of record.Records) {
+        let length = '';
+        let type = '';
+        let moc = 'O';
+        let repeat;
+        let name;
+
+        if (attribute.ExtractionPath) {
+          name = attribute.Name + ' (' + attribute.ExtractionPath + ')';
+        } else {
+          name = attribute.Name;
+        }
+
+        if (!attribute.Length && attribute.Validations) {
+          for (let validation of attribute.Validations) {
+            if (validation.Type === 'Size') {
+              length = validation.MaxValue;
+            }
+          }
+        } else {
+          length = attribute.Length;
+        }
+
+        if (!length) {
+          type = attribute.Type;
+        } else {
+          type = attribute.Type + ' (' + length + ')';
+        }
+
+        if (attribute.RepeatMin > 0 || attribute.RepeatMax === attribute.RepeatMin) {
+          moc = 'M';
+        }
+
+        if (attribute.RepeatMin === attribute.RepeatMax) {
+          repeat = attribute.RepeatMax;
+        } else {
+          repeat = attribute.RepeatMin + '-' + attribute.RepeatMax;
+        }
+
+        rows.push({
+          format: record.Name,
+          attribute: name,
+          moc: moc,
+          repeat: repeat,
+          type: type,
+          description: attribute.Description,
+        });
+      }
+    }
+    return setFfRowData(rows);
   };
 
   //const columns = mapColumns(additionalServices);
@@ -352,52 +471,56 @@ export default function App() {
   useEffect(() => {
     mapColumns(additionalServices);
     mapRows(services, additionalServices);
+    mapFfRows(fileFormats);
   }, []);
 
   useEffect(() => {
     setSkipPageReset(false);
     populateCountries('departureCountries', rowData, '');
     populateCountries('destinationCountries', rowData, '');
-    if (!loaded) {
-      setLoaded(true);
-    }
+    populateDropdown(rowData);
   }, [rowData]);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(params.toString());
-    const serviceGroup = searchParams.get('serviceGroup');
-    const service = searchParams.get('service');
-    const addons = searchParams.get('addons');
-    const departure = searchParams.get('departure');
-    const destination = searchParams.get('destination');
-    const lang = searchParams.get('lang');
-    const filter = searchParams.get('filter');
-    let addonArray = [];
-    let serviceIndex;
+    populateDropdown(ffRowData);
+  }, [ffRowData]);
 
-    if (addons) {
-      addonArray = addons.split(' ');
+  useEffect(() => {
+    if (!loaded) {
+      setLoaded(true);
     }
+  }, [destinationCountries]);
 
-    for (let [i, row] of rowData.entries()) {
-      if (row.serviceCode === service) {
-        serviceIndex = i;
+  useEffect(() => {
+    if (rowData) {
+      const searchParams = new URLSearchParams(params.toString());
+      const serviceGroup = searchParams.get('serviceGroup');
+      const service = searchParams.get('service');
+      const addons = searchParams.get('addons');
+      const departure = searchParams.get('departure');
+      const destination = searchParams.get('destination');
+      const lang = searchParams.get('lang');
+      const filter = searchParams.get('filter');
+      const format = searchParams.get('format');
+      const formatFilter = searchParams.get('formatFilter');
+      let addonArray = [];
+      let serviceIndex;
+
+      if (addons) {
+        addonArray = addons.split(' ');
       }
-    }
-    if (serviceIndex) {
-      for (let addon of addonArray) {
-        setRowData((old) =>
-          old.map((row, index) => {
-            if (index === serviceIndex) {
-              return {
-                ...old[serviceIndex],
-                [addon]: true,
-              };
-            }
-            return row;
-          })
-        );
-        disableExcluded(addon, serviceIndex, true);
+
+      for (let [i, row] of rowData.entries()) {
+        if (row.serviceCode === service) {
+          serviceIndex = i;
+        }
+      }
+
+      if (serviceIndex) {
+        for (let addon of addonArray) {
+          updateRowData(serviceIndex, addon, true);
+          disableExcluded(serviceIndex, addon, true);
+        }
       }
       //setSelectedDepartureCountry(departure);
       //setSelectedDestinationCountry(destination);
@@ -410,115 +533,239 @@ export default function App() {
         departure: departure,
         destination: destination,
         filter: filter,
+        format: format,
+        formatFilter: formatFilter,
         lang: lang,
       }));
     }
   }, [loaded]);
 
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
+
+  const langChange = (e) => {
+    let value = e;
+    updateSearchParams('lang', value);
+    setSelected((prevState) => ({
+      ...prevState,
+      lang: value,
+    }));
+    i18n.changeLanguage(value);
+  };
+
+  const callModal = (e) => {
+    let value = e;
+    let data = {};
+    if (value.substring(0, 1) === '2') {
+      for (const record of services.records) {
+        if (record.ServiceCode === value) {
+          let dimensions = [];
+          let routes = [];
+          data['title'] = record.ServiceCode;
+          data['description'] = record.ServiceCode + '_tooltip';
+          for (const dimension of record.Dimensions) {
+            dimensions.push(dimension);
+          }
+          for (const route of record.Routes) {
+            routes.push(route);
+          }
+          data['routes'] = routes;
+          data['dimensions'] = dimensions;
+        }
+      }
+    } else {
+      for (const record of additionalServices.records) {
+        if (record.ServiceCode === value) {
+          let excluded = [];
+          data['title'] = record.ServiceCode;
+          data['description'] = record.ServiceCode + '_tooltip';
+          for (const addon of record.ExcludedAdditionalServices) {
+            excluded.push(addon.Addon);
+          }
+          data['excluded'] = excluded;
+        }
+      }
+    }
+    setSelected((prevState) => ({
+      ...prevState,
+      modalOpen: true,
+      modalData: data,
+    }));
+  };
+
+  const closeModal = () => {
+    setSelected((prevState) => ({
+      ...prevState,
+      modalOpen: false,
+    }));
+  };
+
   //const data = useMemo(() => mapRows(services), []);
 
   return (
     <div className="App">
+      <Modal
+        t={t}
+        data={selected.modalData}
+        openModal={selected.modalOpen}
+        closeModal={closeModal}
+      />
+      <NavBar
+        selectedLang={langChange}
+        navDropTitle={t('Language')}
+        navMatrix={t("'Service Matrix'")}
+        navFormat={t("'File Formats'")}
+        navDropEn={t('English')}
+        navDropFi={t('Finnish')}
+        value={selected.lang}
+      />
       <Grid fluid>
-        <div className="controls">
-          <Row>
-            <Col xs={6} sm={4} md={4}>
-              <Dropdown
-                title={t("'Select Service Group'")}
-                items={items}
-                multiSelect={false}
-                value={selected.serviceGroup}
-                onChange={(e) => {
-                  let value = e[0].value;
-                  updateSearchParams('serviceGroup', value);
-                  setSelected((prevState) => ({
-                    ...prevState,
-                    serviceGroup: value,
-                  }));
-                }}
-              />
-            </Col>
-            <Col xs={6} sm={4} md={4}>
-              <Filter
-                placeHolder="Filter data"
-                value={selected.filter ? selected.filter : ''}
-                onChange={(e) => {
-                  let value = e.target.value;
-                  updateSearchParams('filter', value);
-                  setSelected((prevState) => ({
-                    ...prevState,
-                    filter: value,
-                  }));
-                }}
-              />
-            </Col>
-            <Col xs={6} sm={4} mdOffset={2} md={2}>
-              <Dropdown
-                title={t("'Select Language'")}
-                items={langs}
-                value={selected.lang}
-                multiSelect={false}
-                onChange={(e) => {
-                  let value = e[0].additionalInfo;
-                  updateSearchParams('lang', value);
-                  setSelected((prevState) => ({
-                    ...prevState,
-                    lang: value,
-                  }));
-                  i18n.changeLanguage(value);
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6} sm={4}>
-              <Dropdown
-                title={t("'Select Departure Country'")}
-                items={departureCountries}
-                multiSelect={false}
-                value={selected.departure}
-                onChange={(e) => {
-                  filterCountries(e, 'departureCountries');
-                }}
-              />
-            </Col>
-            <Col xs={6} sm={4}>
-              <Dropdown
-                title={t("'Select Destination Country'")}
-                items={destinationCountries}
-                value={selected.destination}
-                multiSelect={false}
-                onChange={(e) => {
-                  filterCountries(e, 'destinationCountries');
-                }}
-              />
-            </Col>
-            <Col xs={6} sm={4}></Col>
-          </Row>
-          <Row>
-            <Col xs={6} sm={2}>
-              <Button
-                title={t('Reset')}
-                type="reset"
-                onClick={(e) => {
-                  handleButtonClick(e);
-                }}
-              />
-            </Col>
-          </Row>
-        </div>
-        <div className="content">
-          <Table
-            columns={columnData}
-            data={rowData}
-            onClick={onClick}
-            depCountry={selected.departure}
-            destCountry={selected.destination}
-            glblFilter={selected.filter}
-            serviceGroup={selected.serviceGroup}
-            updateDropdowns={updateDropdowns}
+        <Routes>
+          <Route
+            path="/ServiceMatrix"
+            element={
+              <>
+                <div className="controls">
+                  <Row>
+                    <Col xs={6} sm={4} md={4}>
+                      <Dropdown
+                        title={t("'Select Service Group'")}
+                        items={items}
+                        multiSelect={false}
+                        value={selected.serviceGroup}
+                        onChange={(e) => {
+                          let value = e[0].value;
+                          updateSearchParams('serviceGroup', value);
+                          setSelected((prevState) => ({
+                            ...prevState,
+                            serviceGroup: value,
+                          }));
+                        }}
+                      />
+                    </Col>
+                    <Col xs={6} sm={4} md={4}>
+                      <Filter
+                        placeHolder={t("'Filter data'")}
+                        value={selected.filter ? selected.filter : ''}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          updateSearchParams('filter', value);
+                          setSelected((prevState) => ({
+                            ...prevState,
+                            filter: value,
+                          }));
+                        }}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={6} sm={4}>
+                      <Dropdown
+                        title={t("'Select Departure Country'")}
+                        items={departureCountries}
+                        multiSelect={false}
+                        value={selected.departure}
+                        onChange={(e) => {
+                          filterCountries(e, 'departureCountries');
+                        }}
+                      />
+                    </Col>
+                    <Col xs={6} sm={4}>
+                      <Dropdown
+                        title={t("'Select Destination Country'")}
+                        items={destinationCountries}
+                        value={selected.destination}
+                        multiSelect={false}
+                        onChange={(e) => {
+                          filterCountries(e, 'destinationCountries');
+                        }}
+                      />
+                    </Col>
+                    <Col xs={6} sm={4}></Col>
+                  </Row>
+                  <Row>
+                    <Col xs={6} sm={2}>
+                      <Button title={t('Reset')} type="reset" onClick={handleReset} />
+                    </Col>
+                  </Row>
+                </div>
+                <div className="content">
+                  <Table
+                    t={t}
+                    columns={columnData}
+                    data={rowData}
+                    onClick={onClick}
+                    openModal={callModal}
+                    depCountry={selected.departure}
+                    destCountry={selected.destination}
+                    glblFilter={selected.filter}
+                    serviceGroup={selected.serviceGroup}
+                    updateDropdowns={updateDropdowns}
+                    skipPageReset={skipPageReset}
+                  />
+                </div>
+              </>
+            }
           />
-        </div>
+          <Route
+            path="/FileFormats"
+            element={
+              <div className="appcontainer">
+                <div className="controls">
+                  <Row>
+                    <Col xs={6} sm={4} md={4}>
+                      <Dropdown
+                        title={t("'Select File Format'")}
+                        items={formats}
+                        multiSelect={false}
+                        value={selected.format}
+                        onChange={(e) => {
+                          let value = '';
+                          if (e[0]) {
+                            value = e[0].value;
+                          }
+                          updateSearchParams('format', value);
+                          setSelected((prevState) => ({
+                            ...prevState,
+                            format: value,
+                          }));
+                        }}
+                      />
+                    </Col>
+                    <Col xs={6} sm={4} md={4}>
+                      <Filter
+                        placeHolder={t("'Filter data'")}
+                        value={selected.formatFilter ? selected.formatFilter : ''}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          updateSearchParams('formatFilter', value);
+                          setSelected((prevState) => ({
+                            ...prevState,
+                            formatFilter: value,
+                          }));
+                        }}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+                <div className="content">
+                  <FFTable
+                    t={t}
+                    columns={ffColumnData}
+                    data={selected.format ? ffRowData : []}
+                    onClick={onClick}
+                    populateDropdown={populateDropdown}
+                    selectedFormat={selected.format}
+                    glblFilter={selected.formatFilter}
+                    skipPageReset={skipPageReset}
+                  />
+                </div>
+              </div>
+            }
+          />
+          <Route path="*" element={<Navigate to="/ServiceMatrix" replace />} />
+        </Routes>
       </Grid>
     </div>
   );

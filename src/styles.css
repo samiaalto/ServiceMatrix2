@@ -13,26 +13,58 @@ body {
   height: 100vh;
   width: 100vw;
   padding: 5px;
+  overflow: hidden;
 }
 
 .container-fluid {
-  height: 100%;
+  height: calc(100vh - 78px);
+  margin-top: 5px;
+  padding: 15px;
   max-width: 1440px !important;
   color: #3b4a57;
   box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.15);
-  overflow: auto;
+  overflow: hidden;
   border-radius: 16px;
   margin-left: auto;
   margin-right: auto;
 }
 
+.appcontainer {
+  padding: 0px 0px 50px 0px;
+  height: calc(100vh - 83px);
+  z-index: 2;
+  overflow: hidden;
+}
+
 .controls {
-  padding: 10px;
+  padding: 15px 0px 20px 0px;
+  margin: 0;
 }
 
 .content {
-  height: 100%;
+  max-height: calc(100vh - 95px);
   width: 100%;
-  margin-right: 0;
-  overflow: hidden;
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.tooltip {
+  font-size: 11px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3;
+  border: 4px solid transparent;
+  border-radius: 8px;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar {
+  width: 22px;
+  height: 22px;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }

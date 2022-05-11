@@ -1,0 +1,16 @@
+.color-nav {
+  background-color: #fff;
+}
+
+.nav-link {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.nav-link:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.nav-link.active {
+  border-bottom: 4px solid #3b4a57;
+}

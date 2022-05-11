@@ -50,7 +50,7 @@
 
 .reset .btn-header_icon {
   margin-right: 10px;
-  margin: 6px 6px 0 0;
+  margin: 4px 6px 0 0;
   float: right;
 }
 
@@ -81,7 +81,7 @@
 
 .btn-header_title--bold {
   font-weight: 200;
-  margin: 9px 0 0 10px;
+  margin: 6px 0 0 10px;
   float: left;
 }
 
