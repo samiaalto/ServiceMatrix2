@@ -1,0 +1,14 @@
+:root {
+  --border-radius: 16px;
+  --modal-bg: #394b58;
+  --border: 2px solid #394b58;
+}
+
+.offcanvas-end {
+  width: 45.5em;
+  border-bottom-left-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+  top: 67px;
+  height: calc(100vh - 78px);
+  box-shadow: 0 0 10px 3px rgba(57, 75, 88, 0.3);
+}

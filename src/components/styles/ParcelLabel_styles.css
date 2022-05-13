@@ -1,0 +1,207 @@
+.labelPreview {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid black;
+  width: 45em;
+  padding: 15px;
+  font-size: 12px;
+  font-family: Arial;
+  margin-top: 5px;
+}
+
+.labelBorder {
+  margin: 10px;
+}
+
+.parties {
+  margin-top: -15px;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sender {
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.senderPostOffice {
+  margin-left: -33px;
+}
+
+.receiver {
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.receiverPostalCode {
+  font-weight: 900;
+}
+
+.receiverPostOffice {
+  margin-left: -25px;
+  font-weight: 900;
+}
+
+.receiverCountry {
+  font-weight: 900;
+}
+
+.receiverPhone {
+  position: absolute;
+  margin-top: 81px;
+  padding: 0;
+  left: -70px;
+}
+
+.phoneIcon {
+  margin: 0 !important;
+  padding: 0;
+}
+
+.receiverPhoneValue {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  left: 18px;
+  bottom: 1px;
+}
+
+.EDISSI {
+  margin-top: -5px;
+  font-size: 34px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.processCode {
+  font-size: 40px;
+  font-weight: 700;
+  margin-left: auto;
+  margin-right: 30px;
+}
+
+.labelPreview .serviceName {
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.labelPreview .serviceCode,
+.labelPreview .trackingBarcodeValue {
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 201;
+}
+
+.labelPreview .serviceCode {
+  padding-left: 45px;
+}
+
+.labelPreview .trackingBarcodeValue {
+  margin-left: 150px;
+}
+
+.trackingBarcode {
+  margin-top: -10px;
+  margin-bottom: -12px;
+  margin-left: 40px;
+}
+
+.serviceBarcode {
+  margin-top: -10px;
+  margin-bottom: -12px;
+  margin-left: -40px;
+}
+
+.box {
+  border: 2px solid #000;
+  border-right: 0;
+}
+
+.cod {
+  margin-top: 20px;
+}
+
+.codAmount,
+.codIBAN,
+.codReference,
+.codBIC {
+  border-top: 0;
+}
+
+.addonbox {
+  border: 1px solid #000;
+  min-height: 22px !important;
+  max-width: 20px !important;
+  margin: 4px;
+  padding-left: 8px;
+}
+
+.addonValue {
+  margin-left: -2px;
+}
+
+.dateBox {
+  border-left: 2px solid #000;
+}
+
+.date,
+.date-label,
+.addon-label {
+  padding-left: 5px;
+}
+
+.addon-label {
+  font-weight: 400;
+}
+
+.packageCount {
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.volumelabel,
+.weightlabel {
+  font-weight: 700;
+}
+
+.codAmountValue,
+.codIBANvalue,
+.codReferenceValue,
+.codBICvalue {
+  padding-left: 5px;
+  min-height: 20px;
+}
+
+.otherPayerHeading {
+  padding-left: 5px;
+  font-size: 9px;
+}
+
+.otherPayerValue {
+  padding-left: 5px;
+}
+
+.additionalInfo {
+  border-top: 2px solid #000;
+  min-height: 130px;
+}
+
+.additionalInfoValue {
+  padding-left: 5px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.PostiGreen {
+  position: absolute;
+  bottom: -130px !important;
+  padding-left: 5px;
+  font-size: 17px;
+  font-weight: 700;
+}

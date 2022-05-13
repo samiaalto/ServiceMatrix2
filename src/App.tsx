@@ -8,6 +8,7 @@ import Table from './components/Table';
 import FFTable from './components/FileFormatTable';
 import Filter from './components/Filter';
 import Modal from './components/Modal';
+import OffCanvas from './components/OffCanvas';
 import hideColumn from './components/HideColumn';
 //import customFilterFunction from './components/customFilter';
 import additionalServices from './additionalServices.json';
@@ -68,6 +69,8 @@ export default function App() {
     formatFilter: '',
     modalOpen: false,
     modalData: {},
+    offCanvasOpen: false,
+    offCanvasData: {},
   });
 
   const [formats, setFormats] = useState([]);
@@ -319,12 +322,22 @@ export default function App() {
     //console.log(e);
     let service = '';
     let addons = '';
+    let offCanvasData = {};
     if (e.isChecked) {
       service = rowData[e.row].serviceCode;
+
+      if (selected.service) {
+        for (const service of services.records) {
+          if (service.ServiceCode === selected.service)
+            offCanvasData['serviceName'] = service.LabelName;
+        }
+      }
+
       setSelected((prevState) => ({
         ...prevState,
         service: service,
         addons: [...prevState.addons, e.column],
+        offCanvasData: offCanvasData,
       }));
 
       if (selected.addons.length > 0) {
@@ -347,6 +360,7 @@ export default function App() {
         ...prevState,
         service: service,
         addons: prevState.addons.filter((x) => x !== e.column),
+        offCanvasData: offCanvasData,
       }));
     }
 
@@ -601,6 +615,20 @@ export default function App() {
     }));
   };
 
+  const closeOffCanvas = () => {
+    setSelected((prevState) => ({
+      ...prevState,
+      offCanvasOpen: false,
+    }));
+  };
+
+  const openOffCanvas = () => {
+    setSelected((prevState) => ({
+      ...prevState,
+      offCanvasOpen: true,
+    }));
+  };
+
   //const data = useMemo(() => mapRows(services), []);
 
   return (
@@ -626,6 +654,12 @@ export default function App() {
             path="/ServiceMatrix"
             element={
               <>
+                <OffCanvas
+                  t={t}
+                  data={selected.offCanvasData}
+                  openCanvas={selected.offCanvasOpen}
+                  closeCanvas={closeOffCanvas}
+                />
                 <div className="controls">
                   <Row>
                     <Col xs={6} sm={4} md={4}>
@@ -657,6 +691,9 @@ export default function App() {
                           }));
                         }}
                       />
+                    </Col>
+                    <Col xs={2} sm={2} md={1}>
+                      <Button title={t('Reset')} type="reset" onClick={openOffCanvas} />
                     </Col>
                   </Row>
                   <Row>

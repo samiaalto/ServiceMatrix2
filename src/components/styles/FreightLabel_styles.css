@@ -1,0 +1,204 @@
+.labelPreview {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid black;
+  width: 45em;
+  padding: 15px;
+  font-size: 12px;
+  font-family: Arial;
+  margin-top: 5px;
+}
+
+.labelBorder {
+  margin: 10px;
+}
+
+.parties {
+  margin-top: -15px;
+}
+
+.freightLabel {
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.freightSender {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.senderPostOffice {
+  margin-left: -33px;
+}
+
+.freightReceiver {
+  font-weight: 900;
+  font-size: 13px;
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 500;
+  background: linear-gradient(to right, black 3px, transparent 3px) 0 0,
+    linear-gradient(to right, black 3px, transparent 3px) 0 100%,
+    linear-gradient(to left, black 3px, transparent 3px) 100% 0,
+    linear-gradient(to left, black 3px, transparent 3px) 100% 100%,
+    linear-gradient(to bottom, black 3px, transparent 3px) 0 0,
+    linear-gradient(to bottom, black 3px, transparent 3px) 100% 0,
+    linear-gradient(to top, black 3px, transparent 3px) 0 100%,
+    linear-gradient(to top, black 3px, transparent 3px) 100% 100%;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+}
+
+.freightReceiverAddress1,
+.freightReceiverAddress2,
+.freightReceiverName,
+.freightReceiverName2 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.freightReceiverPostalCode,
+.freightReceiverPostOffice,
+.shipmentIdValue,
+.colliValue,
+.weightValue {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.colliValue,
+.colli,
+.weightValue {
+  display: flex;
+  justify-content: center;
+}
+
+.freightReceiverPostOffice {
+  margin-left: -55px;
+}
+
+.freightReceiverContact {
+  margin-top: 10px;
+}
+
+.freightReceiverPhoneValue {
+  margin-left: -20px;
+}
+
+.EDI {
+  position: absolute;
+  color: #fff;
+  top: 0;
+  right: 0;
+  font-size: 20px;
+  font-weight: 700;
+  z-index: 1;
+}
+
+.EDI-bg {
+  position: absolute;
+  top: -25px;
+  left: 100px;
+  z-index: 0;
+}
+
+.EDI-part {
+  height: 60px;
+}
+
+.freightLabelLogo {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.labelPreview .freightServiceName {
+  font-size: 18px;
+  text-align: right;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.freightAddons,
+.transportInstructions {
+  min-height: 80px;
+  margin-top: 20px;
+}
+
+.shipmentInformation,
+.products {
+  margin-top: 20px;
+}
+
+.productsValue,
+.shipmentInformationValues {
+  border-bottom: 2px solid black;
+}
+
+.freightTrackingBarcode {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.freightTrackingBarcodeValue {
+  margin-left: -50px;
+}
+
+.freight-date-label {
+  text-align: right;
+}
+
+.freightDate {
+  margin-left: 12px;
+  text-align: center;
+}
+
+.packageCount {
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.volumelabel,
+.weightlabel {
+  font-weight: 700;
+}
+
+.codAmountValue,
+.codIBANvalue,
+.codReferenceValue,
+.codBICvalue {
+  padding-left: 5px;
+  min-height: 20px;
+}
+
+.otherPayerHeading {
+  padding-left: 5px;
+  font-size: 9px;
+}
+
+.otherPayerValue {
+  padding-left: 5px;
+}
+
+.additionalInfo {
+  border-top: 2px solid #000;
+  min-height: 130px;
+}
+
+.additionalInfoValue {
+  padding-left: 5px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.PostiGreen {
+  position: absolute;
+  bottom: -130px !important;
+  padding-left: 5px;
+  font-size: 17px;
+  font-weight: 700;
+}
