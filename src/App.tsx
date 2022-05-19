@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { useSearchParams, Route, Routes, Navigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import MessageGenerator from './components/MessageGenerator';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -366,6 +367,8 @@ export default function App() {
 
     updateRowData(e.row, e.column, e.isChecked);
     disableExcluded(e.row, e.column, e.isChecked);
+
+    MessageGenerator(service, services, fileFormats, addons, additionalServices);
   };
 
   const mapRows = (services, additionalServices) => {

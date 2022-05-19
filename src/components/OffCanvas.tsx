@@ -1,4 +1,4 @@
-import { Offcanvas } from 'react-bootstrap';
+import { Offcanvas, Tabs, Tab } from 'react-bootstrap';
 import ParcelLabel from './ParcelLabel';
 import FreightLabel from './FreightLabel';
 import './styles/OffCanvas_styles.css';
@@ -14,12 +14,20 @@ const OffCanvas = ({ openCanvas, closeCanvas, data, t }: offCanvasProps) => {
   return (
     <>
       <Offcanvas backdrop={false} placement="end" show={openCanvas} onHide={closeCanvas}>
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
-        </Offcanvas.Header>
+        <Offcanvas.Header closeButton></Offcanvas.Header>
         <Offcanvas.Body>
-          <FreightLabel data={data} />
-          <ParcelLabel data={data} />
+          <Tabs
+            id="controlled-tab-example"
+            activeKey={data.drawerTab ? data.drawerTab : 'label'}
+            //onSelect={(k) => setKey(k)}
+            className="mb-3">
+            <Tab eventKey="label" title="Label">
+              <FreightLabel data={data} />
+              <ParcelLabel data={data} />
+            </Tab>
+            <Tab eventKey="profile" title="Profile"></Tab>
+            <Tab eventKey="contact" title="Contact"></Tab>
+          </Tabs>
         </Offcanvas.Body>
       </Offcanvas>
     </>

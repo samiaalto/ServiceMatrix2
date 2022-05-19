@@ -33,6 +33,68 @@
         {
           "Country": "LT"
         }
+      ],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Service>3101</Service>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Service",
+          "PropertyValue": "3101",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<CodValue>123.50</CodValue>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "CodValue",
+          "PropertyValue": "123.50",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<CodValue currencyCode=\"EUR\">123.50</CodValue>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "currencyCode",
+          "PropertyValue": "EUR",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<CodIBAN>FI2112345600000785</CodIBAN>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "CodIBAN",
+          "PropertyValue": "FI2112345600000785",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<CodBIC>NDEAFIHH</CodBIC>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "CodBIC",
+          "PropertyValue": "NDEAFIHH",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<CodReference>1234123456898</CodReference>",
+          "Mandatory": false,
+          "MessagePosition": null,
+          "PropertyName": "CodReference",
+          "PropertyValue": "1234123456898",
+          "Fid_deliveryservices": 1
+        }
       ]
     },
     {
@@ -68,7 +130,29 @@
       "Home": true,
       "Pudo": true,
       "ExcludedAdditionalServices": [],
-      "AvailableCountries": []
+      "AvailableCountries": [],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Service>3103</Service>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Service",
+          "PropertyValue": "3103",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Total type=\"WEIGHT\">1.500</Total>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Total",
+          "PropertyValue": "1.500",
+          "Fid_deliveryservices": 1
+        }
+      ]
     },
     {
       "ServiceCode": "3104",
@@ -93,6 +177,18 @@
         {
           "Country": "LT"
         }
+      ],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Service>3104</Service>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Service",
+          "PropertyValue": "3104",
+          "Fid_deliveryservices": 1
+        }
       ]
     },
     {
@@ -109,7 +205,8 @@
         {
           "Country": "FI"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3106",
@@ -135,7 +232,8 @@
         {
           "Country": "FI"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3115",
@@ -147,7 +245,8 @@
       "Home": true,
       "Pudo": true,
       "ExcludedAdditionalServices": [],
-      "AvailableCountries": []
+      "AvailableCountries": [],
+      "Fields": []
     },
     {
       "ServiceCode": "3116",
@@ -172,7 +271,8 @@
         {
           "Country": "LT"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3119",
@@ -188,7 +288,8 @@
         {
           "Country": "FI"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3137",
@@ -213,7 +314,8 @@
         {
           "Country": "LT"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3139",
@@ -238,7 +340,8 @@
         {
           "Country": "LT"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3143",
@@ -253,6 +356,28 @@
       "AvailableCountries": [
         {
           "Country": "FI"
+        }
+      ],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Service>3143</Service>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Service",
+          "PropertyValue": "3143",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<LimitedQuantityWeight>0.234</LimitedQuantityWeight>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "LimitedQuantityWeight",
+          "PropertyValue": "0.234",
+          "Fid_deliveryservices": 1
         }
       ]
     },
@@ -270,7 +395,8 @@
         {
           "Country": "FI"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3147",
@@ -286,7 +412,8 @@
         {
           "Country": "FI"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3151",
@@ -302,7 +429,8 @@
         {
           "Country": "FI"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3155",
@@ -318,7 +446,8 @@
         {
           "Country": "FI"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3162",
@@ -340,7 +469,8 @@
         {
           "Country": "LT"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3163",
@@ -365,7 +495,8 @@
         {
           "Country": "LT"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3164",
@@ -392,5 +523,6 @@
         }
       ]
     }
-  ]
+  ],
+  "Fields": []
 }
