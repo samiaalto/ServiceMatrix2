@@ -1,0 +1,35 @@
+:root {
+  --border-radius: 16px;
+  --modal-bg: #394b58;
+  --border: 2px solid #394b58;
+}
+
+.codePreview {
+  background-color: #23241f;
+  color: #ededed;
+  border-radius: var(--border-radius);
+  width: 45em;
+  padding: 15px;
+  font-size: 13px;
+  font-family: Arial;
+  margin-top: 5px;
+}
+
+.string {
+  color: #e6db74;
+}
+.key {
+  color: #f92672;
+}
+.bracket {
+  color: #989898;
+}
+.number {
+  color: #ae81ff;
+}
+.boolean {
+  color: #d0782a;
+}
+.null {
+  color: #d0782a;
+}

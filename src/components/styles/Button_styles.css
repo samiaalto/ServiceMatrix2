@@ -54,6 +54,31 @@
   float: right;
 }
 
+.samples {
+  border: var(--reset-button-border);
+  border-radius: var(--border-radius);
+}
+
+.samples .btn-header_icon svg path {
+  transition: all var(--speed);
+  fill: black;
+}
+
+.samples .btn-header_icon {
+  margin-right: 10px;
+  margin: 4px 6px 0 0;
+  float: center;
+}
+
+.samples:hover {
+  background-color: var(--reset-button-bg);
+}
+
+.samples:hover .btn-header_icon svg path {
+  transition: all var(--speed);
+  fill: white;
+}
+
 .clipboard {
   background-color: var(--clipboard-button-bg);
   border: var(--clipboard-button-border);

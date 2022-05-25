@@ -28,6 +28,7 @@ function Table({
     hiddenColumns: columns.map((column) => {
       if (column.show === false) return column.accessor || column.id;
     }),
+    //hiddenColumns: columns.filter((x) => x.show !== false),
   };
 
   const {
@@ -50,6 +51,8 @@ function Table({
       t,
       openModal,
       autoResetPage: !skipPageReset,
+      autoResetGlobalFilter: false,
+      autoResetFilters: false,
     },
     useGlobalFilter,
     useFilters
@@ -98,6 +101,7 @@ function Table({
                 } else {
                   return (
                     <OverlayTrigger
+                      key={'tooltip_' + column.id}
                       placement="left"
                       overlay={
                         <Tooltip id={column.id}>
@@ -152,9 +156,10 @@ function Table({
                     if (cell.column.id === 'serviceName') {
                       return (
                         <OverlayTrigger
+                          key={'tooltip_' + cell.id}
                           placement="right"
                           overlay={
-                            <Tooltip id={cell.value}>
+                            <Tooltip id={cell.id}>
                               <b> {t(cell.value)} </b> {' (' + cell.value + ')'}
                               <br />
                               {t(cell.value + '_tooltip')}
@@ -183,6 +188,7 @@ function Table({
                     } else if (cell.value === undefined || cell.value === 'Y') {
                       return (
                         <OverlayTrigger
+                          key={'tooltip_' + cell.row.values.serviceCode + '_' + cell.column.id}
                           placement="top"
                           overlay={
                             <Tooltip id={cell.row.values.serviceCode + '_' + cell.column.id}>

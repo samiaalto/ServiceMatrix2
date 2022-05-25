@@ -1,5 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 import Dropdown from './components/Dropdown';
 import Button from './components/Button';
@@ -71,7 +71,11 @@ export default function App() {
     modalOpen: false,
     modalData: {},
     offCanvasOpen: false,
-    offCanvasData: {},
+    showSamples: true,
+    showOptional: false,
+    labelData: {},
+    POSTRA: {},
+    SMARTSHIP: {},
   });
 
   const [formats, setFormats] = useState([]);
@@ -110,11 +114,30 @@ export default function App() {
   ]);
 
   const items = [
-    { id: 0, value: t("'Parcel Services'"), additionalInfo: t("'Domestic shipments under 35 kg'") },
+    {
+      id: 0,
+      value: 'PARCEL',
+      additionalInfo: t("'Domestic shipments under 35 kg'"),
+    },
     {
       id: 1,
-      value: t("'Transport Unit Services'"),
+      value: 'TRANSPORT_UNIT',
       additionalInfo: t("'Domestic shipments above 35 kg'"),
+    },
+    {
+      id: 2,
+      value: 'INTERNATIONAL',
+      additionalInfo: t("'International Shipments'"),
+    },
+    {
+      id: 3,
+      value: 'FREIGHT',
+      additionalInfo: t("'Freight Shipments'"),
+    },
+    {
+      id: 4,
+      value: 'LETTER',
+      additionalInfo: t("'Letter Shipments'"),
     },
   ];
 
@@ -160,13 +183,15 @@ export default function App() {
     let countries = [];
     if (filteredRows) {
       for (let row of filteredRows) {
-        for (let country of row.original[route]) {
-          if (!countries || !countries.includes(country)) {
-            countries.push(country);
+        if (row.index !== 0) {
+          for (let country of row.original[route]) {
+            if (!countries || !countries.includes(country)) {
+              countries.push(country);
+            }
           }
         }
       }
-    } else {
+    } else if (rowdata) {
       for (let row of rowdata) {
         for (let country of row[route]) {
           if (!countries || !countries.includes(country)) {
@@ -323,22 +348,13 @@ export default function App() {
     //console.log(e);
     let service = '';
     let addons = '';
-    let offCanvasData = {};
     if (e.isChecked) {
       service = rowData[e.row].serviceCode;
-
-      if (selected.service) {
-        for (const service of services.records) {
-          if (service.ServiceCode === selected.service)
-            offCanvasData['serviceName'] = service.LabelName;
-        }
-      }
 
       setSelected((prevState) => ({
         ...prevState,
         service: service,
         addons: [...prevState.addons, e.column],
-        offCanvasData: offCanvasData,
       }));
 
       if (selected.addons.length > 0) {
@@ -361,22 +377,28 @@ export default function App() {
         ...prevState,
         service: service,
         addons: prevState.addons.filter((x) => x !== e.column),
-        offCanvasData: offCanvasData,
       }));
     }
 
     updateRowData(e.row, e.column, e.isChecked);
     disableExcluded(e.row, e.column, e.isChecked);
 
-    MessageGenerator(service, services, fileFormats, addons, additionalServices);
+    //let messages = MessageGenerator(selected, services, fileFormats, additionalServices);
+
+    //offCanvasData['sampleXML'] = messages['POSTRA'];
+
+    //setSelected((prevState) => ({
+    //  ...prevState,
+    //  offCanvasData: offCanvasData,
+    //}));
   };
 
   const mapRows = (services, additionalServices) => {
     let rows = [];
     let allAddons = {
-      serviceName: 'Service',
+      serviceName: t('Service'),
       serviceButton: ' ',
-      serviceCode: 'Code',
+      serviceCode: t('Code'),
       serviceGroup: ' ',
       departureCountries: ' ',
       destinationCountries: ' ',
@@ -493,9 +515,9 @@ export default function App() {
 
   useEffect(() => {
     setSkipPageReset(false);
-    populateCountries('departureCountries', rowData, '');
-    populateCountries('destinationCountries', rowData, '');
-    populateDropdown(rowData);
+    //populateCountries('departureCountries', rowData, '');
+    //populateCountries('destinationCountries', rowData, '');
+    //populateDropdown(rowData);
   }, [rowData]);
 
   useEffect(() => {
@@ -507,6 +529,17 @@ export default function App() {
       setLoaded(true);
     }
   }, [destinationCountries]);
+
+  useEffect(() => {
+    let messages = MessageGenerator(selected, services, fileFormats, additionalServices);
+
+    setSelected((prevState) => ({
+      ...prevState,
+      labelData: messages['labelData'],
+      POSTRA: messages['POSTRA'],
+      SMARTSHIP: messages['SMARTSHIP'],
+    }));
+  }, [selected.service, selected.addons, selected.showSamples, selected.showOptional]);
 
   useEffect(() => {
     if (rowData) {
@@ -558,7 +591,7 @@ export default function App() {
   }, [loaded]);
 
   useEffect(() => {
-    console.log(selected);
+    //console.log(selected);
   }, [selected]);
 
   const langChange = (e) => {
@@ -632,6 +665,20 @@ export default function App() {
     }));
   };
 
+  const showOptional = () => {
+    setSelected((prevState) => ({
+      ...prevState,
+      showOptional: !prevState.showOptional,
+    }));
+  };
+
+  const showSamples = () => {
+    setSelected((prevState) => ({
+      ...prevState,
+      showSamples: !prevState.showSamples,
+    }));
+  };
+
   //const data = useMemo(() => mapRows(services), []);
 
   return (
@@ -659,9 +706,11 @@ export default function App() {
               <>
                 <OffCanvas
                   t={t}
-                  data={selected.offCanvasData}
+                  data={selected}
                   openCanvas={selected.offCanvasOpen}
                   closeCanvas={closeOffCanvas}
+                  showOptional={showOptional}
+                  showSamples={showSamples}
                 />
                 <div className="controls">
                   <Row>
@@ -670,9 +719,13 @@ export default function App() {
                         title={t("'Select Service Group'")}
                         items={items}
                         multiSelect={false}
+                        t={t}
                         value={selected.serviceGroup}
                         onChange={(e) => {
-                          let value = e[0].value;
+                          let value = '';
+                          if (e[0]) {
+                            value = e[0].value;
+                          }
                           updateSearchParams('serviceGroup', value);
                           setSelected((prevState) => ({
                             ...prevState,
@@ -681,7 +734,7 @@ export default function App() {
                         }}
                       />
                     </Col>
-                    <Col xs={6} sm={4} md={4}>
+                    <Col xs={4} sm={4} md={4}>
                       <Filter
                         placeHolder={t("'Filter data'")}
                         value={selected.filter ? selected.filter : ''}
@@ -695,37 +748,42 @@ export default function App() {
                         }}
                       />
                     </Col>
-                    <Col xs={2} sm={2} md={1}>
-                      <Button title={t('Reset')} type="reset" onClick={openOffCanvas} />
+                    <Col xs={2} smOffset={2} sm={2} mdOffset={3} md={1}>
+                      <Button title={''} type="samples" onClick={openOffCanvas} />
                     </Col>
                   </Row>
+                  {selected.serviceGroup === 'INTERNATIONAL' && (
+                    <Row>
+                      <Col xs={6} sm={4}>
+                        <Dropdown
+                          title={t("'Select Departure Country'")}
+                          items={departureCountries}
+                          multiSelect={false}
+                          t={t}
+                          value={selected.departure}
+                          onChange={(e) => {
+                            filterCountries(e, 'departureCountries');
+                          }}
+                        />
+                      </Col>
+                      <Col xs={6} sm={4}>
+                        <Dropdown
+                          title={t("'Select Destination Country'")}
+                          items={destinationCountries}
+                          t={t}
+                          value={selected.destination}
+                          multiSelect={false}
+                          onChange={(e) => {
+                            filterCountries(e, 'destinationCountries');
+                          }}
+                        />
+                      </Col>
+
+                      <Col xs={6} sm={4}></Col>
+                    </Row>
+                  )}
                   <Row>
-                    <Col xs={6} sm={4}>
-                      <Dropdown
-                        title={t("'Select Departure Country'")}
-                        items={departureCountries}
-                        multiSelect={false}
-                        value={selected.departure}
-                        onChange={(e) => {
-                          filterCountries(e, 'departureCountries');
-                        }}
-                      />
-                    </Col>
-                    <Col xs={6} sm={4}>
-                      <Dropdown
-                        title={t("'Select Destination Country'")}
-                        items={destinationCountries}
-                        value={selected.destination}
-                        multiSelect={false}
-                        onChange={(e) => {
-                          filterCountries(e, 'destinationCountries');
-                        }}
-                      />
-                    </Col>
-                    <Col xs={6} sm={4}></Col>
-                  </Row>
-                  <Row>
-                    <Col xs={6} sm={2}>
+                    <Col xs={4} sm={3} md={2} lg={1}>
                       <Button title={t('Reset')} type="reset" onClick={handleReset} />
                     </Col>
                   </Row>
@@ -758,6 +816,7 @@ export default function App() {
                       <Dropdown
                         title={t("'Select File Format'")}
                         items={formats}
+                        t={true}
                         multiSelect={false}
                         value={selected.format}
                         onChange={(e) => {

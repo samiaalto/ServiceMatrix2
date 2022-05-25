@@ -1,6 +1,5 @@
 :root {
   --border-radius: 16px;
-  --modal-bg: #394b58;
   --border: 2px solid #394b58;
 }
 
@@ -11,4 +10,96 @@
   top: 67px;
   height: calc(100vh - 78px);
   box-shadow: 0 0 10px 3px rgba(57, 75, 88, 0.3);
+}
+
+.offcanvas-header {
+  padding-top: 25px;
+  padding-bottom: 0;
+}
+
+.offcanvas-header .btn-close {
+  position: relative;
+  z-index: 5;
+}
+
+.offcanvas-header .btn-close:focus {
+  outline: none !important;
+  -webkit-appearance: none !important;
+
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.dropdown .show {
+  z-index: 40;
+}
+
+.offcanvas-body {
+  padding-top: 0;
+  margin-top: -30px;
+}
+
+input[type='checkbox'].form-check-input {
+  clip: unset;
+  clip-path: unset;
+  width: 35px;
+  height: 15px;
+  border: 2px solid #394b58;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(57, 75, 88,1.0)'/></svg>");
+  transition: all 0.3s ease-in-out;
+}
+
+input[type='checkbox'].form-check-input:checked,
+input[type='checkbox'].form-check-input:checked:focus {
+  background-color: #394b58;
+  outline: none;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(255,255,255,1.0)'/></svg>");
+}
+
+input[type='checkbox'].form-check-input:focus {
+  outline: none !important;
+  -webkit-appearance: none !important;
+
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(57, 75, 88,1.0)'/></svg>");
+}
+
+.form-check input {
+  position: relative;
+  min-height: 20px;
+}
+
+.form-check label {
+  padding-left: 3px;
+  font-size: 13px;
+}
+
+.offcanvas .nav-tabs {
+  border: 0;
+  padding-left: 60px;
+}
+
+.nav-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 0 !important;
+  border: 0 !important;
+}
+
+.offcanvas .nav-link {
+  color: #3b4a57;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.nav-item .nav-link.active:hover {
+  background-color: rgba(0, 0, 0, 0.001);
+}
+
+.nav-item .nav-link.active {
+  font-weight: 700;
+  border: 0;
+  border-bottom: 4px solid rgba(57, 75, 88, 0.9) !important;
 }

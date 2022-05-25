@@ -11,9 +11,10 @@ interface dropdownProps {
   items: item[];
   multiSelect: boolean;
   onChange: (item) => void;
+  t: any;
 }
 
-function Dropdown({ title, items, multiSelect, onChange, value }: dropdownProps) {
+function Dropdown({ title, items, multiSelect, onChange, value, t }: dropdownProps) {
   const [open, setOpen] = useState(false);
   const [handle, setHandle] = useState(-90);
   const [selection, setSelection] = useState([]);
@@ -52,7 +53,7 @@ function Dropdown({ title, items, multiSelect, onChange, value }: dropdownProps)
       for (let item of items) {
         if (item.value === value) {
           setSelection([item]);
-          setSelectedTitle(value);
+          setSelectedTitle(item.value);
         }
       }
     }
@@ -82,7 +83,7 @@ function Dropdown({ title, items, multiSelect, onChange, value }: dropdownProps)
         onKeyPress={() => toggle(!open)}
         onClick={() => toggle(!open)}>
         <div className="dd-header_title">
-          <p className="dd-header_title--bold">{!selectedTitle ? title : selectedTitle}</p>
+          <p className="dd-header_title--bold">{!selectedTitle ? title : t(selectedTitle)}</p>
         </div>
         <div className="dd-header_action">
           <p>
@@ -105,7 +106,7 @@ function Dropdown({ title, items, multiSelect, onChange, value }: dropdownProps)
               <li className="dd-list-item" key={item.id}>
                 <button type="button" onClick={() => handleOnClick(item)}>
                   <span className="dd-list-item_group">
-                    <span className="dd-list-item_value">{item.value}</span>
+                    <span className="dd-list-item_value">{t(item.value)}</span>
                     <span className="dd-list-item_selection">
                       {isItemInSelection(item) && 'Selected'}
                     </span>

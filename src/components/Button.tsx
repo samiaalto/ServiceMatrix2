@@ -1,6 +1,7 @@
 import { ReactComponent as Redo } from './icons/Redo.svg';
 import { ReactComponent as Clipboard } from './icons/Clipboard.svg';
 import { ReactComponent as Select } from './icons/Select.svg';
+import { ReactComponent as Samples } from './icons/Samples.svg';
 import './styles/Button_styles.css';
 
 interface buttonProps {
@@ -17,6 +18,8 @@ function ResetButton({ title, type, onClick }: buttonProps) {
 
   function renderSwitch(param) {
     switch (param) {
+      case 'samples':
+        return <Samples />;
       case 'clipboard':
         return <Clipboard />;
       case 'select':

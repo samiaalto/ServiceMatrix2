@@ -212,6 +212,16 @@
           "PropertyName": "Product",
           "PropertyValue": "2102",
           "Fid_deliveryservices": 2
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\": \"PO2102\"",
+          "Mandatory": true,
+          "MessagePosition": "service",
+          "PropertyName": "id",
+          "PropertyValue": "PO2102",
+          "Fid_deliveryservices": 1
         }
       ]
     },
@@ -325,6 +335,370 @@
         }
       ],
       "Fields": []
+    },
+    {
+      "ServiceCode": "2004",
+      "DisplayNameEN": "Domestic Freight",
+      "DisplayNameFI": "Kotimaan Rahti",
+      "DescriptionEN": "Domestic Freight",
+      "DescriptionFI": "Kotimaan Rahti",
+      "ServiceGroup": "Freight Services",
+      "LabelName": "Rahti",
+      "Dimensions": [
+        {
+          "Name": "Half pallet",
+          "MinWidth": 1,
+          "MaxWidth": 80,
+          "MinHeight": 1,
+          "MaxHeight": 210,
+          "MinDepth": 1,
+          "MaxDepth": 60,
+          "MinWeight": 1,
+          "MaxWeight": 370
+        },
+        {
+          "Name": "EUR",
+          "MinWidth": 1,
+          "MaxWidth": 80,
+          "MinHeight": 1,
+          "MaxHeight": 210,
+          "MinDepth": 1,
+          "MaxDepth": 120,
+          "MinWeight": 1,
+          "MaxWeight": 740
+        }
+      ],
+      "ProcessNumber": "",
+      "Locker": false,
+      "AdditionalServices": [
+        {
+          "Addon": "5100"
+        },
+        {
+          "Addon": "5102"
+        },
+        {
+          "Addon": "5103"
+        },
+        {
+          "Addon": "5104"
+        },
+        {
+          "Addon": "5109"
+        },
+        {
+          "Addon": "5111"
+        },
+        {
+          "Addon": "5112"
+        },
+        {
+          "Addon": "5214"
+        },
+        {
+          "Addon": "5222"
+        },
+        {
+          "Addon": "5223"
+        },
+        {
+          "Addon": "5224"
+        },
+        {
+          "Addon": "5225"
+        },
+        {
+          "Addon": "5227"
+        },
+        {
+          "Addon": "5228"
+        },
+        {
+          "Addon": "5229"
+        },
+        {
+          "Addon": "5230"
+        },
+        {
+          "Addon": "5231"
+        },
+        {
+          "Addon": "5234"
+        },
+        {
+          "Addon": "5235"
+        },
+        {
+          "Addon": "5236"
+        },
+        {
+          "Addon": "5237"
+        },
+        {
+          "Addon": "5238"
+        },
+        {
+          "Addon": "5502"
+        },
+        {
+          "Addon": "5503"
+        }
+      ],
+      "Routes": [
+        {
+          "DepartureCountry": "FI",
+          "DestinationCountries": [
+            {
+              "Country": "FI"
+            }
+          ]
+        }
+      ],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA FREIGHT",
+          "AdditionalInfo": null,
+          "Example": "<Product>2004</Product>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Product",
+          "PropertyValue": "2004",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\": \"FOP1\"",
+          "Mandatory": true,
+          "MessagePosition": "service",
+          "PropertyName": "id",
+          "PropertyValue": "POF1",
+          "Fid_deliveryservices": 1
+        }
+      ]
+    },
+    {
+      "ServiceCode": "2015",
+      "DisplayNameEN": "Priority",
+      "DisplayNameFI": "Priority",
+      "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 09 parcels delivery will be delivered by 9 am the next weekday morning and more than 70% of Finnish companies are covered by this service.",
+      "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 09-pakettitoimitus toimitetaan  seuraavana arkiaamuna klo 9 mennessä ja tämän palvelun piirissä on yli 70% Suomen yrityksistä.",
+      "ServiceGroup": "International Services",
+      "LabelName": "Express-paketti Aamuksi",
+      "ProcessNumber": "09",
+      "Dimensions": [
+        {
+          "Name": "Normal",
+          "MinWidth": 15,
+          "MaxWidth": 60,
+          "MinHeight": 1,
+          "MaxHeight": 60,
+          "MinDepth": 15,
+          "MaxDepth": 60,
+          "MinWeight": 0.1,
+          "MaxWeight": 25,
+          "Circumference": 300
+        },
+        {
+          "Name": "Bulky",
+          "MinWidth": 15,
+          "MaxWidth": 200,
+          "MinHeight": 1,
+          "MaxHeight": 60,
+          "MinDepth": 15,
+          "MaxDepth": 60,
+          "MinWeight": 0.1,
+          "MaxWeight": 25,
+          "Circumference": 300
+        }
+      ],
+      "AdditionalServices": [
+        {
+          "Addon": "3101"
+        },
+        {
+          "Addon": "3102"
+        },
+        {
+          "Addon": "3103"
+        },
+        {
+          "Addon": "3104"
+        },
+        {
+          "Addon": "3106"
+        },
+        {
+          "Addon": "3143"
+        },
+        {
+          "Addon": "3155"
+        },
+        {
+          "Addon": "3162"
+        },
+        {
+          "Addon": "3163"
+        },
+        {
+          "Addon": "3164"
+        }
+      ],
+      "Routes": [
+        {
+          "DepartureCountry": "FI",
+          "DestinationCountries": [
+            {
+              "Country": "FI"
+            },
+            {
+              "Country": "EE"
+            }
+          ]
+        }
+      ],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Product>2101</Product>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Product",
+          "PropertyValue": "2101",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\": \"PO2102\"",
+          "Mandatory": true,
+          "MessagePosition": "id",
+          "PropertyName": "service",
+          "PropertyValue": "PO2102",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\": \"DLV09\"",
+          "Mandatory": true,
+          "MessagePosition": "id",
+          "PropertyName": "addon",
+          "PropertyValue": "DLV09",
+          "Fid_deliveryservices": 1
+        }
+      ]
+    },
+    {
+      "ServiceCode": "2017",
+      "DisplayNameEN": "Priority",
+      "DisplayNameFI": "Priority",
+      "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 09 parcels delivery will be delivered by 9 am the next weekday morning and more than 70% of Finnish companies are covered by this service.",
+      "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 09-pakettitoimitus toimitetaan  seuraavana arkiaamuna klo 9 mennessä ja tämän palvelun piirissä on yli 70% Suomen yrityksistä.",
+      "ServiceGroup": "International Services",
+      "LabelName": "Express-paketti Aamuksi",
+      "ProcessNumber": "09",
+      "Dimensions": [
+        {
+          "Name": "Normal",
+          "MinWidth": 15,
+          "MaxWidth": 60,
+          "MinHeight": 1,
+          "MaxHeight": 60,
+          "MinDepth": 15,
+          "MaxDepth": 60,
+          "MinWeight": 0.1,
+          "MaxWeight": 25,
+          "Circumference": 300
+        },
+        {
+          "Name": "Bulky",
+          "MinWidth": 15,
+          "MaxWidth": 200,
+          "MinHeight": 1,
+          "MaxHeight": 60,
+          "MinDepth": 15,
+          "MaxDepth": 60,
+          "MinWeight": 0.1,
+          "MaxWeight": 25,
+          "Circumference": 300
+        }
+      ],
+      "AdditionalServices": [
+        {
+          "Addon": "3101"
+        },
+        {
+          "Addon": "3102"
+        },
+        {
+          "Addon": "3103"
+        },
+        {
+          "Addon": "3104"
+        },
+        {
+          "Addon": "3143"
+        },
+        {
+          "Addon": "3155"
+        },
+        {
+          "Addon": "3162"
+        },
+        {
+          "Addon": "3163"
+        },
+        {
+          "Addon": "3164"
+        }
+      ],
+      "Routes": [
+        {
+          "DepartureCountry": "FI",
+          "DestinationCountries": [
+            {
+              "Country": "FI"
+            },
+            {
+              "Country": "EE"
+            }
+          ]
+        }
+      ],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Product>2101</Product>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Product",
+          "PropertyValue": "2101",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\": \"PO2102\"",
+          "Mandatory": true,
+          "MessagePosition": "id",
+          "PropertyName": "service",
+          "PropertyValue": "PO2102",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\": \"DLV09\"",
+          "Mandatory": true,
+          "MessagePosition": "id",
+          "PropertyName": "addon",
+          "PropertyValue": "DLV09",
+          "Fid_deliveryservices": 1
+        }
+      ]
     }
   ]
 }

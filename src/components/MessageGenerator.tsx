@@ -1,6 +1,4 @@
-import e from 'express';
-
-const MessageGenerator = (service, services, fileFormats, addons, additionalServices) => {
+const MessageGenerator = (selected, services, fileFormats, additionalServices) => {
   const { create } = require('xmlbuilder2');
 
   //console.log(addons);
@@ -40,15 +38,22 @@ const MessageGenerator = (service, services, fileFormats, addons, additionalServ
   }
 
   const serviceProps = [];
-  let addonArr = addons.split(' ');
+  let addonArr = [];
+  let labelData = {};
+  let labelAddons = [];
+
+  addonArr = selected.addons;
 
   for (const record of services.records) {
-    if (record.ServiceCode === service) {
+    if (record.ServiceCode === selected.service) {
+      labelData['serviceName'] = record.LabelName;
+      labelData['processNumber'] = record.ProcessNumber;
       for (const field of record.Fields) {
         serviceProps.push({
           format: field.MessageFormat,
           property: field.PropertyName,
           value: field.PropertyValue,
+          position: field.MessagePosition,
         });
       }
     }
@@ -56,163 +61,238 @@ const MessageGenerator = (service, services, fileFormats, addons, additionalServ
   if (addonArr) {
     for (const record of additionalServices.records) {
       if (addonArr.includes(record.ServiceCode)) {
+        labelAddons.push({ labelName: record.DisplayNameFI, labelMarking: record.LabelMarking });
         for (const field of record.Fields) {
           serviceProps.push({
             format: field.MessageFormat,
             property: field.PropertyName,
             value: field.PropertyValue,
+            position: field.MessagePosition,
           });
         }
       }
     }
   }
 
-  //console.log(serviceProps);
-
-  const getIndexes = (arr, field, val) => {
-    var indexes = [],
-      i;
-    for (i = 0; i < arr.length; i++) if (arr[i][field] === val) indexes.push(i);
-    return indexes;
-  };
+  let d = new Date();
+  labelData['dateTime'] = d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+  labelData['addons'] = labelAddons;
 
   let outXML = {};
-  let temp = [];
-  let index = {};
+  let outJSON = {};
+  let indexes = {};
+  let sampleValues = selected.showSamples;
+  let mandatoryOnly = selected.showOptional;
+
+  //console.log(serviceProps);
+
   for (const record of fileFormats.records) {
     if (serviceProps.some((e) => e.format === record.Name)) {
       for (let i = 0; i < record.Records.length; i++) {
         if (record.Format === 'XML') {
-          if (
-            record.Records[i].Type !== 'Object' &&
-            record.Records[i].Type !== 'Array' &&
-            record.Records[i].Type !== 'Attribute'
-          ) {
-            let value = '';
+          // Determine new path for the element
 
-            if (record.Records[i].ExampleValue) {
-              if (record.Records[i].ExampleValue === 'dateNow') {
-                value = new Date().toISOString().slice(0, 19) + '+03:00';
-              } else {
-                value = record.Records[i].ExampleValue;
+          let obj = record.Records[i];
+          let parentIndex = record.Records.findIndex((o) => o.Name === obj.Parent);
+          let objParent = record.Records[parentIndex];
+          let newPath = obj.Path;
+          if (parentIndex > -1) {
+            if (objParent.Type === 'Array') {
+              if (!indexes.hasOwnProperty(objParent.Name)) {
+                indexes[objParent.Name] = 0;
+                indexes[obj.Name] = 0;
+              } else if (indexes.hasOwnProperty(obj.Name)) {
+                indexes[obj.Name] = indexes[obj.Name] + 1;
               }
-            }
 
-            for (const prop of serviceProps) {
-              if (prop.property === record.Records[i].Name) {
-                value = prop.value;
+              let path = obj.Path.split('.');
+
+              for (const index of Object.keys(indexes)) {
+                let elIndex = path.findIndex((o) => o === index);
+                if (elIndex > -1) {
+                  path[elIndex + 1] = indexes[index];
+                }
               }
-            }
-            let next = i + 1;
-
-            if (i !== record.Records.length && record.Records[next].Type === 'Attribute') {
-              let indexes = getIndexes(record.Records, 'Name', record.Records[i].Name);
-
-              if (
-                indexes.length > 1 &&
-                !temp.includes(record.Records[i].Name) &&
-                record.Records[i - 2].Type !== 'Object'
-              ) {
-                let elementArr = [];
-
-                for (let k = 0; k < indexes.length; k++) {
-                  if (!temp.includes(record.Records[indexes[k]].Name)) {
-                    temp.push(record.Records[indexes[k]].Name);
-                  }
-                  elementArr.push({
-                    ['@' + record.Records[indexes[k] + 1].Name]: record.Records[indexes[k] + 1]
-                      .ExampleValue,
-                    '#text': record.Records[indexes[k]].ExampleValue,
-                  });
-                }
-                set(outXML, record.Records[i].Path, elementArr);
-              } else if (temp.includes(record.Records[i].Name)) {
-              } else if (record.Records[i - 2].Type === 'Object') {
-                if (!index.hasOwnProperty(record.Records[i - 2].Name)) {
-                  console.log('TÄÄLLÄ');
-                  index[record.Records[i - 2].Name] = 0;
-                  console.log(index);
-                } else {
-                  console.log('TÄÄLLÄ2');
-                  index[record.Records[i - 2].Name] = index[record.Records[i - 2].Name] + 1;
-                  console.log(index);
-                }
-
-                let value2 = {
-                  ['@' + record.Records[i - 1].Name]: record.Records[i - 1].ExampleValue
-                    ? record.Records[i - 1].ExampleValue
-                    : 'TEST',
-                };
-                let path = record.Records[i - 2].Path.split('.');
-                let elementIndex = path.findIndex((obj) => obj === record.Records[i - 2].Name);
-                path[elementIndex + 1] = index[record.Records[i - 2].Name];
-                let newPath = path.join('.');
-
-                set(outXML, newPath, value2);
-
-                path = record.Records[i].Path.split('.');
-                path[elementIndex + 1] = index[record.Records[i - 2].Name];
-                newPath = path.join('.');
-
-                let value3 = {
-                  ['@' + record.Records[next].Name]: record.Records[next].ExampleValue
-                    ? record.Records[next].ExampleValue
-                    : '',
-                  '#text': value,
-                };
-
-                set(outXML, newPath, value3);
-              } else {
-                let value2 = {
-                  ['@' + record.Records[next].Name]: record.Records[next].ExampleValue
-                    ? record.Records[next].ExampleValue
-                    : '',
-                  '#text': value,
-                };
-
-                let indexes = getIndexes(record.Records, 'Parent', record.Records[i].Name);
-                if (indexes.length > 1) {
-                  for (let j = 0; j < indexes.length; j++) {
-                    value2 = Object.assign(value2, {
-                      ['@' + record.Records[indexes[j]].Name]: value,
-                    });
-                  }
-                }
-                set(outXML, record.Records[i].Path, value2);
-              }
+              newPath = path.join('.');
             } else {
-              let occurences = serviceProps.filter((v) => v.property === record.Records[i].Name);
-              if (record.Records[i - 1].Type === 'Array' && occurences.length > 1) {
-                let occArr = [];
-                for (const occurence of occurences) {
-                  occArr.push(occurence.value);
-                }
-                set(outXML, record.Records[i].Path, occArr);
-              } else {
-                //console.log(record.Records[i].Name);
-                if (index.hasOwnProperty(record.Records[i].Parent)) {
-                  let path = record.Records[i].Path.split('.');
-                  let elementIndex = path.findIndex((obj) => obj === record.Records[i].Parent);
-                  path[elementIndex + 1] = index[record.Records[i].Parent];
-                  let newPath = path.join('.');
-                  set(outXML, newPath, value);
-                } else {
-                  set(outXML, record.Records[i].Path, value);
+              let path = obj.Path.split('.');
+
+              for (const index of Object.keys(indexes)) {
+                let elIndex = path.findIndex((o) => o === index);
+                if (elIndex > -1) {
+                  path[elIndex + 1] = indexes[index];
                 }
               }
+              newPath = path.join('.');
             }
           }
-        } else {
+
+          // Set the attributes
+
+          let next = i + 1;
+          let value = {};
+          let val = '';
+
+          if (sampleValues) {
+            if (obj.ExampleValue === 'dateTime') {
+              value = Object.assign(value, {
+                '#text': new Date().toISOString().split('.')[0] + '+03:00',
+              });
+            } else {
+              value = Object.assign(value, { '#text': obj.ExampleValue });
+            }
+          }
+
+          for (const prop of serviceProps) {
+            if (prop.property === record.Records[i].Name) {
+              val = prop.value;
+            }
+          }
+
+          if (val !== '') {
+            value = Object.assign(value, { '#text': val });
+          }
+
+          if (i !== record.Records.length - 1 && record.Records[next].Type === 'Attribute') {
+            value = {
+              ['@' + record.Records[next].Name]:
+                sampleValues || val !== '' ? record.Records[next].ExampleValue : '',
+              '#text': val !== '' ? val : sampleValues ? obj.ExampleValue : '',
+            };
+
+            if (i > 2 && record.Records[i - 2].Type === 'Object') {
+              let value2 = {
+                ['@' + record.Records[i - 1].Name]: sampleValues
+                  ? record.Records[i - 1].ExampleValue
+                  : '',
+                '#text': sampleValues ? record.Records[i - 2].ExampleValue : '',
+              };
+
+              let path = record.Records[i - 2].Path.split('.');
+
+              for (const index of Object.keys(indexes)) {
+                let elIndex = path.findIndex((o) => o === index);
+                if (elIndex > -1) {
+                  path[elIndex + 1] = indexes[index];
+                }
+              }
+              let newPath2 = path.join('.');
+
+              set(outXML, newPath2, value2);
+            }
+
+            if (
+              next + 1 < record.Records.length - 1 &&
+              record.Records[next + 1].Type === 'Attribute'
+            ) {
+              value = Object.assign(value, {
+                ['@' + record.Records[next + 1].Name]: sampleValues
+                  ? record.Records[next + 1].ExampleValue
+                  : '',
+                '#text': sampleValues ? record.Records[next + 1].ExampleValue : '',
+              });
+            }
+          }
+
+          // Set the element in to the tree
+
+          if (obj.Type !== 'Object' && obj.Type !== 'Array' && obj.Type !== 'Attribute') {
+            if (!mandatoryOnly) {
+              if (obj.Mandatory) {
+                set(outXML, newPath, value);
+              }
+            } else {
+              set(outXML, newPath, value);
+            }
+          }
+        } else if (record.Format === 'JSON') {
+          // Determine new path for the element
+
+          let obj = record.Records[i];
+          let parentIndex = record.Records.findIndex((o) => o.Name === obj.Parent);
+          let objParent = record.Records[parentIndex];
+          let newPath = obj.Path;
+          if (parentIndex > -1) {
+            if (objParent.Type === 'Array') {
+              if (!indexes.hasOwnProperty(objParent.Name)) {
+                indexes[objParent.Name] = 0;
+                indexes[obj.Name] = 0;
+              } else if (indexes.hasOwnProperty(obj.Name)) {
+                indexes[obj.Name] = indexes[obj.Name] + 1;
+              }
+
+              let path = obj.Path.split('.');
+
+              for (const index of Object.keys(indexes)) {
+                let elIndex = path.findIndex((o) => o === index);
+                if (elIndex > -1) {
+                  //path[elIndex + 1] = indexes[index];
+                }
+              }
+              newPath = path.join('.');
+            } else {
+              let path = obj.Path.split('.');
+
+              for (const index of Object.keys(indexes)) {
+                let elIndex = path.findIndex((o) => o === index);
+                if (elIndex > -1) {
+                  //path[elIndex + 1] = indexes[index];
+                }
+              }
+              newPath = path.join('.');
+            }
+          }
+
+          // Set the attributes
+
+          let value = '';
+          let val = '';
+
+          if (sampleValues) {
+            if (obj.ExampleValue === 'dateTime') {
+              value = new Date().toISOString().split('.')[0];
+            } else {
+              value = obj.ExampleValue;
+            }
+          }
+
+          for (const prop of serviceProps) {
+            if (
+              prop.property === record.Records[i].Name &&
+              prop.position === record.Records[i].Parent
+            ) {
+              val = prop.value;
+            }
+          }
+
+          if (val !== '') {
+            value = val;
+          }
+
+          // Set the element in to the tree
+
+          if (obj.Type !== 'Object' && obj.Type !== 'Array' && obj.Type !== 'Attribute') {
+            if (!mandatoryOnly) {
+              if (obj.Mandatory) {
+                set(outJSON, newPath, value);
+              }
+            } else {
+              set(outJSON, newPath, value);
+            }
+          }
         }
       }
     }
   }
+  //console.log(indexes);
+  //console.log(JSON.stringify(outJSON));
 
-  console.log(JSON.stringify(outXML));
+  const json = [JSON.stringify(outJSON, null, 2)];
 
   const doc = create({ version: '1.0', encoding: 'UTF-8' }, outXML);
   const xml = doc.end({ prettyPrint: true });
-  console.log(xml);
+  return { POSTRA: xml, SMARTSHIP: json, labelData: labelData };
+  //console.log(xml);
 };
 
 export default MessageGenerator;

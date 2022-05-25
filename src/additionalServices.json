@@ -62,7 +62,7 @@
           "Mandatory": true,
           "MessagePosition": null,
           "PropertyName": "currencyCode",
-          "PropertyValue": "EUR",
+          "PropertyValue": "USA",
           "Fid_deliveryservices": 1
         },
         {
@@ -94,6 +94,66 @@
           "PropertyName": "CodReference",
           "PropertyValue": "1234123456898",
           "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "POSTRA",
+          "AdditionalInfo": null,
+          "Example": "<Service>3101</Service>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Service",
+          "PropertyValue": "3101",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"amount\": 123.50",
+          "Mandatory": true,
+          "MessagePosition": "addons",
+          "PropertyName": "amount",
+          "PropertyValue": "123.50",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"accounttype\": \"IBAN\"",
+          "Mandatory": true,
+          "MessagePosition": "addons",
+          "PropertyName": "accounttype",
+          "PropertyValue": "IBAN",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"account\": \"FI2112345600000785\"",
+          "Mandatory": true,
+          "MessagePosition": "addons",
+          "PropertyName": "account",
+          "PropertyValue": "FI2112345600000785",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"bank\": \"NDEAFIHH\"",
+          "Mandatory": true,
+          "MessagePosition": "addons",
+          "PropertyName": "bank",
+          "PropertyValue": "NDEAFIHH",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\": \"COD\"",
+          "Mandatory": true,
+          "MessagePosition": "addons",
+          "PropertyName": "id",
+          "PropertyValue": "COD",
+          "Fid_deliveryservices": 1
         }
       ]
     },
@@ -118,7 +178,8 @@
         {
           "Country": "LV"
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "ServiceCode": "3103",
@@ -521,8 +582,59 @@
         {
           "Country": "LT"
         }
+      ],
+      "Fields": []
+    },
+    {
+      "ServiceCode": "5100",
+      "DisplayNameEN": "Scheduled Delivery",
+      "DisplayNameFI": "Aikataulutettu jakelu",
+      "DescriptionEN": "Shipments are delivered to recipients according to the schedule. Postal code-specific time frames can be seen in the electronic order channel.",
+      "DescriptionFI": "Aikataulutettu jakelu",
+      "LabelMarking": "",
+      "Home": false,
+      "Pudo": true,
+      "ExcludedAdditionalServices": [
+        {
+          "Addon": "5111"
+        },
+        {
+          "Addon": "5224"
+        },
+        {
+          "Addon": "5225"
+        },
+        {
+          "Addon": "5229"
+        }
+      ],
+      "AvailableCountries": [
+        {
+          "Country": "FI"
+        }
+      ],
+      "Fields": [
+        {
+          "MessageFormat": "POSTRA FREIGHT",
+          "AdditionalInfo": null,
+          "Example": "<Service>5100</Service>",
+          "Mandatory": true,
+          "MessagePosition": null,
+          "PropertyName": "Service",
+          "PropertyValue": "5100",
+          "Fid_deliveryservices": 1
+        },
+        {
+          "MessageFormat": "SMARTSHIP",
+          "AdditionalInfo": null,
+          "Example": "\"id\":\"DLVT\"",
+          "Mandatory": true,
+          "MessagePosition": "addons",
+          "PropertyName": "id",
+          "PropertyValue": "DLVT",
+          "Fid_deliveryservices": 1
+        }
       ]
     }
-  ],
-  "Fields": []
+  ]
 }
