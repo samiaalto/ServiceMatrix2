@@ -10,15 +10,20 @@ import Filter from './components/Filter';
 import Modal from './components/Modal';
 import OffCanvas from './components/OffCanvas';
 import hideColumn from './components/HideColumn';
+import populateCountries from './components/PopulateCountries';
+import mapRows from './components/MapRows';
+import mapFfRows from './components/MapFFRows';
 //import customFilterFunction from './components/customFilter';
 import additionalServices from './additionalServices.json';
 import services from './services.json';
 import fileFormats from './fileFormats.json';
 import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { useSearchParams, Route, Routes, Navigate } from 'react-router-dom';
+import { useSearchParams, Route, Routes, useNavigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import MessageGenerator from './components/MessageGenerator';
+import { update } from 'react-spring';
+import { Tabs, Tab } from 'react-bootstrap';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -29,9 +34,13 @@ export default function App() {
   const destCountryFilter = (rows, id, filterValue) =>
     rows.filter((row) => row.original.destinationCountries.some((e) => e === filterValue));
 
+  const serviceGroupFilter = (rows, id, filterValue) =>
+    rows.filter((row) => row.original.serviceGroup.some((e) => e === filterValue));
+
   const [params, setParams] = useSearchParams();
   const [loaded, setLoaded] = useState(false);
   const [rowData, setRowData] = useState([]);
+  const [filteredRowData, setFilteredRowData] = useState([]);
   const [columnData, setColumnData] = useState([
     { Header: ' ', accessor: 'serviceName', tipText: '', show: true },
     { Header: ' ', accessor: 'serviceButton', tipText: '', show: true },
@@ -68,9 +77,11 @@ export default function App() {
     lang: '',
     format: '',
     formatFilter: '',
+    ffTab: '',
     modalOpen: false,
     modalData: {},
     offCanvasOpen: false,
+    offCanvasTab: 'label',
     showSamples: true,
     showOptional: false,
     labelData: {},
@@ -165,6 +176,7 @@ export default function App() {
         accessor: 'serviceGroup',
         tipText: '',
         show: false,
+        filter: serviceGroupFilter,
       },
     ];
     additionalServices.records.map((record) =>
@@ -176,40 +188,6 @@ export default function App() {
       })
     );
     return setColumnData(columns);
-  };
-
-  const populateCountries = (route, rowdata, filteredRows) => {
-    let out = [];
-    let countries = [];
-    if (filteredRows) {
-      for (let row of filteredRows) {
-        if (row.index !== 0) {
-          for (let country of row.original[route]) {
-            if (!countries || !countries.includes(country)) {
-              countries.push(country);
-            }
-          }
-        }
-      }
-    } else if (rowdata) {
-      for (let row of rowdata) {
-        for (let country of row[route]) {
-          if (!countries || !countries.includes(country)) {
-            countries.push(country);
-          }
-        }
-      }
-    }
-    let index = 0;
-    for (let country of countries) {
-      out.push({ id: index, value: country, additionalInfo: country });
-      index++;
-    }
-    if (route === 'departureCountries') {
-      setDepartureCountries(out);
-    } else {
-      setDestinationCountries(out);
-    }
   };
 
   const populateDropdown = (filteredRows) => {
@@ -227,17 +205,6 @@ export default function App() {
       index++;
     }
     setFormats(out);
-  };
-
-  const updateDropdowns = (filteredRows) => {
-    if (selected.departure && !selected.destination) {
-      populateCountries('destinationCountries', '', filteredRows);
-    } else if (!selected.departure && selected.destination) {
-      populateCountries('departureCountries', '', filteredRows);
-    } else {
-      populateCountries('departureCountries', '', filteredRows);
-      populateCountries('destinationCountries', '', filteredRows);
-    }
   };
 
   const updateSearchParams = (param, value) => {
@@ -310,7 +277,6 @@ export default function App() {
 
         setSkipPageReset(true);
         updateRowData(rowIndex, key, value);
-        hideColumn(key, rowIndex, rowData, setColumnData);
       }
     }
   };
@@ -326,16 +292,20 @@ export default function App() {
     }
     updateSearchParams('addons', '');
     updateSearchParams('service', '');
+
+    setSelected((prevState) => ({
+      ...prevState,
+      service: '',
+      addons: [],
+    }));
   };
 
   const handleServiceSelection = (service) => {
-    //console.log(rowData);
     for (let [i, row] of rowData.entries()) {
-      if (row.serviceCode !== service) {
+      if (row.serviceCode !== service && filteredRowData.some((current) => current.index === i)) {
         for (const [key, value] of Object.entries(row)) {
           if (value === true || value === false) {
             updateRowData(i, key, 'Y');
-            hideColumn(key, i, rowData, setColumnData);
           }
         }
       }
@@ -344,8 +314,18 @@ export default function App() {
     updateSearchParams('service', service);
   };
 
+  const callHideColumn = () => {
+    if (rowData.length > 0 && filteredRowData.length > 0) {
+      for (const [key, value] of Object.entries(rowData[0])) {
+        if (key.substring(0, 1) === '3' || key.substring(0, 1) === '5') {
+          hideColumn(key, filteredRowData[0].index, rowData, setColumnData, filteredRowData);
+        }
+      }
+    }
+  };
+
   const onClick = (e) => {
-    //console.log(e);
+    console.log(e);
     let service = '';
     let addons = '';
     if (e.isChecked) {
@@ -362,6 +342,7 @@ export default function App() {
       } else {
         addons = e.column;
       }
+
       updateSearchParams('service', service);
       updateSearchParams('addons', addons);
     } else {
@@ -382,135 +363,15 @@ export default function App() {
 
     updateRowData(e.row, e.column, e.isChecked);
     disableExcluded(e.row, e.column, e.isChecked);
-
-    //let messages = MessageGenerator(selected, services, fileFormats, additionalServices);
-
-    //offCanvasData['sampleXML'] = messages['POSTRA'];
-
-    //setSelected((prevState) => ({
-    //  ...prevState,
-    //  offCanvasData: offCanvasData,
-    //}));
   };
 
-  const mapRows = (services, additionalServices) => {
-    let rows = [];
-    let allAddons = {
-      serviceName: t('Service'),
-      serviceButton: ' ',
-      serviceCode: t('Code'),
-      serviceGroup: ' ',
-      departureCountries: ' ',
-      destinationCountries: ' ',
-    };
-
-    for (let record of services.records) {
-      let service = {};
-      service['serviceName'] = record.ServiceCode;
-      service['serviceButton'] = (
-        <Button
-          title=""
-          type="select"
-          onClick={(e) => {
-            handleServiceSelection(record.ServiceCode);
-          }}
-        />
-      );
-      service['serviceCode'] = record.ServiceCode;
-      service['serviceGroup'] = record.ServiceGroup;
-
-      let depCountries = [];
-      let destCountries = [];
-
-      for (let route of record.Routes) {
-        depCountries.push(route.DepartureCountry);
-        for (let destination of route.DestinationCountries) {
-          destCountries.push(destination.Country);
-        }
-      }
-      service['departureCountries'] = depCountries;
-      service['destinationCountries'] = destCountries;
-
-      for (let addon of additionalServices.records) {
-        allAddons[addon.ServiceCode] = addon.ServiceCode;
-        if (record.AdditionalServices.some((e) => e.Addon === addon.ServiceCode)) {
-          // checks[addon.ServiceCode] = false;
-          service[addon.ServiceCode] = false;
-        } else {
-          service[addon.ServiceCode] = undefined;
-        }
-      }
-      rows.push(service);
-    }
-    //let out = (...allAddons ...rows)
-    rows = [allAddons, ...rows];
-    //console.log(rows);
-    return setRowData(rows);
-  };
-
-  const mapFfRows = (fileFormats) => {
-    let rows = [];
-    for (let record of fileFormats.records) {
-      for (let attribute of record.Records) {
-        let length = '';
-        let type = '';
-        let moc = 'O';
-        let repeat;
-        let name;
-
-        if (attribute.ExtractionPath) {
-          name = attribute.Name + ' (' + attribute.ExtractionPath + ')';
-        } else {
-          name = attribute.Name;
-        }
-
-        if (!attribute.Length && attribute.Validations) {
-          for (let validation of attribute.Validations) {
-            if (validation.Type === 'Size') {
-              length = validation.MaxValue;
-            }
-          }
-        } else {
-          length = attribute.Length;
-        }
-
-        if (!length) {
-          type = attribute.Type;
-        } else {
-          type = attribute.Type + ' (' + length + ')';
-        }
-
-        if (attribute.RepeatMin > 0 || attribute.RepeatMax === attribute.RepeatMin) {
-          moc = 'M';
-        }
-
-        if (attribute.RepeatMin === attribute.RepeatMax) {
-          repeat = attribute.RepeatMax;
-        } else {
-          repeat = attribute.RepeatMin + '-' + attribute.RepeatMax;
-        }
-
-        rows.push({
-          format: record.Name,
-          attribute: name,
-          moc: moc,
-          repeat: repeat,
-          type: type,
-          description: attribute.Description,
-        });
-      }
-    }
-    return setFfRowData(rows);
-  };
-
-  //const columns = mapColumns(additionalServices);
-  //const data = mapRows(services);
-  //const columns = mapColumns(additionalServices);
+  let navigate = useNavigate();
 
   useEffect(() => {
     mapColumns(additionalServices);
-    mapRows(services, additionalServices);
-    mapFfRows(fileFormats);
+    mapRows(services, additionalServices, t, handleServiceSelection, setRowData);
+    mapFfRows(fileFormats, setFfRowData);
+    //navigate('/ServiceMatrix');
   }, []);
 
   useEffect(() => {
@@ -518,17 +379,12 @@ export default function App() {
     //populateCountries('departureCountries', rowData, '');
     //populateCountries('destinationCountries', rowData, '');
     //populateDropdown(rowData);
+    callHideColumn();
   }, [rowData]);
 
   useEffect(() => {
     populateDropdown(ffRowData);
   }, [ffRowData]);
-
-  useEffect(() => {
-    if (!loaded) {
-      setLoaded(true);
-    }
-  }, [destinationCountries]);
 
   useEffect(() => {
     let messages = MessageGenerator(selected, services, fileFormats, additionalServices);
@@ -542,6 +398,10 @@ export default function App() {
   }, [selected.service, selected.addons, selected.showSamples, selected.showOptional]);
 
   useEffect(() => {
+    const getBool = (val) => {
+      return !!JSON.parse(String(val).toLowerCase());
+    };
+
     if (rowData) {
       const searchParams = new URLSearchParams(params.toString());
       const serviceGroup = searchParams.get('serviceGroup');
@@ -553,6 +413,10 @@ export default function App() {
       const filter = searchParams.get('filter');
       const format = searchParams.get('format');
       const formatFilter = searchParams.get('formatFilter');
+      const offCanvasOpen = getBool(searchParams.get('offCanvasOpen'));
+      const showOptional = getBool(searchParams.get('showOptional'));
+      const showSamples = getBool(searchParams.get('showSamples'));
+      const offCanvasTab = searchParams.get('offCanvasTab');
       let addonArray = [];
       let serviceIndex;
 
@@ -586,13 +450,57 @@ export default function App() {
         format: format,
         formatFilter: formatFilter,
         lang: lang,
+        offCanvasOpen: offCanvasOpen,
+        offCanvasTab: offCanvasTab,
+        showSamples: showSamples,
+        showOptional: showOptional,
       }));
     }
   }, [loaded]);
 
   useEffect(() => {
-    //console.log(selected);
+    console.log(selected);
   }, [selected]);
+
+  useEffect(() => {
+    if (!loaded) {
+      setLoaded(true);
+    }
+    console.log(filteredRowData);
+
+    if (selected.departure && !selected.destination) {
+      populateCountries(
+        'destinationCountries',
+        '',
+        filteredRowData,
+        setDepartureCountries,
+        setDestinationCountries
+      );
+    } else if (!selected.departure && selected.destination) {
+      populateCountries(
+        'departureCountries',
+        '',
+        filteredRowData,
+        setDepartureCountries,
+        setDestinationCountries
+      );
+    } else {
+      populateCountries(
+        'departureCountries',
+        '',
+        filteredRowData,
+        setDepartureCountries,
+        setDestinationCountries
+      );
+      populateCountries(
+        'destinationCountries',
+        '',
+        filteredRowData,
+        setDepartureCountries,
+        setDestinationCountries
+      );
+    }
+  }, [filteredRowData]);
 
   const langChange = (e) => {
     let value = e;
@@ -642,6 +550,7 @@ export default function App() {
       modalOpen: true,
       modalData: data,
     }));
+    updateSearchParams('modalOpen', true);
   };
 
   const closeModal = () => {
@@ -649,6 +558,7 @@ export default function App() {
       ...prevState,
       modalOpen: false,
     }));
+    updateSearchParams('modalOpen', false);
   };
 
   const closeOffCanvas = () => {
@@ -656,6 +566,7 @@ export default function App() {
       ...prevState,
       offCanvasOpen: false,
     }));
+    updateSearchParams('offCanvasOpen', false);
   };
 
   const openOffCanvas = () => {
@@ -663,6 +574,7 @@ export default function App() {
       ...prevState,
       offCanvasOpen: true,
     }));
+    updateSearchParams('offCanvasOpen', true);
   };
 
   const showOptional = () => {
@@ -670,6 +582,7 @@ export default function App() {
       ...prevState,
       showOptional: !prevState.showOptional,
     }));
+    updateSearchParams('showOptional', !selected.showOptional);
   };
 
   const showSamples = () => {
@@ -677,6 +590,7 @@ export default function App() {
       ...prevState,
       showSamples: !prevState.showSamples,
     }));
+    updateSearchParams('showSamples', !selected.showSamples);
   };
 
   //const data = useMemo(() => mapRows(services), []);
@@ -711,6 +625,13 @@ export default function App() {
                   closeCanvas={closeOffCanvas}
                   showOptional={showOptional}
                   showSamples={showSamples}
+                  setKey={(e) => {
+                    updateSearchParams('offCanvasTab', e);
+                    setSelected((prevState) => ({
+                      ...prevState,
+                      offCanvasTab: e,
+                    }));
+                  }}
                 />
                 <div className="controls">
                   <Row>
@@ -799,8 +720,9 @@ export default function App() {
                     destCountry={selected.destination}
                     glblFilter={selected.filter}
                     serviceGroup={selected.serviceGroup}
-                    updateDropdowns={updateDropdowns}
+                    updateDropdowns={setFilteredRowData}
                     skipPageReset={skipPageReset}
+                    serviceSelection={handleServiceSelection}
                   />
                 </div>
               </>
@@ -816,7 +738,7 @@ export default function App() {
                       <Dropdown
                         title={t("'Select File Format'")}
                         items={formats}
-                        t={true}
+                        t={t}
                         multiSelect={false}
                         value={selected.format}
                         onChange={(e) => {
@@ -849,21 +771,35 @@ export default function App() {
                   </Row>
                 </div>
                 <div className="content">
-                  <FFTable
-                    t={t}
-                    columns={ffColumnData}
-                    data={selected.format ? ffRowData : []}
-                    onClick={onClick}
-                    populateDropdown={populateDropdown}
-                    selectedFormat={selected.format}
-                    glblFilter={selected.formatFilter}
-                    skipPageReset={skipPageReset}
-                  />
+                  <Tabs
+                    id="controlled-tab-example"
+                    activeKey={selected.ffTab ? selected.ffTab : 'specs'}
+                    onSelect={(k) => {
+                      updateSearchParams('fileFormatTab', k);
+                      setSelected((prevState) => ({
+                        ...prevState,
+                        ffTab: k,
+                      }));
+                    }}
+                    className="mb-3">
+                    <Tab eventKey="version" title={t('version')}></Tab>
+                    <Tab eventKey="specs" title={t('specs')}>
+                      <FFTable
+                        t={t}
+                        columns={ffColumnData}
+                        data={selected.format ? ffRowData : []}
+                        onClick={onClick}
+                        populateDropdown={populateDropdown}
+                        selectedFormat={selected.format}
+                        glblFilter={selected.formatFilter}
+                        skipPageReset={skipPageReset}
+                      />
+                    </Tab>
+                  </Tabs>
                 </div>
               </div>
             }
           />
-          <Route path="*" element={<Navigate to="/ServiceMatrix" replace />} />
         </Routes>
       </Grid>
     </div>

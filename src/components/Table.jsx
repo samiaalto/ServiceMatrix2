@@ -8,6 +8,7 @@ import {
 import { useEffect } from 'react';
 //import { useSticky } from 'react-table-sticky';
 import './styles/Table_styles.css';
+import Button from './Button';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 function Table({
@@ -22,6 +23,7 @@ function Table({
   serviceGroup,
   t,
   openModal,
+  serviceSelection,
 }) {
   // function TableUI({ columns, data, isChecked }) {
   const initialState = {
@@ -50,6 +52,7 @@ function Table({
       updateDropdowns,
       t,
       openModal,
+      serviceSelection,
       autoResetPage: !skipPageReset,
       autoResetGlobalFilter: false,
       autoResetFilters: false,
@@ -176,7 +179,13 @@ function Table({
                     } else if (cell.column.id === 'serviceButton') {
                       return (
                         <td className="serviceButton" {...cell.getCellProps()}>
-                          {cell.render('Cell')}
+                          <Button
+                            title=""
+                            type="select"
+                            onClick={(e) => {
+                              serviceSelection(cell.row.values.serviceCode);
+                            }}
+                          />
                         </td>
                       );
                     } else if (cell.column.id === 'serviceCode') {

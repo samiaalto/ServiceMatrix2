@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Offcanvas, Tabs, Tab, Form } from 'react-bootstrap';
 import ParcelLabel from './ParcelLabel';
 import FreightLabel from './FreightLabel';
@@ -12,6 +11,7 @@ interface offCanvasProps {
   showOptional: any;
   showSamples: any;
   t: any;
+  setKey: (string) => void;
 }
 
 const OffCanvas = ({
@@ -21,12 +21,8 @@ const OffCanvas = ({
   t,
   showOptional,
   showSamples,
+  setKey,
 }: offCanvasProps) => {
-  //const defaultKey = data.drawerTab ? data.drawerTab : 'label';
-  const [key, setKey] = useState(data.drawerTab ? data.drawerTab : 'label');
-  //const [showOptional, setShowOptional] = useState(false);
-  //const [showSamples, setShowSamples] = useState(false);
-
   return (
     <>
       <Offcanvas backdrop={false} placement="end" show={openCanvas} onHide={closeCanvas}>
@@ -34,7 +30,7 @@ const OffCanvas = ({
         <Offcanvas.Body>
           <Tabs
             id="controlled-tab-example"
-            activeKey={key}
+            activeKey={data.offCanvasTab ? data.offCanvasTab : 'label'}
             onSelect={(k) => setKey(k)}
             className="mb-3">
             <Tab eventKey="label" title={t('Label')}>

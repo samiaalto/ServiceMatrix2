@@ -33,6 +33,8 @@ let en = {
   Finnish: 'Finnish',
   Code: 'Code',
   Service: 'Service',
+  specs: 'Message Specifications',
+  version: 'Version History',
 };
 
 let fi = {
@@ -67,6 +69,8 @@ let fi = {
   Finnish: 'Suomi',
   Code: 'Koodi',
   Service: 'Palvelu',
+  specs: 'Sanomakuvaus',
+  version: 'Versiohistoria',
 };
 
 function loadLanguages(language) {

@@ -6,7 +6,7 @@
       "DisplayNameFI": "Express-paketti Aamuksi",
       "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 09 parcels delivery will be delivered by 9 am the next weekday morning and more than 70% of Finnish companies are covered by this service.",
       "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 09-pakettitoimitus toimitetaan  seuraavana arkiaamuna klo 9 mennessä ja tämän palvelun piirissä on yli 70% Suomen yrityksistä.",
-      "ServiceGroup": "Parcel Services",
+      "ServiceGroup": "PARCEL",
       "LabelName": "Express-paketti Aamuksi",
       "ProcessNumber": "09",
       "Dimensions": [
@@ -116,7 +116,7 @@
       "DisplayNameFI": "Express-paketti",
       "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 14 parcels will be delivered between 8 am and 4 pm on the next working day and this service covers more than 95% of Finnish companies.",
       "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 14-paketti toimitetaan klo 8–16 välillä seuraavana arkipäivänä ja tämän palvelun piirissä on yli 95% Suomen yrityksistä.",
-      "ServiceGroup": "Parcel Services",
+      "ServiceGroup": "PARCEL",
       "LabelName": "Express-paketti",
       "ProcessNumber": "14",
       "Dimensions": [
@@ -231,7 +231,7 @@
       "DisplayNameFI": "Postipaketti",
       "DescriptionEN": "Postal Parcel",
       "DescriptionFI": "Postipaketti",
-      "ServiceGroup": "Parcel Services",
+      "ServiceGroup": "PARCEL",
       "LabelName": "Postipaketti",
       "ProcessNumber": "16",
       "Dimensions": [],
@@ -285,7 +285,7 @@
       "DisplayNameFI": "Kotipaketti",
       "DescriptionEN": "Home Parcel",
       "DescriptionFI": "Kotipaketti",
-      "ServiceGroup": "Parcel Services",
+      "ServiceGroup": "PARCEL",
       "LabelName": "Kotipaketti",
       "ProcessNumber": "21",
       "Dimensions": [],
@@ -342,7 +342,7 @@
       "DisplayNameFI": "Kotimaan Rahti",
       "DescriptionEN": "Domestic Freight",
       "DescriptionFI": "Kotimaan Rahti",
-      "ServiceGroup": "Freight Services",
+      "ServiceGroup": "FREIGHT",
       "LabelName": "Rahti",
       "Dimensions": [
         {
@@ -483,7 +483,7 @@
       "DisplayNameFI": "Priority",
       "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 09 parcels delivery will be delivered by 9 am the next weekday morning and more than 70% of Finnish companies are covered by this service.",
       "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 09-pakettitoimitus toimitetaan  seuraavana arkiaamuna klo 9 mennessä ja tämän palvelun piirissä on yli 70% Suomen yrityksistä.",
-      "ServiceGroup": "International Services",
+      "ServiceGroup": "INTERNATIONAL",
       "LabelName": "Express-paketti Aamuksi",
       "ProcessNumber": "09",
       "Dimensions": [
@@ -596,7 +596,7 @@
       "DisplayNameFI": "Priority",
       "DescriptionEN": "Express parcel deliveries are mainly intended for business recipients and include the most versatile parcel solutions in the country for different needs. The customer can choose e.g. several different delivery speeds as well as delivery methods. Express packages are delivered to the destination or vending machine of the customer's choice. The Express 09 parcels delivery will be delivered by 9 am the next weekday morning and more than 70% of Finnish companies are covered by this service.",
       "DescriptionFI": "Express-pakettitoimitukset on tarkoitettu pääsääntöisesti yritysvastaanottajille ja ne sisältävät valtakunnan monipuolisimmat pakettiratkaisut erilaisiin tarpeisiin. Asiakkaan valittavana on mm. useita erilaisia toimitusnopeuksia sekä toimitustapoja. Express-paketit toimitetaan perille tai automaattiin asiakkaan valinnan mukaan. Express 09-pakettitoimitus toimitetaan  seuraavana arkiaamuna klo 9 mennessä ja tämän palvelun piirissä on yli 70% Suomen yrityksistä.",
-      "ServiceGroup": "International Services",
+      "ServiceGroup": "INTERNATIONAL",
       "LabelName": "Express-paketti Aamuksi",
       "ProcessNumber": "09",
       "Dimensions": [

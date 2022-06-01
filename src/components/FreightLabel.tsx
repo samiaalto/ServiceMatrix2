@@ -278,7 +278,7 @@ const FreightLabel = ({ data }) => {
               </Row>
               <Row>
                 {data.labelData.addons
-                  ? data.labelData.addons.map((addon) => (
+                  ? data.labelData.addons.map((addon, i) => (
                       <div key={'addon_' + i}>{addon.labelName.toUpperCase()}</div>
                     ))
                   : ''}

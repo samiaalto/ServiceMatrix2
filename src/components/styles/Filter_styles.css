@@ -9,7 +9,7 @@
 input {
   position: relative;
   border-radius: var(--border-radius);
-  width: 95%;
+  width: 100%;
   min-height: 35px;
   height: 0;
   padding-left: 10px;

@@ -2,6 +2,8 @@
   "records": [
     {
       "Name": "WAYBILD16A",
+      "DisplayName": "WAYBILD16A",
+      "AdditionalInfo": "",
       "Type": "Shipment",
       "Format": "TXT",
       "FileIdPosition": {
@@ -436,6 +438,8 @@
     },
     {
       "Name": "POSTRA",
+      "DisplayName": "POSTRA for parcels and letters",
+      "AdditionalInfo": "",
       "Type": "Shipment",
       "Format": "XML",
       "FileIdPosition": {
@@ -2154,11 +2158,81 @@
     },
     {
       "Name": "POSTRA FREIGHT",
+      "DisplayName": "POSTRA for freight",
+      "AdditionalInfo": "",
       "Type": "Shipment",
       "Format": "XML",
       "FileIdPosition": {
         "Element": "Postra"
       },
+      "VersionHistory": [
+        {
+          "DocumentVersion": 0,
+          "SchemaVersion": 1.0,
+          "Date": "10.8.2017",
+          "Comments": "Document created"
+        },
+        {
+          "DocumentVersion": 1,
+          "SchemaVersion": 1.0,
+          "Date": "14.8.2017",
+          "Comments": "Chapter 1 updated. Message specification added."
+        },
+        {
+          "DocumentVersion": 2,
+          "SchemaVersion": 1.0,
+          "Date": "17.8.2017",
+          "Comments": "Chapter 1 updated. Message specification updated."
+        },
+        {
+          "DocumentVersion": 3,
+          "SchemaVersion": 1.0,
+          "Date": "24.8.2017",
+          "Comments": "Message specification updated. Added sample 1."
+        },
+        {
+          "DocumentVersion": 4,
+          "SchemaVersion": 1.0,
+          "Date": "2.10.2017",
+          "Comments": "Header and footer information updated."
+        },
+        {
+          "DocumentVersion": 5,
+          "SchemaVersion": 1.0,
+          "Date": "14.11.2017",
+          "Comments": "Message specification updated."
+        },
+        {
+          "DocumentVersion": 6,
+          "SchemaVersion": 1.0,
+          "Date": "21.11.2017",
+          "Comments": "Message specification updated, Descriptions updated."
+        },
+        {
+          "DocumentVersion": 7,
+          "SchemaVersion": 1.0,
+          "Date": "8.12.2017",
+          "Comments": "First draft version is published."
+        },
+        {
+          "DocumentVersion": 8,
+          "SchemaVersion": 1.1,
+          "Date": "11.10.2019",
+          "Comments": "* New schema (MessageRelease = 1). Is compatible to release 0. The element changed to mandatory. * Default encoding is UTF-8 * New ‘LimitedQuantity’ field (boolean) added to inform dangerous goods classified details in limited quantities (LQ). * LimitedQuantityWeight decimals 2 > 3 Supplementings to description texts: * Posti will charge penalty fee for manual correction of missing or erroneous data * ShipmentDate is PickupDate, if PickupDate not sent * @timeEarliest and @timeLatest cannot be the same timestamp value * How LimitedQuantityWeight differ from LimitedQuantity * SSCC codes must be sent with leading zeroes"
+        },
+        {
+          "DocumentVersion": 9,
+          "SchemaVersion": 1.1,
+          "Date": "16.6.2020",
+          "Comments": "* Shipment/Totals and GoodsItem/GrossWeight, Volume, LoadingMeter allow max. 3 decimals. * All parties (CONSIGNEE, CONSIGNOR, PICKUP, DELIVERY, PAYER) has Street2 address allowed. *PAYER Name1 is always mandatory. * Namespace added to MIG root element. * DangerousGoods Provisions added"
+        },
+        {
+          "DocumentVersion": 10,
+          "SchemaVersion": 1.2,
+          "Date": "10.9.2021",
+          "Comments": "* New schema (MessageRelease = 2) Is compatible to previous releases. *COD is no longer available for FI domestic * Party Account @type ‘VAT’ and TAX_NUMBER added for roles CONSIGNOR and CONSIGNEE"
+        }
+      ],
       "Records": [
         {
           "Name": "?xml",
@@ -4177,6 +4251,8 @@
     },
     {
       "Name": "IFCSUM",
+      "DisplayName": "IFCSUM",
+      "AdditionalInfo": "",
       "Type": "Shipment",
       "Format": "EDIFACT",
       "FileIdPosition": {
@@ -4781,6 +4857,8 @@
     },
     {
       "Name": "IFTMIN",
+      "DisplayName": "IFTMIN",
+      "AdditionalInfo": "",
       "Type": "Shipment",
       "Format": "EDIFACT",
       "FileIdPosition": {
@@ -4802,6 +4880,8 @@
     },
     {
       "Name": "SMARTSHIP",
+      "DisplayName": "SMARTSHIP",
+      "AdditionalInfo": "",
       "Type": "Shipment",
       "Format": "JSON",
       "FileIdPosition": {},

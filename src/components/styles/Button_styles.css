@@ -57,6 +57,7 @@
 .samples {
   border: var(--reset-button-border);
   border-radius: var(--border-radius);
+  width: 70px;
 }
 
 .samples .btn-header_icon svg path {
