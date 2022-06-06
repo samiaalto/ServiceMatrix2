@@ -37,6 +37,78 @@ const MessageGenerator = (selected, services, fileFormats, additionalServices) =
     //}
   }
 
+  const beautify = (xmlData) => {
+    let highlighted = [];
+    let row = 1;
+    let rows = [];
+    let xmlRows = xmlData.split('\n');
+    for (let j = 0; j < xmlRows.length; j++) {
+      var string = [];
+      var items = xmlRows[j].split(/(?=[ "?=></])|(?<=[ "?=></])/g);
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i] === '<' || items[i] === '>' || items[i] === '/' || items[i] === '?') {
+          string.push(<span className="bracket">{items[i]}</span>);
+        } else if (items[i - 1] === '?') {
+          string.push(<span className="bracket">{items[i]}</span>);
+        } else if (items[i + 1] === '=') {
+          string.push(<span className="string">{items[i]}</span>);
+        } else if (items[i] === '=') {
+          string.push(<span className="string">{items[i]}</span>);
+        } else if (items[i - 1] === '<' || items[i - 1] === '/') {
+          string.push(<span className="key">{items[i]}</span>);
+        } else {
+          string.push(<span>{items[i]}</span>);
+        }
+      }
+
+      //console.log(string);
+
+      highlighted.push(<span key={row}>{string}</span>);
+      highlighted.push('\n');
+
+      rows.push(row);
+      rows.push('\n');
+      row++;
+    }
+    return highlighted;
+  };
+
+  const beautifyJSON = (jsonData) => {
+    let highlighted = [];
+    let row = 1;
+    let rows = [row, '\n'];
+    console.log(jsonData);
+    let jsonRows = jsonData.split('\n');
+    //let jsonRows = jsonData;
+    for (let j = 0; j < jsonRows.length; j++) {
+      var testiii = jsonRows[j].split(/(?=[}{":,\[\]])|(?<=[}{":,\[\]])/g);
+      var string = [];
+      for (var i = 0; i < testiii.length; i++) {
+        if (testiii[i - 1] === '"' && testiii[i + 1] === '"') {
+          string.push(<span className="string">{testiii[i]}</span>);
+        } else if (testiii[i - 1] === ':') {
+          if (/true|null|false/.test(testiii[i])) {
+            string.push(<span className="boolean">{testiii[i]}</span>);
+          } else {
+            string.push(<span className="number">{testiii[i]}</span>);
+          }
+        } else {
+          string.push(<span>{testiii[i]}</span>);
+        }
+      }
+    }
+
+    highlighted.push(<span key={row}>{string}</span>);
+    highlighted.push('\n');
+
+    row++;
+    rows.push(row);
+    rows.push('\n');
+    console.log(highlighted);
+    return highlighted;
+  };
+
   const serviceProps = [];
   let addonArr = [];
   let labelData = {};
@@ -284,14 +356,55 @@ const MessageGenerator = (selected, services, fileFormats, additionalServices) =
       }
     }
   }
+
+  function syntaxHighlight(json) {
+    let highlighted = [];
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(
+      /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+      function (match) {
+        var cls = 'number';
+        var output = '';
+        let string = [];
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) {
+            cls = 'key';
+          } else {
+            cls = 'string';
+          }
+        } else if (/true|false/.test(match)) {
+          cls = 'boolean';
+        } else if (/null/.test(match)) {
+          cls = 'null';
+        }
+        if (cls === 'key') {
+          match = match.substring(1, match.length - 2);
+          //output = '"<span class="' + cls + '">' + match + '</span>":';
+          string.push(<span className="key">{match}</span>);
+        } else if (cls === 'string') {
+          match = match.substring(1, match.length - 1);
+          //output = '"<span class="' + cls + '">' + match + '</span>"';
+          string.push(<span className="string">{match}</span>);
+        } else {
+          output = '<span class="' + cls + '">' + match + '</span>';
+          string.push(<span className={cls}>{match}</span>);
+        }
+
+        return string;
+        //return output;
+      }
+    );
+  }
+
   //console.log(indexes);
   //console.log(JSON.stringify(outJSON));
-
+  console.log(outJSON);
   const json = [JSON.stringify(outJSON, null, 2)];
-
+  const beautifiedJSON = beautifyJSON(JSON.stringify(outJSON, null, 2));
   const doc = create({ version: '1.0', encoding: 'UTF-8' }, outXML);
   const xml = doc.end({ prettyPrint: true });
-  return { POSTRA: xml, SMARTSHIP: json, labelData: labelData };
+  const beautifiedXML = beautify(xml);
+  return { POSTRA: beautifiedXML, SMARTSHIP: beautifiedJSON, labelData: labelData };
   //console.log(xml);
 };
 

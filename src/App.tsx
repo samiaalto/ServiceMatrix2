@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import Dropdown from './components/Dropdown';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
-import Table from './components/Table';
-import FFTable from './components/FileFormatTable';
+import MatrixTable from './components/Table';
+import FileFormats from './components/FileFormats';
 import Filter from './components/Filter';
 import Modal from './components/Modal';
 import OffCanvas from './components/OffCanvas';
@@ -19,11 +19,10 @@ import services from './services.json';
 import fileFormats from './fileFormats.json';
 import { useTranslation } from 'react-i18next';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { useSearchParams, Route, Routes, useNavigate } from 'react-router-dom';
+import { useSearchParams, Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import MessageGenerator from './components/MessageGenerator';
 import { update } from 'react-spring';
-import { Tabs, Tab } from 'react-bootstrap';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -111,6 +110,12 @@ export default function App() {
       Header: 'Repeat',
       accessor: 'repeat',
       show: true,
+    },
+
+    {
+      Header: 'Position',
+      accessor: 'position',
+      show: false,
     },
     {
       Header: 'Type',
@@ -277,6 +282,7 @@ export default function App() {
 
         setSkipPageReset(true);
         updateRowData(rowIndex, key, value);
+        //hideColumn(key, rowIndex, rowData, setColumnData, filteredRowData);
       }
     }
   };
@@ -326,6 +332,7 @@ export default function App() {
 
   const onClick = (e) => {
     console.log(e);
+    let updatedSearchParams = new URLSearchParams(params.toString());
     let service = '';
     let addons = '';
     if (e.isChecked) {
@@ -343,15 +350,15 @@ export default function App() {
         addons = e.column;
       }
 
-      updateSearchParams('service', service);
-      updateSearchParams('addons', addons);
+      updatedSearchParams.set('service', service);
+      updatedSearchParams.set('addons', addons);
     } else {
       if (selected.addons.length === 1) {
-        updateSearchParams('service', service);
-        updateSearchParams('addons', addons);
+        updatedSearchParams.delete('service');
+        updatedSearchParams.delete('addons');
       } else {
         addons = selected.addons.filter((x) => x !== e.column).join(' ');
-        updateSearchParams('addons', addons);
+        updatedSearchParams.set('addons', addons);
       }
 
       setSelected((prevState) => ({
@@ -363,6 +370,7 @@ export default function App() {
 
     updateRowData(e.row, e.column, e.isChecked);
     disableExcluded(e.row, e.column, e.isChecked);
+    setParams(updatedSearchParams.toString());
   };
 
   let navigate = useNavigate();
@@ -710,7 +718,7 @@ export default function App() {
                   </Row>
                 </div>
                 <div className="content">
-                  <Table
+                  <MatrixTable
                     t={t}
                     columns={columnData}
                     data={rowData}
@@ -731,75 +739,20 @@ export default function App() {
           <Route
             path="/FileFormats"
             element={
-              <div className="appcontainer">
-                <div className="controls">
-                  <Row>
-                    <Col xs={6} sm={4} md={4}>
-                      <Dropdown
-                        title={t("'Select File Format'")}
-                        items={formats}
-                        t={t}
-                        multiSelect={false}
-                        value={selected.format}
-                        onChange={(e) => {
-                          let value = '';
-                          if (e[0]) {
-                            value = e[0].value;
-                          }
-                          updateSearchParams('format', value);
-                          setSelected((prevState) => ({
-                            ...prevState,
-                            format: value,
-                          }));
-                        }}
-                      />
-                    </Col>
-                    <Col xs={6} sm={4} md={4}>
-                      <Filter
-                        placeHolder={t("'Filter data'")}
-                        value={selected.formatFilter ? selected.formatFilter : ''}
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          updateSearchParams('formatFilter', value);
-                          setSelected((prevState) => ({
-                            ...prevState,
-                            formatFilter: value,
-                          }));
-                        }}
-                      />
-                    </Col>
-                  </Row>
-                </div>
-                <div className="content">
-                  <Tabs
-                    id="controlled-tab-example"
-                    activeKey={selected.ffTab ? selected.ffTab : 'specs'}
-                    onSelect={(k) => {
-                      updateSearchParams('fileFormatTab', k);
-                      setSelected((prevState) => ({
-                        ...prevState,
-                        ffTab: k,
-                      }));
-                    }}
-                    className="mb-3">
-                    <Tab eventKey="version" title={t('version')}></Tab>
-                    <Tab eventKey="specs" title={t('specs')}>
-                      <FFTable
-                        t={t}
-                        columns={ffColumnData}
-                        data={selected.format ? ffRowData : []}
-                        onClick={onClick}
-                        populateDropdown={populateDropdown}
-                        selectedFormat={selected.format}
-                        glblFilter={selected.formatFilter}
-                        skipPageReset={skipPageReset}
-                      />
-                    </Tab>
-                  </Tabs>
-                </div>
-              </div>
+              <FileFormats
+                t={t}
+                selected={selected}
+                setSelected={setSelected}
+                formats={formats}
+                ffColumnData={ffColumnData}
+                setFfColumnData={setFfColumnData}
+                ffRowData={ffRowData}
+                updateSearchParams={updateSearchParams}
+                fileFormats={fileFormats}
+              />
             }
           />
+          <Route path="*" element={<Navigate to="/ServiceMatrix" replace />} />
         </Routes>
       </Grid>
     </div>

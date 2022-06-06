@@ -11,7 +11,7 @@ const hideColumn = (addon, currentRow, rowData, setColumnData, filteredData) => 
     }
   }
 
-  // console.log(addon + ' ' + emptyCount + ' ' + filteredData.length);
+  //console.log(addon + ' ' + emptyCount + ' ' + filteredData.length);
   if (emptyCount === filteredData.length) {
     //hide column
     setColumnData((prevState) =>

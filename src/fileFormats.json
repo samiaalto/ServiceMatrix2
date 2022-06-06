@@ -445,6 +445,68 @@
       "FileIdPosition": {
         "Element": "Postra"
       },
+      "VersionHistory": [
+        {
+          "DocumentVersion": 0,
+          "SchemaVersion": 1.0,
+          "Date": "6.9.2017",
+          "Comments": "Document created"
+        },
+        {
+          "DocumentVersion": 1,
+          "SchemaVersion": 1.0,
+          "Date": "11.9.2017",
+          "Comments": "Chapter 1 updated."
+        },
+        {
+          "DocumentVersion": 2,
+          "SchemaVersion": 1.0,
+          "Date": "26.9.2017",
+          "Comments": "Added message specification and updated other content."
+        },
+        {
+          "DocumentVersion": 3,
+          "SchemaVersion": 1.0,
+          "Date": "14.11.2017",
+          "Comments": "Message specification updated."
+        },
+        {
+          "DocumentVersion": 4,
+          "SchemaVersion": 1.0,
+          "Date": "8.12.2017",
+          "Comments": "Message specification updated."
+        },
+        {
+          "DocumentVersion": 5,
+          "SchemaVersion": 1.0,
+          "Date": "15.8.2018",
+          "Comments": ""
+        },
+        {
+          "DocumentVersion": 6,
+          "SchemaVersion": 1.1,
+          "Date": "11.10.2019",
+          "Comments": "New ‘LimitedQuantity’ field (boolean) added to inform dangerous goods classified details in limited quantities (LQ). The element MessageRelease changed to mandatory."
+        },
+        {
+          "DocumentVersion": 7,
+          "SchemaVersion": 1.1,
+          "Date": "13.2.2020",
+          "Comments": "Decimal values corrected in sample messages."
+        },
+        {
+          "DocumentVersion": 8,
+          "SchemaVersion": 1.1,
+          "Date": "16.6.2020",
+          "Comments": "DangerousGoods Provisions added."
+        },
+        {
+          "DocumentVersion": 9,
+          "SchemaVersion": 1.2,
+          "Date": "10.9.2021",
+          "Comments": "*Namespace added in header * UTF-8 encoding allowed with exception *New schema (MessageRelease = 2) Is compatible to previous releases *AgreedDeliveryDate added *Reference @typeCode ‘IOSS_NUMBER’ added *New Party @role DELIVERY *Party Account @type codes ‘VAT’ and ‘TAX_NUMBER’ added for roles CONSIGNOR and CONSIGNEE"
+        }
+      ],
       "Records": [
         {
           "Name": "?xml",
