@@ -4,6 +4,21 @@ import './styles/ParcelLabel_styles.css';
 
 const ParcelLabel = ({ data }) => {
   const Barcode = require('react-barcode');
+  const addonboxes = [];
+  let addonCount = 0;
+  if (data.labelData.addons.length > 0) {
+    for (const [i, addon] of data.labelData.addons.entries()) {
+      if (addon.labelMarking !== null && i <= 5) {
+        addonboxes.push({ id: i, marking: addon.labelMarking });
+        addonCount++;
+      }
+    }
+  }
+  if (addonCount < 5) {
+    for (let i = addonCount; i < 5; i++) {
+      addonboxes.push({ id: i, marking: '' });
+    }
+  }
 
   return (
     <>
@@ -538,21 +553,13 @@ const ParcelLabel = ({ data }) => {
                 <div className="addon-label label">Lisäpalvelut Tilläggstjänster</div>
               </Row>
               <Row>
-                <Col className="addonbox">
-                  <div id="addonbox1" className="addonValue"></div>
-                </Col>
-                <Col className="addonbox">
-                  <div id="addonbox2" className="addonValue"></div>
-                </Col>
-                <Col className="addonbox">
-                  <div id="addonbox3" className="addonValue"></div>
-                </Col>
-                <Col className="addonbox">
-                  <div id="addonbox4" className="addonValue"></div>
-                </Col>
-                <Col className="addonbox">
-                  <div id="addonbox5" className="addonValue"></div>
-                </Col>
+                {addonboxes.map((addon) => (
+                  <Col className="addonbox">
+                    <div className="addonValue" key={'addonbox' + addon.id}>
+                      {addon.marking}
+                    </div>
+                  </Col>
+                ))}
               </Row>
             </Col>
             <Col xs={4} className="otherPayer box">

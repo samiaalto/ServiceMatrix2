@@ -142,7 +142,10 @@
 }
 
 .addonValue {
-  margin-left: -2px;
+  display: flex;
+  justify-content: center;
+  padding-left: 2px;
+  padding-top: 1px;
 }
 
 .dateBox {
