@@ -81,7 +81,7 @@ export default function App() {
     modalOpen: false,
     modalData: {},
     showAlert: false,
-    alertData: {},
+    alertData: [],
     offCanvasOpen: false,
     offCanvasTab: 'label',
     showSamples: true,
@@ -419,21 +419,32 @@ export default function App() {
 
     if (rowData) {
       const URLparams = Object.fromEntries([...params]);
+      let alertArray = [];
       let addonArray = [];
       let serviceIndex;
       let lang = 'en';
       let languages = ['en', 'fi'];
 
       if (URLparams.lang && !languages.includes(URLparams.lang.toLowerCase())) {
-        updateSearchParams('lang', lang);
-        showAlert('unsupported', 'lang', URLparams.lang);
+        //updateSearchParams('lang', lang);
+        alertArray.push({
+          reason: 'unsupported',
+          param: 'lang',
+          value: URLparams.lang,
+          datestamp: Date.now(),
+        });
       } else if (URLparams.lang) {
         lang = URLparams.lang.toLowerCase();
         updateSearchParams('lang', lang);
       }
 
       if (URLparams.service && !services.records.some((e) => e.ServiceCode === URLparams.service)) {
-        showAlert('unsupported', 'service', URLparams.service);
+        alertArray.push({
+          reason: 'unsupported',
+          param: 'service',
+          value: URLparams.service,
+          datestamp: Date.now(),
+        });
       }
 
       if (URLparams.addons) {
@@ -443,7 +454,12 @@ export default function App() {
       if (addonArray) {
         for (let addon of addonArray) {
           if (!additionalServices.records.some((e) => e.ServiceCode === addon)) {
-            showAlert('unsupported', 'addons', addon);
+            alertArray.push({
+              reason: 'unsupported',
+              param: 'addons',
+              value: addon,
+              datestamp: Date.now(),
+            });
           }
         }
       }
@@ -479,6 +495,9 @@ export default function App() {
         showSamples: getBool(URLparams.showSamples),
         showOptional: getBool(URLparams.showOptional),
       }));
+      if (alertArray.length > 0) {
+        showAlert(alertArray);
+      }
     }
   }, [loaded]);
 
@@ -645,28 +664,37 @@ export default function App() {
     updateSearchParams('showSamples', !selected.showSamples);
   };
 
-  const showAlert = (reason, param, value) => {
-    let output;
-    if (reason === 'unsupported') {
-      output = { text: "'Unsupported value'", param: param, value: value };
-      setSelected((prevState) => ({
-        ...prevState,
-        showAlert: true,
-        alertData: output,
-      }));
-    } else {
-      setSelected((prevState) => ({
-        ...prevState,
-        showAlert: !prevState.showAlert,
-      }));
+  const showAlert = (alerts) => {
+    let output = [];
+    let delay = 3000;
+    let itemId = 0;
+    for (let item of alerts) {
+      if (item.reason === 'unsupported') {
+        output.push({
+          id: itemId,
+          title: "'Unable to set filters'",
+          text: "'Unsupported value'",
+          param: item.param,
+          value: item.value,
+          show: true,
+          delay: delay,
+          datestamp: item.datestamp,
+        });
+        delay = delay + 50;
+        itemId++;
+      }
     }
+    setSelected((prevState) => ({
+      ...prevState,
+      alertData: output,
+    }));
   };
 
   //const data = useMemo(() => mapRows(services), []);
 
   return (
     <div className="App">
-      <Alert t={t} data={selected.alertData} show={selected.showAlert} closeToast={showAlert} />
+      <Alert t={t} data={selected.alertData} closeToast={showAlert} />
       <Modal
         t={t}
         data={selected.modalData}

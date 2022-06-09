@@ -45,6 +45,7 @@ let en = {
     'Additional service is only available when sending shipments to pickup point chosen by the recipient.',
   "'in parameter'": 'in parameter',
   "'Unsupported value'": 'Unsupported value',
+  "'Unable to set filters'": 'Unable to set filters',
 };
 
 let fi = {
@@ -98,6 +99,7 @@ let fi = {
   ago: 'sitten',
   "'Unsupported value'": 'Ei tuettu arvo',
   "'in parameter'": 'parametrissa',
+  "'Unable to set filters'": 'Filttereitä ei voi asettaa',
 };
 
 function loadLanguages(language) {
