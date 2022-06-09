@@ -99,7 +99,7 @@ let fi = {
   ago: 'sitten',
   "'Unsupported value'": 'Ei tuettu arvo',
   "'in parameter'": 'parametrissa',
-  "'Unable to set filters'": 'Filttereitä ei voi asettaa',
+  "'Unable to set filters'": 'Filtteriä ei voi asettaa',
 };
 
 function loadLanguages(language) {

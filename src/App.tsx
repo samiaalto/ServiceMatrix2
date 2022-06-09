@@ -1,6 +1,11 @@
 import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams, Route, Routes, Navigate } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
+
 import Dropdown from './components/Dropdown';
 import Button from './components/Button';
 import Checkbox from './components/Checkbox';
@@ -18,11 +23,8 @@ import mapFfRows from './components/MapFFRows';
 import additionalServices from './additionalServices.json';
 import services from './services.json';
 import fileFormats from './fileFormats.json';
-import { useTranslation } from 'react-i18next';
-import { useSearchParams, Route, Routes, Navigate } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import { Container, Row, Col } from 'react-bootstrap';
 import MessageGenerator from './components/MessageGenerator';
+import NavBar from './components/NavBar';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -377,11 +379,26 @@ export default function App() {
     setParams(updatedSearchParams.toString());
   };
 
+  const fetchData = async () => {
+    try {
+      let data = await axios({
+        method: 'get',
+        url: '/server/api',
+        //timeout: 1000 * 5, // Wait for 5 seconds
+      }).then(({ data }) => data);
+      console.log('TÄÄL');
+      console.log(data);
+      // setResponseData(data);
+    } catch (err) {
+      console.log(err.response);
+    }
+  };
+
   useEffect(() => {
     mapColumns(additionalServices);
     mapRows(services, additionalServices, t, handleServiceSelection, setRowData);
     mapFfRows(fileFormats, setFfRowData);
-    //navigate('/ServiceMatrix');
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -741,7 +758,7 @@ export default function App() {
                         }}
                       />
                     </Col>
-                    <Col xs={2} smOffset={2} sm={2} mdOffset={3} md={1}>
+                    <Col xs={2} sm={{ span: 2, offset: 2 }} md={{ span: 1, offset: 3 }}>
                       <Button title={''} type="samples" onClick={openOffCanvas} />
                     </Col>
                   </Row>
@@ -771,7 +788,6 @@ export default function App() {
                           }}
                         />
                       </Col>
-
                       <Col xs={6} sm={4}></Col>
                     </Row>
                   )}
