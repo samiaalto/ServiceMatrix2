@@ -383,7 +383,7 @@ export default function App() {
     try {
       let data = await axios({
         method: 'get',
-        url: '/server/api',
+        url: '/api',
         //timeout: 1000 * 5, // Wait for 5 seconds
       }).then(({ data }) => data);
       console.log('TÄÄL');
