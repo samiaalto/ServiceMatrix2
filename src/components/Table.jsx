@@ -86,7 +86,7 @@ function Table({
   // Render the UI for your table
   return (
     <>
-      <table {...getTableProps()}>
+      <table className="serviceMatrix-table" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>

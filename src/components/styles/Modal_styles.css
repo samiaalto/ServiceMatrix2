@@ -4,12 +4,22 @@
   --border: 2px solid #394b58;
 }
 
+.modal-dialog {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+}
+
+.h4 {
+  font-size: 1rem;
+}
+
 .modal .modal-dialog {
   max-width: 1100px !important;
 }
 
 .modal-body {
   padding-top: 0;
+  padding-bottom: 0;
   background-color: #fff;
 }
 
@@ -38,9 +48,42 @@
 }
 
 .modal-text-header {
-  font-weight: 700;
+  font-weight: 500;
+  padding-top: 20px;
 }
 
-.modal-text {
-  padding-bottom: 20px;
+.modal-content .nav-tabs {
+  border: 0;
+}
+
+.modal-content .nav-link {
+  color: #3b4a57;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.modal-table {
+  max-width: 1100px !important;
+  overflow: auto;
+}
+
+.modal-tech-table td {
+  padding: 2px;
+  border: 0;
+}
+
+.modal-tech-table td:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.mandatory_col,
+.mandatory_title {
+  max-width: 40px;
+  text-align: center;
+}
+
+.example_col,
+.example_title {
+  max-width: 100px;
 }

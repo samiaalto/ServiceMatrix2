@@ -1,0 +1,39 @@
+:root {
+  --border-radius: 16px;
+  --modal-bg: #394b58;
+  --toast-border: 2px solid red;
+}
+
+.toast-container {
+  z-index: 2000;
+}
+
+.toast {
+  border: var(--toast-border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 10px 3px rgba(57, 75, 88, 0.3);
+}
+
+.toast-header {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  background-color: rgba(255, 235, 235, 1);
+  color: red;
+  border-bottom: 1px solid red;
+}
+
+.toast-body {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  background-color: #fff;
+  text-align: left;
+}
+
+.toast-header svg path {
+  fill: red;
+}
+
+.alert-icon {
+  height: 26px;
+  margin-right: 9px;
+}

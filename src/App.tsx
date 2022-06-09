@@ -9,6 +9,7 @@ import FileFormats from './components/FileFormats';
 import Filter from './components/Filter';
 import Modal from './components/Modal';
 import OffCanvas from './components/OffCanvas';
+import Alert from './components/Alert';
 import hideColumn from './components/HideColumn';
 import populateCountries from './components/PopulateCountries';
 import mapRows from './components/MapRows';
@@ -79,6 +80,8 @@ export default function App() {
     ffTab: '',
     modalOpen: false,
     modalData: {},
+    showAlert: false,
+    alertData: {},
     offCanvasOpen: false,
     offCanvasTab: 'label',
     showSamples: true,
@@ -288,6 +291,7 @@ export default function App() {
   };
 
   const handleReset = () => {
+    let updatedSearchParams = new URLSearchParams(params.toString());
     for (let [i, row] of rowData.entries()) {
       for (const [key, value] of Object.entries(row)) {
         if (value === true || value === 'Y') {
@@ -296,8 +300,9 @@ export default function App() {
         }
       }
     }
-    updateSearchParams('addons', '');
-    updateSearchParams('service', '');
+    updatedSearchParams.delete('service');
+    updatedSearchParams.delete('addons');
+    setParams(updatedSearchParams.toString());
 
     setSelected((prevState) => ({
       ...prevState,
@@ -407,33 +412,44 @@ export default function App() {
 
   useEffect(() => {
     const getBool = (val) => {
-      return !!JSON.parse(String(val).toLowerCase());
+      if (val !== undefined) {
+        return !!JSON.parse(String(val).toLowerCase());
+      }
     };
 
     if (rowData) {
-      const searchParams = new URLSearchParams(params.toString());
-      const serviceGroup = searchParams.get('serviceGroup');
-      const service = searchParams.get('service');
-      const addons = searchParams.get('addons');
-      const departure = searchParams.get('departure');
-      const destination = searchParams.get('destination');
-      const lang = searchParams.get('lang');
-      const filter = searchParams.get('filter');
-      const format = searchParams.get('format');
-      const formatFilter = searchParams.get('formatFilter');
-      const offCanvasOpen = getBool(searchParams.get('offCanvasOpen'));
-      const showOptional = getBool(searchParams.get('showOptional'));
-      const showSamples = getBool(searchParams.get('showSamples'));
-      const offCanvasTab = searchParams.get('offCanvasTab');
+      const URLparams = Object.fromEntries([...params]);
       let addonArray = [];
       let serviceIndex;
+      let lang = 'en';
+      let languages = ['en', 'fi'];
 
-      if (addons) {
-        addonArray = addons.split(' ');
+      if (URLparams.lang && !languages.includes(URLparams.lang.toLowerCase())) {
+        updateSearchParams('lang', lang);
+        showAlert('unsupported', 'lang', URLparams.lang);
+      } else if (URLparams.lang) {
+        lang = URLparams.lang.toLowerCase();
+        updateSearchParams('lang', lang);
+      }
+
+      if (URLparams.service && !services.records.some((e) => e.ServiceCode === URLparams.service)) {
+        showAlert('unsupported', 'service', URLparams.service);
+      }
+
+      if (URLparams.addons) {
+        addonArray = URLparams.addons.split(' ');
+      }
+
+      if (addonArray) {
+        for (let addon of addonArray) {
+          if (!additionalServices.records.some((e) => e.ServiceCode === addon)) {
+            showAlert('unsupported', 'addons', addon);
+          }
+        }
       }
 
       for (let [i, row] of rowData.entries()) {
-        if (row.serviceCode === service) {
+        if (row.serviceCode === URLparams.service) {
           serviceIndex = i;
         }
       }
@@ -449,19 +465,19 @@ export default function App() {
 
       setSelected((prevState) => ({
         ...prevState,
-        serviceGroup: serviceGroup,
-        service: service,
+        serviceGroup: URLparams.serviceGroup,
+        service: URLparams.service,
         addons: addonArray,
-        departure: departure,
-        destination: destination,
-        filter: filter,
-        format: format,
-        formatFilter: formatFilter,
+        departure: URLparams.departure,
+        destination: URLparams.destination,
+        filter: URLparams.filter,
+        format: URLparams.format,
+        formatFilter: URLparams.formatFilter,
         lang: lang,
-        offCanvasOpen: offCanvasOpen,
-        offCanvasTab: offCanvasTab,
-        showSamples: showSamples,
-        showOptional: showOptional,
+        offCanvasOpen: getBool(URLparams.offCanvasOpen),
+        offCanvasTab: URLparams.offCanvasTab,
+        showSamples: getBool(URLparams.showSamples),
+        showOptional: getBool(URLparams.showOptional),
       }));
     }
   }, [loaded]);
@@ -523,6 +539,7 @@ export default function App() {
   const callModal = (e) => {
     let value = e;
     let data = {};
+    data['fields'] = {};
     if (value.substring(0, 1) === '2') {
       for (const record of services.records) {
         if (record.ServiceCode === value) {
@@ -536,6 +553,13 @@ export default function App() {
           for (const route of record.Routes) {
             routes.push(route);
           }
+          for (const field of record.Fields) {
+            if (!data['fields'][field.MessageFormat]) {
+              data['fields'][field.MessageFormat] = [];
+            }
+
+            data['fields'][field.MessageFormat].push(field);
+          }
           data['routes'] = routes;
           data['dimensions'] = dimensions;
         }
@@ -544,15 +568,35 @@ export default function App() {
       for (const record of additionalServices.records) {
         if (record.ServiceCode === value) {
           let excluded = [];
+          let mandatory = '';
+          data['fields'] = {};
+          data['availability'] = { pudo: record.Pudo, home: record.Home };
           data['title'] = record.ServiceCode;
           data['description'] = record.ServiceCode + '_tooltip';
           for (const addon of record.ExcludedAdditionalServices) {
             excluded.push(addon.Addon);
           }
+          for (const field of record.Fields) {
+            if (!data['fields'][field.MessageFormat]) {
+              data['fields'][field.MessageFormat] = [];
+            }
+            if (
+              field.MessageFormat === 'POSTRA' &&
+              field.PropertyName !== 'Service' &&
+              field.Mandatory
+            ) {
+              mandatory = mandatory + field.PropertyName + ', ';
+              data['fields'][field.MessageFormat].push(field);
+            } else {
+              data['fields'][field.MessageFormat].push(field);
+            }
+          }
           data['excluded'] = excluded;
+          data['mandatory'] = mandatory.substring(0, mandatory.length - 2);
         }
       }
     }
+    console.log(data);
     setSelected((prevState) => ({
       ...prevState,
       modalOpen: true,
@@ -601,15 +645,36 @@ export default function App() {
     updateSearchParams('showSamples', !selected.showSamples);
   };
 
+  const showAlert = (reason, param, value) => {
+    let output;
+    if (reason === 'unsupported') {
+      output = { text: "'Unsupported value'", param: param, value: value };
+      setSelected((prevState) => ({
+        ...prevState,
+        showAlert: true,
+        alertData: output,
+      }));
+    } else {
+      setSelected((prevState) => ({
+        ...prevState,
+        showAlert: !prevState.showAlert,
+      }));
+    }
+  };
+
   //const data = useMemo(() => mapRows(services), []);
 
   return (
     <div className="App">
+      <Alert t={t} data={selected.alertData} show={selected.showAlert} closeToast={showAlert} />
       <Modal
         t={t}
         data={selected.modalData}
         openModal={selected.modalOpen}
         closeModal={closeModal}
+        selected={selected}
+        setSelected={setSelected}
+        updateSearchParams={updateSearchParams}
       />
       <NavBar
         selectedLang={langChange}

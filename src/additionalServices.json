@@ -96,13 +96,13 @@
           "Fid_deliveryservices": 1
         },
         {
-          "MessageFormat": "POSTRA",
+          "MessageFormat": "SMARTSHIP",
           "AdditionalInfo": null,
-          "Example": "<Service>3101</Service>",
+          "Example": "\"id\": \"COD\"",
           "Mandatory": true,
-          "MessagePosition": null,
-          "PropertyName": "Service",
-          "PropertyValue": "3101",
+          "MessagePosition": "addons",
+          "PropertyName": "id",
+          "PropertyValue": "COD",
           "Fid_deliveryservices": 1
         },
         {
@@ -143,16 +143,6 @@
           "MessagePosition": "addons",
           "PropertyName": "bank",
           "PropertyValue": "NDEAFIHH",
-          "Fid_deliveryservices": 1
-        },
-        {
-          "MessageFormat": "SMARTSHIP",
-          "AdditionalInfo": null,
-          "Example": "\"id\": \"COD\"",
-          "Mandatory": true,
-          "MessagePosition": "addons",
-          "PropertyName": "id",
-          "PropertyValue": "COD",
           "Fid_deliveryservices": 1
         }
       ]

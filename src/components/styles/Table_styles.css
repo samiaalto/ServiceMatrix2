@@ -1,4 +1,4 @@
-th.headerTitle {
+.serviceMatrix-table th.headerTitle {
   height: 270px; /* header height */
   white-space: nowrap;
   font-weight: 700;
@@ -7,13 +7,13 @@ th.headerTitle {
   opacity: 1;
 }
 
-th.headerTitle > div {
+.serviceMatrix-table th.headerTitle > div {
   transform: translate(17px, 130px) rotate(270deg) !important;
   /* rotate(315deg); for diagnol */
   width: 0px !important;
 }
 
-.service {
+.serviceMatrix-table .service {
   white-space: nowrap;
   font-weight: 700;
   text-align: right;
@@ -23,44 +23,44 @@ th.headerTitle > div {
   max-width: 200px;
 }
 
-td.service {
+.serviceMatrix-table td.service {
   border: 0;
 }
 
-td.serviceHeader {
+.serviceMatrix-table td.serviceHeader {
   border: 0;
   font-weight: 700;
   text-align: left;
   padding-left: 5px;
 }
 
-td.serviceButton {
+.serviceMatrix-table td.serviceButton {
   border: 0;
 }
 
-td.code {
+.serviceMatrix-table td.code {
   border: 0;
   font-weight: 700;
 }
 
-td.serviceCode {
+.serviceMatrix-table td.serviceCode {
   border-left: 0;
   border-bottom: 0;
   border-top: 0;
 }
 
-td.addonCode {
+.serviceMatrix-table td.addonCode {
   border-left: 0;
   border-right: 0;
   border-top: 0;
   height: 39px;
 }
 
-tr {
+.serviceMatrix-table tr {
   max-height: 39px !important;
 }
 
-td {
+.serviceMatrix-table td {
   min-width: 39px;
   min-height: 39px !important;
   max-width: 39px;
@@ -69,7 +69,7 @@ td {
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-table {
+.serviceMatrix-table table {
   border-spacing: 0;
   border-collapse: collapse;
   z-index: 1;
@@ -79,7 +79,7 @@ table {
   cursor: default !important;
 }
 
-th:hover {
+.serviceMatrix-table th:hover {
   background-color: #394b58;
   color: #fff;
   cursor: pointer;
@@ -87,38 +87,38 @@ th:hover {
   transition-delay: 0.1s;
 }
 
-td:hover {
+.serviceMatrix-table td:hover {
   background-color: #394b58;
   color: #fff;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
   transition-delay: 0.1s;
 }
-td:hover:first-child {
+.serviceMatrix-table td:hover:first-child {
   background-color: #394b58;
 }
-td:hover:nth-child(3n) {
-  background-color: #394b58;
-}
-
-th:first-child td:hover {
+.serviceMatrix-table td:hover:nth-child(3n) {
   background-color: #394b58;
 }
 
-td,
-th,
-.row,
-.col {
+.serviceMatrix-table th:first-child td:hover {
+  background-color: #394b58;
+}
+
+.serviceMatrix-table td,
+.serviceMatrix-table th,
+.serviceMatrix-table .row,
+.serviceMatrix-table .col {
   cursor: pointer;
   position: relative;
 }
 
-th.left:hover {
+.serviceMatrix-table th.left:hover {
   background-color: #fff;
 }
 
-td:hover::before,
-th:hover::before {
+.serviceMatrix-table td:hover::before,
+.serviceMatrix-table th:hover::before {
   background-color: rgba(57, 75, 88, 0.2);
   content: '\00a0';
   height: 100%;
@@ -131,8 +131,8 @@ th:hover::before {
   z-index: -1;
 }
 
-td:hover::after,
-th:hover::after {
+.serviceMatrix-table td:hover::after,
+.serviceMatrix-table th:hover::after {
   background-color: rgba(57, 75, 88, 0.2);
   content: '\00a0';
   height: 10000px;

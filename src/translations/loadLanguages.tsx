@@ -23,6 +23,9 @@ let en = {
   "'Excluded Additional Services'": 'Excluded Additional Services',
   "'Show sample values'": 'Show sample values',
   "'Show optional fields'": 'Show optional fields',
+  "'Technical Instructions'": 'Technical Instructions',
+  "'Mandatory Information'": 'Mandatory Information',
+  "'Additional Information'": 'Additional Information',
   Label: 'Label',
   Type: 'Type',
   Repeat: 'Repeat',
@@ -35,6 +38,13 @@ let en = {
   Service: 'Service',
   specs: 'Message Specifications',
   version: 'Version History',
+  BOTH:
+    'Additional service is available when sending shipments to pickup point chosen by the recipient and to recipient home address.',
+  HOME: 'Additional service is only available when sending shipments to recipient home address.',
+  PUDO:
+    'Additional service is only available when sending shipments to pickup point chosen by the recipient.',
+  "'in parameter'": 'in parameter',
+  "'Unsupported value'": 'Unsupported value',
 };
 
 let fi = {
@@ -59,6 +69,9 @@ let fi = {
   "'Excluded Additional Services'": 'Poissuljetut lisäpalvelut',
   "'Show sample values'": 'Näytä esimerkkiarvot',
   "'Show optional fields'": 'Näytä vapaaehtoiset kentät',
+  "'Technical Instructions'": 'Tekniset ohjeet',
+  "'Mandatory Information'": 'Pakolliset tiedot',
+  "'Additional Information'": 'Lisätiedot',
   Label: 'Osoitekortti',
   Type: 'Tyyppi',
   Repeat: 'Toisto',
@@ -71,6 +84,20 @@ let fi = {
   Service: 'Palvelu',
   specs: 'Sanomakuvaus',
   version: 'Versiohistoria',
+  TRUE: 'KYLLÄ',
+  FALSE: 'EI',
+  Attribute: 'Atribuutti',
+  Mandatory: 'Pakollinen',
+  Example: 'Esimerkki',
+  Availability: 'Saatavuus',
+  BOTH:
+    'Lisäpalvelu on saatavilla asiakkaan valitsemaan noutopisteeseen sekä asiakkaan osoitteeseen lähetettäessä.',
+  HOME: 'Lisäpalvelu on saatavilla ainoastaan asiakkaan osoitteeseen lähetettäessä.',
+  PUDO: 'Lisäpalvelu on saatavilla ainoastaan asiakkaan valitsemaan noutopisteeseen',
+  Error: 'Virhe',
+  ago: 'sitten',
+  "'Unsupported value'": 'Ei tuettu arvo',
+  "'in parameter'": 'parametrissa',
 };
 
 function loadLanguages(language) {

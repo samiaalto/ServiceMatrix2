@@ -1,7 +1,15 @@
-import { Modal, Button, Row, Col, Table } from 'react-bootstrap';
+import { Modal, Button, Row, Col, Table, Tabs, Tab } from 'react-bootstrap';
 import './styles/Modal_styles.css';
 
-const ModalWindow = ({ openModal, closeModal, data, t }) => {
+const ModalWindow = ({
+  openModal,
+  closeModal,
+  data,
+  t,
+  selected,
+  setSelected,
+  updateSearchParams,
+}) => {
   return (
     <>
       <Modal show={openModal} onHide={closeModal}>
@@ -78,6 +86,43 @@ const ModalWindow = ({ openModal, closeModal, data, t }) => {
           ) : (
             ''
           )}
+          {data.availability ? (
+            <>
+              <Row>
+                <Col className="modal-text-header">{t('Availability')}</Col>
+              </Row>
+              {data.availability.pudo && data.availability.home ? (
+                <Row>
+                  <Col className="modal-text">{t('BOTH')}</Col>
+                </Row>
+              ) : (
+                ''
+              )}
+              {!data.availability.pudo && data.availability.home ? (
+                <Row>
+                  <Col className="modal-text">{t('HOME')}</Col>
+                </Row>
+              ) : (
+                ''
+              )}
+              {data.availability.pudo && !data.availability.home ? (
+                <Row>
+                  <Col className="modal-text">{t('PUDO')}</Col>
+                </Row>
+              ) : (
+                ''
+              )}
+              {!data.availability.pudo && !data.availability.home ? (
+                <Row>
+                  <Col className="modal-text">{t('NONE')}</Col>
+                </Row>
+              ) : (
+                ''
+              )}
+            </>
+          ) : (
+            ''
+          )}
 
           {data.routes ? (
             <>
@@ -111,6 +156,19 @@ const ModalWindow = ({ openModal, closeModal, data, t }) => {
             ''
           )}
 
+          {data.mandatory ? (
+            <>
+              <Row>
+                <Col className="modal-text-header">{t("'Mandatory Information'")}</Col>
+              </Row>
+              <Row>
+                <Col>{data.mandatory}</Col>
+              </Row>
+            </>
+          ) : (
+            ''
+          )}
+
           {data.excluded ? (
             <>
               <Row>
@@ -121,6 +179,115 @@ const ModalWindow = ({ openModal, closeModal, data, t }) => {
                   <Col>{t(addon) + ' (' + addon + ')'}</Col>
                 </Row>
               ))}
+            </>
+          ) : (
+            ''
+          )}
+
+          {data.fields ? (
+            <>
+              <Row>
+                <Col className="modal-text-header">{t("'Technical Instructions'")}</Col>
+              </Row>
+              <Tabs
+                id="controlled-tab-example"
+                activeKey={selected.modalTab ? selected.modalTab : ''}
+                onSelect={(k) => {
+                  updateSearchParams('modalTab', k);
+                  setSelected((prevState) => ({
+                    ...prevState,
+                    modalTab: k,
+                  }));
+                }}
+                className="mb-3 modal-tabs">
+                {data.fields.POSTRA ? (
+                  <Tab eventKey="postra" title="Postra">
+                    <Table className="modal-tech-table">
+                      <thead>
+                        <tr>
+                          <td>{t("'Attribute Name'")}</td>
+                          <td className="attribute_title">{t('Attribute')}</td>
+                          <td className="mandatory_title">{t('Mandatory')}</td>
+                          <td>{t("'Additional Information'")}</td>
+                          <td className="example_title">{t('Example')}</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.fields.POSTRA.map((item) => (
+                          <tr>
+                            <td></td>
+                            <td className="attribute_col">{item.PropertyName}</td>
+                            <td className="mandatory_col">
+                              {item.Mandatory ? t('TRUE') : t('FALSE')}
+                            </td>
+                            <td></td>
+                            <td className="example_col">{item.Example}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </Tab>
+                ) : (
+                  ''
+                )}
+                {data.fields.SMARTSHIP ? (
+                  <Tab eventKey="smartship" title="Smartship">
+                    <Table className="modal-table">
+                      <thead>
+                        <tr>
+                          <td>{t("'Attribute Name'")}</td>
+                          <td>{t('Attribute')}</td>
+                          <td>{t('Mandatory')}</td>
+                          <td>{t("'Additional Information'")}</td>
+                          <td>{t('Example')}</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.fields.SMARTSHIP.map((item) => (
+                          <tr>
+                            <td></td>
+                            <td>{item.PropertyName}</td>
+                            <td>{item.Mandatory ? t('TRUE') : t('FALSE')}</td>
+                            <td></td>
+                            <td>{item.Example}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </Tab>
+                ) : (
+                  ''
+                )}
+
+                {data.fields.WAYBILD16A ? (
+                  <Tab eventKey="waybil" title="Waybild16a">
+                    <Table className="modal-table">
+                      <thead>
+                        <tr>
+                          <td>{t("'Attribute Name'")}</td>
+                          <td>{t('Attribute')}</td>
+                          <td>{t('Mandatory')}</td>
+                          <td>{t("'Additional Information'")}</td>
+                          <td>{t('Example')}</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.fields.WAYBILD16A.map((item) => (
+                          <tr>
+                            <td></td>
+                            <td>{item.PropertyName}</td>
+                            <td>{item.Mandatory ? t('TRUE') : t('FALSE')}</td>
+                            <td></td>
+                            <td>{item.Example}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </Tab>
+                ) : (
+                  ''
+                )}
+              </Tabs>
             </>
           ) : (
             ''
