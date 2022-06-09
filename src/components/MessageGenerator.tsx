@@ -78,7 +78,7 @@ const MessageGenerator = (selected, services, fileFormats, additionalServices) =
     let highlighted = [];
     let row = 1;
     let rows = [row, '\n'];
-    console.log(jsonData);
+    //console.log(jsonData);
     let jsonRows = jsonData.split('\n');
     //let jsonRows = jsonData;
     for (let j = 0; j < jsonRows.length; j++) {
@@ -105,7 +105,7 @@ const MessageGenerator = (selected, services, fileFormats, additionalServices) =
     row++;
     rows.push(row);
     rows.push('\n');
-    console.log(highlighted);
+    //console.log(highlighted);
     return highlighted;
   };
 
@@ -398,7 +398,7 @@ const MessageGenerator = (selected, services, fileFormats, additionalServices) =
 
   //console.log(indexes);
   //console.log(JSON.stringify(outJSON));
-  console.log(outJSON);
+  //console.log(outJSON);
   const json = [JSON.stringify(outJSON, null, 2)];
   const beautifiedJSON = beautifyJSON(JSON.stringify(outJSON, null, 2));
   const doc = create({ version: '1.0', encoding: 'UTF-8' }, outXML);

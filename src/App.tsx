@@ -10,20 +10,19 @@ import Filter from './components/Filter';
 import Modal from './components/Modal';
 import OffCanvas from './components/OffCanvas';
 import Alert from './components/Alert';
+import GenerateAlert from './components/GenerateAlerts';
 import hideColumn from './components/HideColumn';
 import populateCountries from './components/PopulateCountries';
 import mapRows from './components/MapRows';
 import mapFfRows from './components/MapFFRows';
-//import customFilterFunction from './components/customFilter';
 import additionalServices from './additionalServices.json';
 import services from './services.json';
 import fileFormats from './fileFormats.json';
 import { useTranslation } from 'react-i18next';
-import { Grid, Row, Col } from 'react-flexbox-grid';
-import { useSearchParams, Route, Routes, useNavigate, Navigate } from 'react-router-dom';
+import { useSearchParams, Route, Routes, Navigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import { Container, Row, Col } from 'react-bootstrap';
 import MessageGenerator from './components/MessageGenerator';
-import { update } from 'react-spring';
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -327,7 +326,7 @@ export default function App() {
 
   const callHideColumn = () => {
     if (rowData.length > 0 && filteredRowData.length > 0) {
-      for (const [key, value] of Object.entries(rowData[0])) {
+      for (const [key] of Object.entries(rowData[0])) {
         if (key.substring(0, 1) === '3' || key.substring(0, 1) === '5') {
           hideColumn(key, filteredRowData[0].index, rowData, setColumnData, filteredRowData);
         }
@@ -377,8 +376,6 @@ export default function App() {
     disableExcluded(e.row, e.column, e.isChecked);
     setParams(updatedSearchParams.toString());
   };
-
-  let navigate = useNavigate();
 
   useEffect(() => {
     mapColumns(additionalServices);
@@ -496,7 +493,7 @@ export default function App() {
         showOptional: getBool(URLparams.showOptional),
       }));
       if (alertArray.length > 0) {
-        showAlert(alertArray);
+        GenerateAlert(alertArray, setSelected);
       }
     }
   }, [loaded]);
@@ -615,7 +612,7 @@ export default function App() {
         }
       }
     }
-    console.log(data);
+
     setSelected((prevState) => ({
       ...prevState,
       modalOpen: true,
@@ -664,37 +661,11 @@ export default function App() {
     updateSearchParams('showSamples', !selected.showSamples);
   };
 
-  const showAlert = (alerts) => {
-    let output = [];
-    let delay = 3000;
-    let itemId = 0;
-    for (let item of alerts) {
-      if (item.reason === 'unsupported') {
-        output.push({
-          id: itemId,
-          title: "'Unable to set filters'",
-          text: "'Unsupported value'",
-          param: item.param,
-          value: item.value,
-          show: true,
-          delay: delay,
-          datestamp: item.datestamp,
-        });
-        delay = delay + 50;
-        itemId++;
-      }
-    }
-    setSelected((prevState) => ({
-      ...prevState,
-      alertData: output,
-    }));
-  };
-
   //const data = useMemo(() => mapRows(services), []);
 
   return (
     <div className="App">
-      <Alert t={t} data={selected.alertData} closeToast={showAlert} />
+      <Alert t={t} data={selected.alertData} />
       <Modal
         t={t}
         data={selected.modalData}
@@ -713,7 +684,7 @@ export default function App() {
         navDropFi={t('Finnish')}
         value={selected.lang}
       />
-      <Grid fluid>
+      <Container fluid>
         <Routes>
           <Route
             path="/ServiceMatrix"
@@ -847,7 +818,7 @@ export default function App() {
           />
           <Route path="*" element={<Navigate to="/ServiceMatrix" replace />} />
         </Routes>
-      </Grid>
+      </Container>
     </div>
   );
 }

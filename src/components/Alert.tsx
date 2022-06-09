@@ -6,19 +6,19 @@ import './styles/Alert_styles.css';
 const Alert = ({ data, t }) => {
   const [list, setList] = useState(data);
 
+  const deleteToast = (id) => {
+    //const listItemIndex = list.findIndex((e) => e.id === id);
+    //list.splice(listItemIndex, 1);
+    //setList([...list]);
+
+    const newIds = list.slice(); //copy the array
+    newIds[id].show = false; //execute the manipulations
+    setList(newIds); //set the new state
+  };
+
   useEffect(() => {
     setList([...data]);
   }, [data]);
-
-  useEffect(() => {
-    console.log(list);
-  }, [list]);
-
-  const deleteToast = (id) => {
-    const listItemIndex = list.findIndex((e) => e.id === id);
-    list.splice(listItemIndex, 1);
-    setList([...list]);
-  };
 
   return (
     <ToastContainer position="top-end" className="p-3">
@@ -26,7 +26,7 @@ const Alert = ({ data, t }) => {
         ? list.map((item) => (
             <>
               <Toast
-                key={item.id}
+                key={'toast_' + item.id}
                 onClose={() => deleteToast(item.id)}
                 show={item.show}
                 delay={item.delay}
